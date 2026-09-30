@@ -1840,6 +1840,9 @@ window.__rig2D = function(){
   function update(){
     var v = past();
     if(v !== on){ on = v; header.classList.toggle('brand-on', v); }
+    /* on a wide screen the links sit over the hero badge as it scrolls up, so
+       the bar takes a backing as soon as the page moves */
+    header.classList.toggle('scrolled', window.scrollY > 24);
     ticking = false;
   }
   window.addEventListener('scroll', function(){

@@ -1049,3 +1049,57 @@ header.hero-page.brand-on::before{opacity:0}
   .survey-steps h3{font-size:1.05rem;margin-bottom:.4rem}
   .survey-steps p{font-size:.9rem}
 }
+
+
+/* ---------- desktop / tablet hero: the phone hero, given more room ----------
+   The mountain-photograph hero is retired. Above 860px the hero is the same
+   piece as on a phone: the outlined badge with its living aurora on the night
+   sky, resting on the same blue range that rises into the next section. The
+   markup, the badge canvas, the star field and the range artwork are the
+   phone's own; this block only lays them out for a wider screen. The phone
+   rules above are untouched. */
+@media (min-width:861px){
+  /* one measure for the range, so the badge, the readouts and the artwork
+     all agree where it begins */
+  :root{--hr-h:clamp(220px,17vw,280px);--hr-rise:calc(var(--hr-h) * .5 + 1rem)}
+  .stage{height:auto;min-height:100svh;margin-top:-74px;position:relative;overflow:visible;z-index:0}
+  .stage-sticky{
+    position:relative;inset:auto;height:auto;min-height:100svh;overflow:visible;z-index:auto;
+    padding:calc(74px + 1.5rem) var(--pad) var(--hr-rise);
+    display:flex;align-items:center;justify-content:center;
+  }
+  /* the retired canvas hero */
+  #sky,.cue,.sect-ridge{display:none}
+  .nightsky{
+    display:block;position:absolute;inset:0;width:100%;height:100%;
+    z-index:0;pointer-events:none;
+  }
+  /* the badge is the focal point: about 43% of the width, held back only so
+     that it always fits the screen's height with the range beneath it */
+  .badge-live{
+    display:block;position:relative;z-index:2;
+    width:min(43vw, calc((100svh - 74px - 1.5rem - var(--hr-rise)) * 0.9388));
+    min-width:300px;aspect-ratio:1273/1356;
+  }
+  .badge-lights,.badge-frame{position:absolute;inset:0;width:100%;height:100%}
+  .badge-lights{display:block}
+  .badge-frame{object-fit:contain}
+
+  /* the range that carries the hero into the next section */
+  .intro{margin-top:0;padding-block:clamp(3.5rem,6vw,6rem) 0;overflow:visible}
+  .hero-ridge{
+    display:block;position:absolute;left:0;right:0;
+    top:calc(var(--hr-h) * -.88);
+    height:var(--hr-h);pointer-events:none;z-index:0;
+  }
+  .hero-ridge svg{width:100%;height:100%;display:block}
+  .hero-ridge .hr-far{fill:#17455A}
+  .hero-ridge .hr-mid{fill:#0E2E3E}
+  .hero-ridge .hr-near{fill:var(--night)}
+  .intro .wrap{position:relative;z-index:1}
+
+  /* readouts sit above the range, not under it */
+  .ht-bl,.ht-br{bottom:calc(var(--hr-rise) + 1rem)}
+
+  header.hero-page.scrolled{background:rgba(7,26,36,.88);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+}
