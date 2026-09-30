@@ -25,6 +25,7 @@ window.__sectionProgress = function(el){
 
 (function(){
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var clamp = function(v,a,b){ return v<a?a:v>b?b:v; };
 
   /* ---- latitude stations ---- */
   var LAT_MIN = 48.6, LAT_MAX = 67.2;
