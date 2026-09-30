@@ -2637,8 +2637,24 @@ window.__rig2D = function(){
 
   function progress(){
     return window.matchMedia('(max-width:860px)').matches
-      ? window.__pinProgress(sec, sec.querySelector('.capture-sticky'))
+      ? noteProgress(window.__pinProgress(sec, sec.querySelector('.capture-sticky')))
       : window.__sectionProgress(sec);
+  }
+
+  /* On a phone the four notes scroll past in equal quarters, and each one
+     should leave the drawing in its own state: raw returns, registered cloud,
+     surface mesh, deliverable. So scroll position is mapped onto the animation
+     through knots at each note's midpoint, which makes every note bring a
+     change instead of the stages bunching up between notes. */
+  var KNOTS = [[0,0],[0.125,0.08],[0.375,0.38],[0.625,0.68],[0.875,0.97],[1,1]];
+  function noteProgress(s){
+    for(var i=1;i<KNOTS.length;i++){
+      if(s <= KNOTS[i][0]){
+        var a = KNOTS[i-1], b = KNOTS[i];
+        return a[1] + (b[1]-a[1]) * (s-a[0]) / (b[0]-a[0]);
+      }
+    }
+    return 1;
   }
 
   var sm = function(v){ v = v<0?0:v>1?1:v; return v*v*v*(v*(v*6-15)+10); };
