@@ -864,21 +864,34 @@ header.hero-page.brand-on::before{opacity:0}
   .capture-steps li.live .step-in{opacity:1}
 }
 
-/* On a phone, overlaying notes on a pinned drawing never reads cleanly at this
-   width. The drawing takes the top of the section and the notes run beneath it
-   in ordinary document order: nothing crosses anything. */
+/* On a phone the reality-capture drawing pins to the top of the screen, like
+   the map above it, and runs its whole sequence while pinned. The notes pass
+   through the band beneath it and slide away under it. The section carries its
+   own clear ground at the bottom (padding, not margin, so the dark colour fills
+   it) for the mountain break of the next section to rise into. */
 @media (max-width:860px){
-  .capture-sticky{position:relative;top:auto;height:56svh;margin-bottom:1.5rem}
-  .capture-steps li{
-    min-height:0;padding:0;margin-block:0;
-    border-top:1px solid var(--rule-dark);
+  .capture-sticky{
+    position:sticky;top:0;height:64svh;height:64dvh;
+    display:block;overflow:hidden;background:var(--night);z-index:2;
+    margin-bottom:0;
   }
+  /* padding on the section itself: the pinned drawing releases before it, so
+     the ridge never rises over the legend */
+  .capture{padding-bottom:calc(clamp(66px,19vw,104px) + 1.5rem)}
+  .capture-steps{margin:0 var(--pad);padding-top:1.4rem;z-index:1}
+  /* the point count gets its own line under the legend so they never overlap */
+  .capture-legend{bottom:2.6rem}
+  .capture-count{bottom:.9rem}
+  .capture-steps li{
+    display:flex;align-items:center;min-height:42svh;
+    padding:0;margin:0;max-width:none;
+    border-top:1px solid var(--rule-dark);opacity:.4;
+  }
+  .capture-steps li.live{opacity:1}
   .capture-steps li:first-child{border-top:0}
   .capture-steps .step-in{position:static;padding:1.5rem 0}
-  .capture-steps li{opacity:1}
   .capture-steps h3{font-size:1.05rem;margin-bottom:.4rem}
   .capture-steps p{font-size:.9rem}
-  .capture-steps{margin:0 var(--pad) clamp(3rem,9vw,5rem)}
 }
 
 /* ---------- instrument annotations ---------- */

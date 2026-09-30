@@ -5,6 +5,13 @@
    starts the moment the section appears over the bottom edge and finishes at
    the same place as before. The animation then plays while the section is
    travelling up the screen rather than only once it has arrived. */
+/* progress through a section whose drawing pins to the top of the screen on a
+   phone: 0 when it pins, 1 when the last note has passed */
+window.__pinProgress = function(el, pin){
+  var r = el.getBoundingClientRect();
+  var span = el.offsetHeight - (pin ? pin.offsetHeight : window.innerHeight);
+  return span > 0 ? Math.max(0, Math.min(1, -r.top / span)) : 0;
+};
 window.__sectionProgress = function(el){
   var r = el.getBoundingClientRect();
   var vh = window.innerHeight;
@@ -2628,7 +2635,11 @@ window.__rig2D = function(){
     build();
   }
 
-  function progress(){ return window.__sectionProgress(sec); }
+  function progress(){
+    return window.matchMedia('(max-width:860px)').matches
+      ? window.__pinProgress(sec, sec.querySelector('.capture-sticky'))
+      : window.__sectionProgress(sec);
+  }
 
   var sm = function(v){ v = v<0?0:v>1?1:v; return v*v*v*(v*(v*6-15)+10); };
 
@@ -2768,7 +2779,9 @@ window.__rig2D = function(){
     head.style.transition = 'opacity .55s ease, transform .55s cubic-bezier(.2,.8,.3,1)';
     var on = null, ticking = false;
     function update(){
-      var p = window.__sectionProgress(sec);
+      var p = pair[0]==='#capture' && window.matchMedia('(max-width:860px)').matches
+        ? window.__pinProgress(sec, sec.querySelector('.capture-sticky'))
+        : window.__sectionProgress(sec);
       var show = p < 0.14;
       if(show !== on){
         on = show;
