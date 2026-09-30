@@ -495,8 +495,11 @@ header.hero-page.brand-on::before{opacity:0}
   .teasers,.contact{position:relative}
   .contact{overflow:visible}   /* the section clipped its own ridge away */
   .ridge{
-    display:block;position:absolute;left:0;right:0;bottom:100%;
-    height:clamp(66px,19vw,104px);overflow:hidden;pointer-events:none;z-index:2;
+    /* sunk 2px into the section below: on a phone the address bar resizing
+       leaves the two edges on different sub-pixels, and the dark section behind
+       shows through as a hairline if they only meet */
+    display:block;position:absolute;left:0;right:0;bottom:calc(100% - 2px);
+    height:calc(clamp(66px,19vw,104px) + 2px);overflow:hidden;pointer-events:none;z-index:2;
   }
   .ridge svg{width:100%;height:100%;display:block}
   .ridge-front{fill:var(--ridge)}
