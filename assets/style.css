@@ -71,16 +71,8 @@ nav a:hover::after{right:0}
 @media (max-width:620px){.brand img{height:30px}}
 
 /* ---------- scroll stage ---------- */
-.stage{position:relative;height:220svh;padding:0;background:var(--night);margin-top:-74px}
-.stage-sticky{position:sticky;top:0;height:100svh;overflow:hidden}
-#sky{position:absolute;inset:0;width:100%;height:100%;display:block}
+.stage{position:relative;padding:0;background:var(--night);margin-top:-74px}
 .badge-live{display:none}
-.cue{
-  position:absolute;left:50%;bottom:1.9rem;transform:translateX(-50%);margin:0;z-index:3;
-  font-family:var(--mono);font-size:.6rem;letter-spacing:.28em;text-transform:uppercase;
-  color:rgba(255,255,255,.5);display:flex;flex-direction:column;align-items:center;gap:.6rem;
-}
-.cue::after{content:"";width:1px;height:34px;background:linear-gradient(rgba(255,255,255,.5),transparent)}
 
 /* ---------- intro ---------- */
 .intro{
@@ -338,8 +330,6 @@ footer{background:var(--night);color:rgba(255,255,255,.45);border-top:1px solid 
 .skip:focus{left:1rem;top:1rem;z-index:99;background:var(--green);color:#04141B;padding:.6rem 1rem;font-family:var(--sans);font-weight:700}
 @media (prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
-  .stage{height:100svh}
-  .cue{display:none}
   *{animation:none!important;transition:none!important}
   .rv{opacity:1;transform:none}
 }
@@ -437,7 +427,6 @@ nav a[aria-current="page"]::after{right:0}
     padding:calc(74px + clamp(2.5rem,9vw,4rem)) var(--pad) clamp(2.5rem,9vw,4rem);
     display:flex;align-items:center;justify-content:center;
   }
-  #sky,.cue{display:none}
   .stage{position:relative;overflow:visible}
   .nightsky{
     display:block;position:absolute;inset:0;width:100%;height:100%;
@@ -966,41 +955,10 @@ header.hero-page.brand-on::before{opacity:0}
   .ra,.rl-ring,.rl-lines line{transition:none}
 }
 
-/* ---------- the hero stays put; the page rides over it ---------- */
+/* ---------- section order above the fold ---------- */
 @media (min-width:861px){
-  /* the stage is only as tall as the screen now, and its canvas is fixed, so
-     the sky and the range hold still while the next section climbs over them */
-  /* the hero holds a screen and a half before the page climbs over it */
-  .stage{height:150svh;height:150dvh}
-  /* inset alone, with no stated height: svh is the *smallest* viewport
-     height, so on a tablet with retracting browser chrome a fixed 100svh
-     layer ends short of the real viewport and leaves a band underneath */
-  .stage-sticky{position:fixed;inset:0;height:auto;z-index:0;overflow:hidden}
-  /* the canvas keeps its own height and is anchored to the top; the stage
-     crops whatever runs past the bottom of the frame */
-  #sky{position:absolute;top:0;left:0;right:0;bottom:auto;width:100%;height:auto}
-  /* the overlap that used to pull the copy up into the hero is not wanted
-     now that the hero stays put underneath */
   .intro{position:relative;z-index:2;margin-top:0}
-  /* the section arrives with a ridge rather than a straight edge */
-  .sect-ridge{
-    display:block;
-    position:absolute;left:0;right:0;top:0;transform:translateY(-99%);
-    height:clamp(96px,11vw,168px);pointer-events:none;
-  }
-  .sect-ridge svg{width:100%;height:100%;display:block}
-  /* the ranges recede in the same tones the rest of the site uses: the
-     nearest is the section colour itself, so it meets the page seamlessly */
-  .sect-ridge .sr-1{fill:#123B4E}
-  .sect-ridge .sr-2{fill:#0E2E3E}
-  .sect-ridge .sr-3{fill:#0A2231}
-  .sect-ridge .sr-4{fill:var(--night)}
 }
-
-/* the transition ridge belongs to the pinned desktop hero; without its
-   positioning rules it falls into the flow as a dark block, so it is only
-   switched off below that width rather than globally */
-@media (max-width:860px){ .sect-ridge{display:none} }
 
 /* ---------- the pinned hero must stay behind everything after it ----------
    A fixed layer paints above ordinary, unpositioned block boxes however low
@@ -1068,8 +1026,6 @@ header.hero-page.brand-on::before{opacity:0}
     padding:calc(74px + 1.5rem) var(--pad) var(--hr-rise);
     display:flex;align-items:center;justify-content:center;
   }
-  /* the retired canvas hero */
-  #sky,.cue,.sect-ridge{display:none}
   .nightsky{
     display:block;position:absolute;inset:0;width:100%;height:100%;
     z-index:0;pointer-events:none;
