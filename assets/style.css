@@ -746,6 +746,11 @@ header.hero-page.brand-on::before{opacity:0}
   padding-bottom:16svh;max-width:34ch;margin-left:var(--pad);opacity:.22;
   transition:opacity .5s ease;
 }
+/* the notes share the left edge with the four-line legend pinned at the
+   bottom of the drawing, so they stop short of its top rather than 16% up */
+@media (min-width:861px){
+  .capture-steps li{padding-bottom:max(16svh, calc(clamp(2rem,7vh,4.5rem) + 7.5rem + 1.5rem))}
+}
 .capture-steps li.live{opacity:1}
 .capture-steps h3{color:#fff;font-size:clamp(1.2rem,2.2vw,1.7rem);margin-bottom:.6rem}
 .capture-steps p{color:rgba(255,255,255,.7);margin:0}
