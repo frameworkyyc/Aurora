@@ -2415,3 +2415,20 @@ window.__rig2D = function(){
   window.addEventListener('resize', update);
   update();
 })();
+
+
+/* ---- Portfolio Demo Mode: the single switch ------------------------------
+   The Framework portfolio embeds this site in a device mockup using
+   ?portfolioDemo=1. Everything the mode does lives in assets/portfolio-demo.js,
+   which is requested only when the parameter is present; this is the one place
+   the parameter is read, and without it nothing here does anything. */
+(function(){
+  function isPortfolioDemo(){
+    try{ return new URLSearchParams(window.location.search).get('portfolioDemo') === '1'; }
+    catch(e){ return false; }
+  }
+  if(!isPortfolioDemo()) return;
+  var s = document.createElement('script');
+  s.src = 'assets/portfolio-demo.js';
+  document.body.appendChild(s);
+})();
