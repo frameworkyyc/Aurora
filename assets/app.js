@@ -7,6 +7,11 @@
    travelling up the screen rather than only once it has arrived. */
 /* progress through a section whose drawing pins to the top of the screen on a
    phone: 0 when it pins, 1 when the last note has passed */
+/* the aurora blades of the badge, measured off the artwork (x, width, foot
+   and tip, as fractions of the badge). Shared by the phone badge and the
+   wide-screen hero so both draw the same mark. */
+window.__AURORA_BLADES = [{"x": 0.06441, "w": 0.02278, "base": 0.65708, "tip": 0.21239}, {"x": 0.10448, "w": 0.02435, "base": 0.64233, "tip": 0.21313}, {"x": 0.14611, "w": 0.02435, "base": 0.62316, "tip": 0.28614}, {"x": 0.18814, "w": 0.02357, "base": 0.60398, "tip": 0.24779}, {"x": 0.22977, "w": 0.02357, "base": 0.60029, "tip": 0.34218}, {"x": 0.2718, "w": 0.02435, "base": 0.61578, "tip": 0.29572}, {"x": 0.31383, "w": 0.02357, "base": 0.64676, "tip": 0.31416}, {"x": 0.35467, "w": 0.02357, "base": 0.64971, "tip": 0.33112}, {"x": 0.3967, "w": 0.02435, "base": 0.66003, "tip": 0.26475}, {"x": 0.43833, "w": 0.02435, "base": 0.691, "tip": 0.20133}, {"x": 0.47997, "w": 0.02435, "base": 0.71018, "tip": 0.24853}, {"x": 0.5216, "w": 0.02435, "base": 0.71976, "tip": 0.05826}, {"x": 0.56324, "w": 0.02435, "base": 0.72714, "tip": 0.13053}, {"x": 0.60487, "w": 0.02435, "base": 0.73525, "tip": 0.08112}, {"x": 0.6465, "w": 0.02435, "base": 0.73378, "tip": 0.00074}, {"x": 0.68814, "w": 0.02435, "base": 0.73083, "tip": 0.0}, {"x": 0.72977, "w": 0.02435, "base": 0.72861, "tip": 0.0354}, {"x": 0.77141, "w": 0.02435, "base": 0.70796, "tip": 0.04351}, {"x": 0.81304, "w": 0.02435, "base": 0.71386, "tip": 0.18805}, {"x": 0.85507, "w": 0.02357, "base": 0.72861, "tip": 0.27139}, {"x": 0.89631, "w": 0.02435, "base": 0.7382, "tip": 0.33038}, {"x": 0.9348, "w": 0.02278, "base": 0.7441, "tip": 0.36726}];
+
 window.__pinProgress = function(el, pin){
   var r = el.getBoundingClientRect();
   var span = el.offsetHeight - (pin ? pin.offsetHeight : window.innerHeight);
@@ -1324,7 +1329,7 @@ window.__rig2D = function(){
   if(!stage || !header) return;              /* inner pages keep the logo always */
   header.classList.add('hero-page');
 
-  var badge = stage.querySelector('.badge-live, .stage-static');
+  var badge = stage.querySelector('.badge-live');
   var isStatic = function(){ return !!(badge && badge.offsetWidth); };
 
   function past(){
@@ -1332,20 +1337,15 @@ window.__rig2D = function(){
       /* mobile: the badge itself has to clear the header */
       return badge.getBoundingClientRect().bottom <= header.offsetHeight;
     }
-    /* desktop: the drawn wordmark is gone once the ranges have closed over it */
-    var span = stage.offsetHeight - window.innerHeight;
-    if(span <= 0) return true;
-    var p = -stage.getBoundingClientRect().top / span;
-    return p > 0.78;
+    /* wide screen: the logo arrives once the hero, wordmark and all, has
+       scrolled up past the bar */
+    return stage.getBoundingClientRect().bottom <= header.offsetHeight;
   }
 
   var on = null, ticking = false;
   function update(){
     var v = past();
     if(v !== on){ on = v; header.classList.toggle('brand-on', v); }
-    /* on a wide screen the links sit over the hero badge as it scrolls up, so
-       the bar takes a backing as soon as the page moves */
-    header.classList.toggle('scrolled', window.scrollY > 24);
     ticking = false;
   }
   window.addEventListener('scroll', function(){
@@ -1401,7 +1401,19 @@ window.__rig2D = function(){
   var wrap = document.querySelector('.badge-live');
   var cv   = wrap && wrap.querySelector('.badge-lights');
   if(!wrap || !cv) return;
-  if(!wrap.offsetWidth) return;                 /* desktop: not shown */
+  /* hidden on a wide screen: start the first time it is shown instead, for
+     a tablet that loads in landscape and is then turned to portrait */
+  if(!wrap.offsetWidth){
+    var later = function(){
+      if(!wrap.offsetWidth) return;
+      window.removeEventListener('resize', later);
+      boot();
+    };
+    window.addEventListener('resize', later);
+    return;
+  }
+  boot();
+  function boot(){
   var ctx = cv.getContext('2d');
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -1409,7 +1421,7 @@ window.__rig2D = function(){
      0.496 and 0.798 — only blades under that opening may pass it */
   var RAIL_Y = 0.1111, GAP_L = 0.512, GAP_R = 0.782;
 
-  var BLADES = [{"x": 0.06441, "w": 0.02278, "base": 0.65708, "tip": 0.21239}, {"x": 0.10448, "w": 0.02435, "base": 0.64233, "tip": 0.21313}, {"x": 0.14611, "w": 0.02435, "base": 0.62316, "tip": 0.28614}, {"x": 0.18814, "w": 0.02357, "base": 0.60398, "tip": 0.24779}, {"x": 0.22977, "w": 0.02357, "base": 0.60029, "tip": 0.34218}, {"x": 0.2718, "w": 0.02435, "base": 0.61578, "tip": 0.29572}, {"x": 0.31383, "w": 0.02357, "base": 0.64676, "tip": 0.31416}, {"x": 0.35467, "w": 0.02357, "base": 0.64971, "tip": 0.33112}, {"x": 0.3967, "w": 0.02435, "base": 0.66003, "tip": 0.26475}, {"x": 0.43833, "w": 0.02435, "base": 0.691, "tip": 0.20133}, {"x": 0.47997, "w": 0.02435, "base": 0.71018, "tip": 0.24853}, {"x": 0.5216, "w": 0.02435, "base": 0.71976, "tip": 0.05826}, {"x": 0.56324, "w": 0.02435, "base": 0.72714, "tip": 0.13053}, {"x": 0.60487, "w": 0.02435, "base": 0.73525, "tip": 0.08112}, {"x": 0.6465, "w": 0.02435, "base": 0.73378, "tip": 0.00074}, {"x": 0.68814, "w": 0.02435, "base": 0.73083, "tip": 0.0}, {"x": 0.72977, "w": 0.02435, "base": 0.72861, "tip": 0.0354}, {"x": 0.77141, "w": 0.02435, "base": 0.70796, "tip": 0.04351}, {"x": 0.81304, "w": 0.02435, "base": 0.71386, "tip": 0.18805}, {"x": 0.85507, "w": 0.02357, "base": 0.72861, "tip": 0.27139}, {"x": 0.89631, "w": 0.02435, "base": 0.7382, "tip": 0.33038}, {"x": 0.9348, "w": 0.02278, "base": 0.7441, "tip": 0.36726}];
+  var BLADES = window.__AURORA_BLADES;
 
   var W=0,H=0,dpr=1,t=0,raf=0,live=false;
   function resize(){
@@ -1510,6 +1522,241 @@ window.__rig2D = function(){
       es.forEach(function(e){ e.isIntersecting ? start() : stop(); });
     },{threshold:0}).observe(wrap);
   } else start();
+  }
+})();
+
+/* ---- wide-screen hero: the badge's aurora opened out to the whole screen ----
+   The same blades as the logo (window.__AURORA_BLADES), unframed and set over
+   the wordmark the way the badge sets them: the blade span matches the AURORA
+   letters and the mountain line sits the badge's own distance above them.
+   Heights keep the logo's variation but are fitted to the screen. The blades
+   stand behind a continuous mountain silhouette that carries on to both
+   edges, and live quietly: brightness drifting blade to blade, and a soft
+   light running up each one, staggered across the curtain. As the page
+   scrolls the blades reach a little higher while the wordmark sinks away.
+   Wide screens only; with reduced motion it is drawn once and holds. */
+(function(){
+  var stage = document.getElementById('top');
+  var cv    = stage && stage.querySelector('.hero-aurora');
+  var word  = stage && stage.querySelector('.hero-word');
+  if(!cv || !word || !window.__AURORA_BLADES) return;
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* where the AURORA letters sit in the badge, in the blades' own units */
+  var AX0 = 0.0627, AX1 = 0.9349, ATOP = 0.7867;
+  var BLADES = window.__AURORA_BLADES;
+  var FEET = BLADES.map(function(b){ return {x:b.x, y:b.base}; });
+  var N = FEET.length;
+
+  /* the mountain line: Catmull-Rom through the blades' feet, as on the badge,
+     then carried on past the end blades at their own slope, flattening out */
+  function foot(u){
+    if(u <= FEET[0].x){
+      var sl = (FEET[1].y - FEET[0].y) / (FEET[1].x - FEET[0].x);
+      var d = FEET[0].x - u;
+      return FEET[0].y - sl * 0.18 * (1 - Math.exp(-d / 0.18));
+    }
+    if(u >= FEET[N-1].x){
+      var sr = (FEET[N-1].y - FEET[N-2].y) / (FEET[N-1].x - FEET[N-2].x);
+      var e = u - FEET[N-1].x;
+      return FEET[N-1].y + sr * 0.18 * (1 - Math.exp(-e / 0.18));
+    }
+    var i = 0;
+    while(i < N-2 && FEET[i+1].x < u) i++;
+    var p0 = FEET[Math.max(0,i-1)], p1 = FEET[i], p2 = FEET[i+1], p3 = FEET[Math.min(N-1,i+2)];
+    var t = (u - p1.x) / (p2.x - p1.x || 1), t2 = t*t, t3 = t2*t;
+    return 0.5*((2*p1.y) + (-p0.y + p2.y)*t +
+                (2*p0.y - 5*p1.y + 4*p2.y - p3.y)*t2 +
+                (-p0.y + 3*p1.y - 3*p2.y + p3.y)*t3);
+  }
+
+  var ctx = null, W = 0, H = 0, dpr = 1;
+  var g = {wl:0, ww:0, sx:1, sy:1, top:0};      /* badge units -> screen */
+  function X(u){ return g.wl + (u - AX0) * g.sx; }
+  function Y(v){ return g.top + v * g.sy; }
+
+  function measure(){
+    dpr = Math.min(window.devicePixelRatio || 1, 2);
+    W = cv.clientWidth; H = cv.clientHeight;
+    if(!W || !H) return false;
+    cv.width = Math.round(W*dpr); cv.height = Math.round(H*dpr);
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+    /* offset* ignore the scroll transform on the wordmark, which is what we
+       want: the blades are laid out against where the wordmark rests */
+    g.wl = word.offsetLeft;
+    g.ww = word.offsetWidth;
+    g.sx = g.ww / (AX1 - AX0);
+    var wordTop = word.offsetTop;
+    g.top = 74 + Math.max(20, H * 0.045);       /* clear of the navigation */
+    g.sy = (wordTop - g.top) / ATOP;            /* the badge's gap above AURORA */
+    return g.sy > 0;
+  }
+
+  var ease = function(v){ v = v<0?0:v>1?1:v; return 1 - Math.pow(1-v, 3); };
+  var t = 0, born = 0, p = 0;                   /* clock, entrance start, scroll */
+
+  function silhouette(){
+    var steps = 96, x, u;
+    ctx.beginPath();
+    ctx.moveTo(0, H);
+    for(var s=0; s<=steps; s++){
+      x = W * s / steps; u = AX0 + (x - g.wl) / g.sx;
+      ctx.lineTo(x, Y(foot(u)));
+    }
+    ctx.lineTo(W, H);
+    ctx.closePath();
+  }
+
+  function draw(){
+    if(!W || !H) return;
+    ctx.clearRect(0,0,W,H);
+
+    /* a low haze where the curtain is brightest, so it lights the sky a
+       little rather than sitting on it */
+    var breath = reduce ? 0.6 : 0.5 + 0.5*Math.sin(t*0.11);
+    var hx = X(0.62), hy = Y(0.36), rx = g.ww*0.62, ry = g.sy*0.62;
+    ctx.save();
+    ctx.translate(hx, hy); ctx.scale(rx, ry);
+    var hz = ctx.createRadialGradient(0,0,0, 0,0,1);
+    hz.addColorStop(0,   'hsla(158,62%,46%,' + (0.075 + 0.035*breath).toFixed(3) + ')');
+    hz.addColorStop(0.6, 'hsla(176,58%,44%,' + (0.028 + 0.012*breath).toFixed(3) + ')');
+    hz.addColorStop(1,   'hsla(190,55%,40%,0)');
+    ctx.fillStyle = hz;
+    ctx.beginPath(); ctx.arc(0,0,1,0,Math.PI*2); ctx.fill();
+    ctx.restore();
+
+    var age = t - born;
+    for(var i=0; i<BLADES.length; i++){
+      var b = BLADES[i];
+      /* entrance: each blade rises from the mountain in turn, left to right */
+      var grow = reduce ? 1 : ease((age - 0.25 - i*0.045) / 1.5);
+      if(grow <= 0.002) continue;
+
+      /* the screen stretches the badge sideways more than upwards, so the
+         blades are narrowed to keep the logo's slender spikes */
+      var cx = X(b.x), bw = b.w * g.sx * 0.56, half = bw/2;
+      var yb = Y(foot(b.x));
+      var len = (b.base - b.tip) * g.sy * (1 + 0.22*p) * grow;
+      var yt = Math.max(8, yb - len);
+
+      /* brightness drifts along the curtain, never in step */
+      var lum = reduce ? 0.8
+        : 0.78 + 0.13*Math.sin(t*0.42 - b.x*7.0) + 0.09*Math.sin(t*0.23 + i*1.7);
+      var hueTip = 180 + 28*(0.5 + 0.5*Math.sin(t*0.07 - b.x*3.2));    /* teal to blue */
+
+      ctx.beginPath();
+      var fu = b.w * 0.56;
+      ctx.moveTo(cx - half, Y(foot(b.x - fu/2)) + 2);
+      for(var k=1;k<=6;k++){
+        ctx.lineTo(cx - half + bw*(k/6), Y(foot(b.x - fu/2 + fu*(k/6))) + 2);
+      }
+      ctx.lineTo(cx + bw*0.045, yt);
+      ctx.lineTo(cx - bw*0.045, yt);
+      ctx.closePath();
+
+      var gr = ctx.createLinearGradient(0, yb, 0, yt);
+      gr.addColorStop(0,    'hsla(134,50%,34%,' + (0.95*lum).toFixed(3) + ')');
+      gr.addColorStop(0.45, 'hsla(156,58%,49%,' + (0.92*lum).toFixed(3) + ')');
+      gr.addColorStop(1,    'hsla(' + hueTip.toFixed(1) + ',74%,68%,' + (0.85*lum).toFixed(3) + ')');
+      ctx.fillStyle = gr;
+      ctx.fill();
+
+      /* a soft band of light travelling up the blade */
+      if(!reduce){
+        var s = (t*0.075 + i*0.137) % 1;
+        var lo = Math.max(0, s - 0.14), hi = Math.min(1, s + 0.14);
+        var sh = ctx.createLinearGradient(0, yb, 0, yt);
+        sh.addColorStop(0, 'rgba(210,255,236,0)');
+        sh.addColorStop(lo, 'rgba(210,255,236,0)');
+        sh.addColorStop(s,  'rgba(210,255,236,' + (0.20*lum*grow).toFixed(3) + ')');
+        sh.addColorStop(hi, 'rgba(210,255,236,0)');
+        sh.addColorStop(1, 'rgba(210,255,236,0)');
+        ctx.globalCompositeOperation = 'lighter';
+        ctx.fillStyle = sh;
+        ctx.fill();
+        ctx.globalCompositeOperation = 'source-over';
+      }
+    }
+
+    /* the mountain the blades stand behind: it masks their feet and runs on
+       to both edges, deepening into the page colour at the foot */
+    silhouette();
+    var mg = ctx.createLinearGradient(0, Y(0.62), 0, H);
+    mg.addColorStop(0,    '#0B2533');
+    mg.addColorStop(0.35, '#081D29');
+    mg.addColorStop(1,    '#071A24');
+    ctx.fillStyle = mg;
+    ctx.fill();
+    /* and a hairline along its crest, like a surveyed profile */
+    ctx.beginPath();
+    for(var s2=0; s2<=96; s2++){
+      var x2 = W*s2/96, u2 = AX0 + (x2 - g.wl)/g.sx;
+      s2 ? ctx.lineTo(x2, Y(foot(u2))) : ctx.moveTo(x2, Y(foot(u2)));
+    }
+    ctx.strokeStyle = 'rgba(120,214,200,0.22)';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+  }
+
+  /* scroll: 0 at the top, 1 once the hero has gone. The wordmark reads it
+     through --hero-p; the blades read it in draw() */
+  function scrollP(){
+    var h = stage.offsetHeight || 1;
+    var v = -stage.getBoundingClientRect().top / h;
+    return v < 0 ? 0 : v > 1 ? 1 : v;
+  }
+  function applyScroll(){
+    var np = reduce ? 0 : scrollP();
+    if(np !== p){ p = np; stage.style.setProperty('--hero-p', p.toFixed(4)); return true; }
+    return false;
+  }
+
+  var raf = 0, visible = true, last = 0, started = false;
+  function frame(now){
+    raf = 0;
+    if(!visible) return;
+    var moved = applyScroll();
+    if(moved || now - last > 33){                /* the curtain holds at 30fps */
+      t += last ? Math.min(now - last, 100) / 1000 : 0.016;
+      last = now;
+      draw();
+    }
+    raf = requestAnimationFrame(frame);
+  }
+  function go(){ if(!raf && !reduce) raf = requestAnimationFrame(frame); }
+
+  function start(){
+    if(started || !cv.offsetWidth) return false;
+    started = true;
+    ctx = cv.getContext('2d');
+    measure();
+    draw();
+    window.addEventListener('resize', function(){ if(cv.offsetWidth && measure()) draw(); });
+    if(reduce) return true;
+    /* the entrance replays whenever the hero is made ready again (the
+       portfolio demo does this when it loops back to the top) */
+    if('MutationObserver' in window){
+      new MutationObserver(function(){
+        if(stage.classList.contains('stage-ready')) born = t;
+      }).observe(stage, {attributes:true, attributeFilter:['class']});
+    }
+    window.addEventListener('scroll', function(){ if(visible) go(); }, {passive:true});
+    if('IntersectionObserver' in window){
+      new IntersectionObserver(function(es){
+        visible = es[es.length-1].isIntersecting;
+        if(visible){ last = 0; go(); }
+        else { applyScroll(); }
+      },{threshold:0}).observe(stage);
+    }
+    go();
+    return true;
+  }
+  /* wide screens only: a tablet that loads in portrait and is turned to
+     landscape starts the hero then */
+  if(!start()){
+    var later = function(){ if(start()) window.removeEventListener('resize', later); };
+    window.addEventListener('resize', later);
+  }
 })();
 
 /* ---- night sky: stars that breathe, the odd one falling, and on the
