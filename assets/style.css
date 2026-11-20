@@ -327,7 +327,7 @@ footer{background:var(--night);color:rgba(255,255,255,.45);border-top:1px solid 
   display:flex;flex-wrap:wrap;gap:1rem 2rem;align-items:center;justify-content:space-between;
   font-family:var(--mono);font-size:.63rem;letter-spacing:.14em;text-transform:uppercase;
 }
-.foot img{height:46px;opacity:.9}
+.foot img{height:54px;width:auto}
 .credit{
   max-width:var(--maxw);margin:0 auto;padding:0 var(--pad) 1.5rem;text-align:right;
   font-family:var(--mono);font-size:.55rem;letter-spacing:.16em;text-transform:uppercase;
@@ -1099,3 +1099,6 @@ header.hero-page.brand-on::before{opacity:0}
   .hold .lede{display:block}
   .hold .cta-row .btn-ghost{display:inline-block}
 }
+
+/* room between the contact buttons and the footer rule */
+.hold{padding-bottom:clamp(60px,8vw,80px)}
