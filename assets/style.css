@@ -434,7 +434,7 @@ nav a[aria-current="page"]::after{right:0}
 .hero-ridge{display:none}
 .nightsky{display:none}
 /* the wide-screen hero's own layers; the phone hero never shows them */
-.hero-aurora,.hero-badge,.hero-glow,.hero-tag{display:none}
+.hero-aurora,.hero-badge,.hero-glow,.hero-tag,.hero-range{display:none}
 
 /* ---------- mobile hero: the badge, held still ---------- */
 @media (max-width:860px){
@@ -1078,6 +1078,21 @@ header.hero-page.brand-on::before{opacity:0}
     display:block;position:absolute;inset:0;width:100%;height:100%;z-index:1;
     pointer-events:none;mix-blend-mode:screen;
   }
+
+  /* a mountain range across the foot of the hero, three layers of dark denim
+     silhouettes in the manner of the logo's own mountain edge: the far range
+     hazy and pale, the near one dark, each fading into the sky's last colour at
+     the bottom so it joins the page without a seam. They sit behind the badge.
+     On scroll they lag the page by different amounts, the far ones most, for a
+     gentle sense of depth. */
+  .hero-range{
+    display:block;position:absolute;left:0;right:0;bottom:0;z-index:1;
+    width:100%;height:46svh;object-fit:cover;object-position:50% 100%;
+    pointer-events:none;will-change:transform;
+  }
+  .hero-range--far{transform:translate3d(0, calc(var(--hero-p, 0) * 13svh), 0)}
+  .hero-range--mid{transform:translate3d(0, calc(var(--hero-p, 0) * 8svh), 0)}
+  .hero-range--near{transform:translate3d(0, calc(var(--hero-p, 0) * 3svh), 0)}
 
   /* the tagline, under the badge: small, light and widely spaced. It follows
      the badge as the page scrolls, and comes in just after it. */
