@@ -5,5 +5,10 @@
   "assets": {
     "directory": "."
   },
-  "previews": {}
+  "previews": {},
+  // Serve only on the custom domain. The *.workers.dev address and the
+  // per-version preview URLs would sit outside the Cloudflare Access policy
+  // that protects the frameworktools.ca subdomains.
+  "workers_dev": false,
+  "preview_urls": false
 }
