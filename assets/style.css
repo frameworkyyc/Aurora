@@ -1087,7 +1087,7 @@ header.hero-page.brand-on::before{opacity:0}
      gentle sense of depth. */
   .hero-range{
     display:block;position:absolute;left:0;right:0;bottom:0;z-index:1;
-    width:100%;height:46svh;object-fit:cover;object-position:50% 100%;
+    width:100%;height:56svh;object-fit:cover;object-position:50% 100%;
     pointer-events:none;will-change:transform;
   }
   .hero-range--far{transform:translate3d(0, calc(var(--hero-p, 0) * 13svh), 0)}
