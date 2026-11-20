@@ -216,11 +216,19 @@ window.__BADGE_SHORT = {"w":199.143,"h":157.475,"blades":[{"pts":[[10.469,86.535
     return f[j] + (f[j+1] - f[j]) * r;
   }
 
-  /* brand colours: Green #3bb657, Bright Blue #1f83a7, Purple #544197 */
-  var GREEN = [59,182,87], BLUE = [31,131,167], PURPLE = [84,65,151];
-  function lerp(a, b, t){ return [a[0]+(b[0]-a[0])*t, a[1]+(b[1]-a[1])*t, a[2]+(b[2]-a[2])*t]; }
-  function lift(c, t){ return lerp(c, [255,255,255], t); }
-  function rgb(c){ return 'rgb(' + Math.round(c[0]) + ',' + Math.round(c[1]) + ',' + Math.round(c[2]) + ')'; }
+  /* the brand's Green, Bright Blue and Purple, as hue / saturation / lightness
+     (hues 134, 197 and 255 are theirs); saturation and lightness are raised
+     from the printed values so the colour reads clearly as light against the
+     sky. tone(m) walks Green -> Bright Blue -> Purple as m goes 0 -> 1. */
+  var HSL_G = [134, 72, 46], HSL_B = [197, 88, 46], HSL_P = [255, 66, 58];
+  function tone(m, light){
+    m = m < 0 ? 0 : m > 1 ? 1 : m;
+    var a, b, f;
+    if(m < 0.5){ a = HSL_G; b = HSL_B; f = m / 0.5; } else { a = HSL_B; b = HSL_P; f = (m - 0.5) / 0.5; }
+    f = f*f*(3 - 2*f);                                  /* ease, so each colour holds a moment */
+    var l = (a[2] + (b[2]-a[2])*f) * light;
+    return 'hsl(' + (a[0] + (b[0]-a[0])*f).toFixed(1) + ',' + (a[1] + (b[1]-a[1])*f).toFixed(1) + '%,' + Math.min(78, l).toFixed(1) + '%)';
+  }
 
   var ctx = null, W = 0, H = 0, dpr = 1, k = 1;
   function measure(){
@@ -251,16 +259,18 @@ window.__BADGE_SHORT = {"w":199.143,"h":157.475,"blades":[{"pts":[[10.469,86.535
       var rise    = b.mid - b.ymin;
       var s       = Math.min(breathe, (b.mid - b.ceil) / rise) * grow;
 
-      /* colour: green at the foot always, the tip drifting up through bright
-         blue and into purple */
-      var s1  = 0.5 + 0.5*Math.sin(t*0.20 - b.u*4.2);
-      var s2  = 0.5 + 0.5*Math.sin(t*0.09 + 1.1);
-      var raw = Math.max(0, Math.min(1, 0.62*s1 + 0.55*s2 - 0.09));
-      var mix = Math.pow(raw, 2.0);
-      var cFoot = lerp(lerp(GREEN, [0,0,0], 0.22), lerp(BLUE, [0,0,0], 0.22), Math.min(1, mix*0.8));
-      var cMid  = lerp(GREEN, BLUE, Math.min(1, mix*1.4));
-      var cTip  = mix < 0.5 ? lerp(lift(GREEN, 0.28), lift(BLUE, 0.30), mix/0.5)
-                            : lerp(lift(BLUE, 0.30), lift(PURPLE, 0.34), (mix-0.5)/0.5);
+      /* colour flows across the curtain like light moving through it: a wave
+         runs left to right along the row (a band crosses the whole badge in
+         about nine seconds), with a slower swell under it so it never repeats
+         exactly. Each line is graded from its foot to its tip, the tip a step
+         ahead in the sequence, so the colour also climbs the lines. The
+         sequence is the brand's Green, Bright Blue and Purple. */
+      var ph = t*0.55 - b.u*5.2;
+      var wv = 0.7*Math.sin(ph) + 0.3*Math.sin(ph*0.53 + t*0.17 + 1.3);
+      var m  = Math.max(0, Math.min(1, 0.5 + 0.5*wv*1.25));
+      var cFoot = tone(m - 0.40, 0.88);
+      var cMid  = tone(m, 1);
+      var cTip  = tone(m + 0.34, 1.10);
 
       /* the foot stays on the mountain edge; everything above it scales */
       ctx.beginPath();
@@ -275,9 +285,9 @@ window.__BADGE_SHORT = {"w":199.143,"h":157.475,"blades":[{"pts":[[10.469,86.535
       ctx.closePath();
       var yb = b.mid * k;
       var gr = ctx.createLinearGradient(0, yb, 0, Math.min(top, yb - 1));
-      gr.addColorStop(0,    rgb(cFoot));
-      gr.addColorStop(0.46, rgb(cMid));
-      gr.addColorStop(1,    rgb(cTip));
+      gr.addColorStop(0,    cFoot);
+      gr.addColorStop(0.46, cMid);
+      gr.addColorStop(1,    cTip);
       ctx.fillStyle = gr;
       ctx.fill();
     }

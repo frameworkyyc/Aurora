@@ -1102,3 +1102,22 @@ header.hero-page.brand-on::before{opacity:0}
 
 /* room between the contact buttons and the footer rule */
 .hold{padding-bottom:clamp(60px,8vw,80px)}
+
+/* ---------- header over the hero ----------
+   The page opens on the hero alone. The header is hidden from the first
+   paint: the markup carries hero-page from the start, and the same hiding is
+   inlined in the page's head (see index.html) so it holds before this file has
+   loaded. The script adds brand-on once the hero has scrolled past and takes it
+   away on the way back; only then does it fade, because the transition is
+   declared here, on the state change, and not on the hidden starting state. A
+   link that has keyboard focus brings the header into view so it stays
+   reachable. Pages without a hero keep a plain, always-visible header. */
+header.hero-page{
+  opacity:0;visibility:hidden;pointer-events:none;
+  transition:opacity .45s ease, visibility 0s linear .45s, background .45s ease, border-color .45s ease;
+}
+header.hero-page.brand-on,
+header.hero-page:focus-within{
+  opacity:1;visibility:visible;pointer-events:auto;
+  transition:opacity .45s ease, visibility 0s, background .45s ease, border-color .45s ease;
+}

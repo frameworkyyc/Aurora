@@ -6,6 +6,9 @@
 <meta name="robots" content="noindex, nofollow">
 <title>Aurora Surveys — Geomatics Engineering and Reality Capture</title>
 <meta name="description" content="Geomatics engineering, construction surveying and reality capture across British Columbia and the Canadian North.">
+<!-- critical: the header stays hidden until the script reveals it, so it can never show before the hero does -->
+<style>header.hero-page{opacity:0;visibility:hidden;pointer-events:none}</style>
+<noscript><style>html header.hero-page{opacity:1;visibility:visible;pointer-events:auto}</style></noscript>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700;800&family=Noto+Sans+Mono:wght@400;500;700&family=Noto+Serif:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
@@ -15,7 +18,7 @@
 <body>
 <a class="skip" href="#main">Skip to content</a>
 
-<header>
+<header class="hero-page">
   <div class="bar">
     <a class="brand" href="index.html">
       <img src="assets/mark.png" alt="Aurora Surveys">
