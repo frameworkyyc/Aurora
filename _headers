@@ -1,6 +1,9 @@
+# Temporary holding site: keep it out of search results until launch. This line
+# is for the holding site only and must not be carried over when staging replaces main.
 # Aurora may be framed only by the Framework portfolio (used by ?portfolioDemo=1).
 # frame-ancestors supersedes X-Frame-Options in every current browser, and unlike
 # it can name more than one origin. Any other site that tries to frame Aurora is
 # refused. Add an origin here (space separated) if Framework serves from another.
 /*
   Content-Security-Policy: frame-ancestors 'self' https://frameworkco.ca https://staging.frameworkco.ca
+  X-Robots-Tag: noindex, nofollow
