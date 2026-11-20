@@ -434,7 +434,7 @@ nav a[aria-current="page"]::after{right:0}
 .hero-ridge{display:none}
 .nightsky{display:none}
 /* the wide-screen hero's own layers; the phone hero never shows them */
-.hero-aurora,.hero-badge{display:none}
+.hero-aurora,.hero-badge,.hero-glow,.hero-contour,.hero-tag{display:none}
 
 /* ---------- mobile hero: the badge, held still ---------- */
 @media (max-width:860px){
@@ -1072,6 +1072,39 @@ header.hero-page.brand-on::before{opacity:0}
   }
   .stage-ready .hero-badge img{opacity:1;transform:none}
 
+  /* atmosphere: a slow glow of Green, Bright Blue and Purple behind the badge,
+     and faint contour lines rising from the two bottom corners and dying away
+     towards the middle. Both sit between the sky and the badge, and neither
+     is bright enough to compete with it. */
+  .hero-glow{
+    display:block;position:absolute;inset:0;width:100%;height:100%;z-index:1;
+    pointer-events:none;mix-blend-mode:screen;
+  }
+  .hero-contour{
+    display:block;position:absolute;bottom:0;z-index:1;pointer-events:none;
+    height:min(80svh, 52vw);width:auto;opacity:.42;
+  }
+  .hero-contour--l{left:0;
+    -webkit-mask-image:radial-gradient(ellipse 100% 100% at 0% 100%,#000 0%,rgba(0,0,0,.55) 38%,transparent 78%);
+            mask-image:radial-gradient(ellipse 100% 100% at 0% 100%,#000 0%,rgba(0,0,0,.55) 38%,transparent 78%)}
+  .hero-contour--r{right:0;
+    -webkit-mask-image:radial-gradient(ellipse 100% 100% at 100% 100%,#000 0%,rgba(0,0,0,.55) 38%,transparent 78%);
+            mask-image:radial-gradient(ellipse 100% 100% at 100% 100%,#000 0%,rgba(0,0,0,.55) 38%,transparent 78%)}
+
+  /* the tagline, under the badge: small, light and widely spaced. It follows
+     the badge as the page scrolls, and comes in just after it. */
+  .hero-tag{
+    display:block;position:absolute;z-index:2;left:50%;margin:0;
+    top:calc(50% + var(--badge-w) * .3955 + clamp(1.4rem, 3.4svh, 2.6rem));
+    transform:translate3d(-50%, calc(var(--hero-p, 0) * 9svh), 0);
+    opacity:calc(1 - var(--hero-p, 0) * 1.6);
+    font-family:var(--sans);font-weight:400;font-size:clamp(.62rem, .82vw, .86rem);
+    letter-spacing:.46em;text-transform:uppercase;white-space:nowrap;text-indent:.46em;
+    color:rgba(255,255,255,.64);pointer-events:none;
+  }
+  .hero-tag span{display:block;opacity:0;transition:opacity 1.8s ease .9s}
+  .stage-ready .hero-tag span{opacity:1}
+
   /* the phone hero's range is not part of the wide-screen composition */
   .hero-ridge{display:none}
   .intro{margin-top:0;padding-block:clamp(3.5rem,6vw,6rem) 0;overflow:visible}
@@ -1079,6 +1112,7 @@ header.hero-page.brand-on::before{opacity:0}
 }
 @media (min-width:861px) and (prefers-reduced-motion:reduce){
   .hero-badge img{opacity:1;transform:none;transition:none}
+  .hero-tag span{opacity:1;transition:none}
 }
 
 /* ---------- phone hero keeps its own night palette ----------

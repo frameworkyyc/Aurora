@@ -1705,6 +1705,90 @@ window.__BADGE_SHORT = {"w":199.143,"h":157.475,"blades":[{"pts":[[10.469,86.535
   }
 })();
 
+/* ---- wide-screen hero: a slow glow behind the badge ----
+   Three large soft lights, in the brand's Green, Bright Blue and Purple,
+   drift very slowly behind the logo, a minute or more to cross. They are drawn
+   small and let the browser scale them up, which keeps the gradient smooth and
+   the cost close to nothing, and the canvas is blended onto the sky so it only
+   ever adds a little light. Wide screens only; with reduced motion it is drawn
+   once and holds. */
+(function(){
+  var stage = document.getElementById('top');
+  var cv    = stage && stage.querySelector('.hero-glow');
+  if(!cv) return;
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var ctx = null, W = 0, H = 0, t = reduce ? 30 : 0, raf = 0, visible = true, last = 0, started = false;
+  var SCALE = 0.25;                                  /* drawn at a quarter of the size */
+
+  /* x, y: where it sits (fractions of the hero) and how far it wanders; r: its
+     reach as a fraction of the hero's width; a: its strongest light */
+  var LIGHTS = [
+    {c:[59,182,87],  x:.44, y:.50, dx:.10, dy:.05, r:.42, a:.105, s:.085, p:0.0},
+    {c:[31,131,167], x:.60, y:.42, dx:.12, dy:.06, r:.40, a:.125, s:.070, p:2.1},
+    {c:[84,65,151],  x:.50, y:.34, dx:.14, dy:.05, r:.36, a:.140, s:.060, p:4.2}
+  ];
+
+  function measure(){
+    var w = cv.clientWidth, h = cv.clientHeight;
+    if(!w || !h) return false;
+    W = Math.max(2, Math.round(w*SCALE)); H = Math.max(2, Math.round(h*SCALE));
+    cv.width = W; cv.height = H;
+    ctx = cv.getContext('2d');
+    return true;
+  }
+  function draw(){
+    if(!W) return;
+    ctx.clearRect(0,0,W,H);
+    ctx.globalCompositeOperation = 'lighter';
+    for(var i=0;i<LIGHTS.length;i++){
+      var L = LIGHTS[i];
+      var x = (L.x + L.dx*Math.sin(t*L.s + L.p)) * W;
+      var y = (L.y + L.dy*Math.cos(t*L.s*0.8 + L.p)) * H;
+      var r = L.r * W * (0.94 + 0.06*Math.sin(t*L.s*1.3 + L.p));
+      var a = L.a * (0.82 + 0.18*Math.sin(t*L.s*1.1 + L.p*1.7));      /* the light itself breathes a little */
+      var g = ctx.createRadialGradient(x, y, 0, x, y, r);
+      var c = L.c;
+      g.addColorStop(0,    'rgba('+c[0]+','+c[1]+','+c[2]+','+a.toFixed(3)+')');
+      g.addColorStop(0.55, 'rgba('+c[0]+','+c[1]+','+c[2]+','+(a*0.32).toFixed(3)+')');
+      g.addColorStop(1,    'rgba('+c[0]+','+c[1]+','+c[2]+',0)');
+      ctx.fillStyle = g;
+      ctx.fillRect(0, 0, W, H);
+    }
+    ctx.globalCompositeOperation = 'source-over';
+  }
+  function frame(now){
+    raf = 0;
+    if(!visible) return;
+    if(!last || now - last >= 40){                    /* 25 fps is plenty for something this slow */
+      t += last ? Math.min(now - last, 120) / 1000 : 0.04;
+      last = now;
+      draw();
+    }
+    raf = requestAnimationFrame(frame);
+  }
+  function go(){ if(!raf && !reduce) raf = requestAnimationFrame(frame); }
+  function start(){
+    if(started || !cv.offsetWidth) return false;
+    started = true;
+    measure(); draw();
+    window.addEventListener('resize', function(){ if(cv.offsetWidth && measure()) draw(); });
+    if(reduce) return true;
+    if('IntersectionObserver' in window){
+      new IntersectionObserver(function(es){
+        visible = es[es.length-1].isIntersecting;
+        if(visible){ last = 0; go(); }
+      },{threshold:0}).observe(stage);
+    }
+    go();
+    return true;
+  }
+  /* a tablet that loads in portrait and is turned to landscape starts it then */
+  if(!start()){
+    var later = function(){ if(start()) window.removeEventListener('resize', later); };
+    window.addEventListener('resize', later);
+  }
+})();
+
 /* ---- night sky: stars that breathe, the odd one falling, and on the
         instrument backdrop a slow aurora wash behind it all ---- */
 (function(){
