@@ -1,0 +1,12 @@
+# The rest of the site is under construction: send the old page addresses to the
+# holding page. 302, not 301, because this is temporary and search engines should
+# keep the real addresses for when the pages return.
+/index.html  /  302
+/services    /  302
+/services.html /  302
+/projects    /  302
+/projects.html /  302
+/safety      /  302
+/safety.html /  302
+/contact     /  302
+/contact.html /  302

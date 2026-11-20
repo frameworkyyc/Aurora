@@ -426,6 +426,8 @@ nav a[aria-current="page"]::after{right:0}
 /* the night sky and the ridge belong to the phone hero only */
 .hero-ridge{display:none}
 .nightsky{display:none}
+/* the wide-screen hero's own layers; the phone hero never shows them */
+.hero-aurora,.hero-word{display:none}
 
 /* ---------- mobile hero: the badge, held still ---------- */
 @media (max-width:860px){
@@ -1022,53 +1024,73 @@ header.hero-page.brand-on::before{opacity:0}
 }
 
 
-/* ---------- desktop / tablet hero: the phone hero, given more room ----------
-   The mountain-photograph hero is retired. Above 860px the hero is the same
-   piece as on a phone: the outlined badge with its living aurora on the night
-   sky, resting on the same blue range that rises into the next section. The
-   markup, the badge canvas, the star field and the range artwork are the
-   phone's own; this block only lays them out for a wider screen. The phone
-   rules above are untouched. */
+/* ---------- desktop / tablet hero: the brand, opened out to the screen ----------
+   Above 860px the hero is the logo taken apart and set at the scale of the
+   room: no frame, the aurora blades of the badge rising from its mountain
+   line across the whole width, and the AURORA SURVEYS wordmark set enormous
+   along the foot of the screen. Three layers, back to front: the night sky
+   and the instrument readouts, the aurora canvas with its mountain, and the
+   wordmark. The phone hero above is untouched; none of this applies below
+   861px. */
 @media (min-width:861px){
-  /* one measure for the range, so the badge, the readouts and the artwork
-     all agree where it begins */
-  :root{--hr-h:clamp(220px,17vw,280px);--hr-rise:calc(var(--hr-h) * .5 + 1rem)}
-  .stage{height:auto;min-height:100svh;margin-top:-74px;position:relative;overflow:visible;z-index:0}
-  .stage-sticky{
-    position:relative;inset:auto;height:auto;min-height:100svh;overflow:visible;z-index:auto;
-    padding:calc(74px + 1.5rem) var(--pad) var(--hr-rise);
-    display:flex;align-items:center;justify-content:center;
+  /* one measure for the wordmark, shared by the readouts and (through its
+     box) by the aurora canvas, so the three always line up. 441/1691 is the
+     artwork's own height to width. */
+  :root{
+    --word-w:min(90vw, 153svh);
+    --word-h:calc(var(--word-w) * .2608);
+    --word-b:clamp(1.6rem, 4.5svh, 3.25rem);
+    --word-l:calc(50% - var(--word-w) / 2);
   }
+  .stage{height:100svh;min-height:600px;margin-top:-74px;position:relative;overflow:hidden;z-index:0}
+  .stage-sticky{position:absolute;inset:0;height:auto;min-height:0;padding:0;display:block;overflow:hidden;z-index:auto}
   .nightsky{
     display:block;position:absolute;inset:0;width:100%;height:100%;
     z-index:0;pointer-events:none;
   }
-  /* the badge is the focal point: about 43% of the width, held back only so
-     that it always fits the screen's height with the range beneath it */
-  .badge-live{
-    display:block;position:relative;z-index:2;
-    width:min(43vw, calc((100svh - 74px - 1.5rem - var(--hr-rise)) * 0.9388));
-    min-width:300px;aspect-ratio:1273/1356;
-  }
-  .badge-lights,.badge-frame{position:absolute;inset:0;width:100%;height:100%}
-  .badge-lights{display:block}
-  .badge-frame{object-fit:contain}
+  .badge-live{display:none}
 
-  /* the range that carries the hero into the next section */
-  .intro{margin-top:0;padding-block:clamp(3.5rem,6vw,6rem) 0;overflow:visible}
-  .hero-ridge{
-    display:block;position:absolute;left:0;right:0;
-    top:calc(var(--hr-h) * -.88);
-    height:var(--hr-h);pointer-events:none;z-index:0;
+  /* middle layer: the blades and the mountain they stand behind */
+  .hero-aurora{display:block;position:absolute;inset:0;width:100%;height:100%;z-index:1;pointer-events:none}
+
+  /* front layer: the wordmark. The outer box follows the scroll (it sinks
+     and fades as the page moves on); the image inside does the entrance, so
+     the two never fight over the same transform. */
+  .hero-word{
+    display:block;position:absolute;z-index:2;
+    left:var(--word-l);bottom:var(--word-b);width:var(--word-w);
+    transform:translate3d(0, calc(var(--hero-p, 0) * 14svh), 0);
+    opacity:calc(1 - var(--hero-p, 0) * 1.25);
   }
-  .hero-ridge svg{width:100%;height:100%;display:block}
-  .hero-ridge .hr-far{fill:#17455A}
-  .hero-ridge .hr-mid{fill:#0E2E3E}
-  .hero-ridge .hr-near{fill:var(--night)}
+  .hero-word img{
+    display:block;width:100%;height:auto;
+    opacity:0;transform:translateY(22px);
+    transition:opacity 1.5s ease .35s, transform 1.8s cubic-bezier(.16,.84,.28,1) .35s;
+  }
+  .stage-ready .hero-word img{opacity:1;transform:none}
+
+  /* the hero carries its own mountain into the next section now */
+  .hero-ridge{display:none}
+  .intro{margin-top:0;padding-block:clamp(3.5rem,6vw,6rem) 0;overflow:visible}
   .intro .wrap{position:relative;z-index:1}
 
-  /* readouts sit above the range, not under it */
-  .ht-bl,.ht-br{bottom:calc(var(--hr-rise) + 1rem)}
+  /* readouts keep to the wordmark's edges: two at the top corners, and two
+     on the instrument baseline in the open ground left of SURVEYS */
+  .ht-tl{left:var(--word-l)}
+  .ht-tr{right:var(--word-l)}
+  .ht-bl,.ht-br{bottom:calc(var(--word-b) + var(--word-h) * .02)}
+  .ht-bl{left:var(--word-l)}
+  .ht-br{left:calc(var(--word-l) + var(--word-w) * .24);right:auto}
+  .ht-br::before{left:-30px;right:auto;background:linear-gradient(90deg,rgba(130,205,205,.5),transparent)}
+}
+@media (min-width:861px) and (prefers-reduced-motion:reduce){
+  .hero-word img{opacity:1;transform:none;transition:none}
+}
 
-  header.hero-page.scrolled{background:rgba(7,26,36,.88);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+/* ---------- temporary holding page ----------
+   The phone intro normally hides its paragraph and secondary button; on the
+   holding page those carry the message and the phone number, so show them. */
+@media (max-width:860px){
+  .hold .lede{display:block}
+  .hold .cta-row .btn-ghost{display:inline-block}
 }
