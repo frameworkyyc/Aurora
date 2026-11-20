@@ -1,15 +1,22 @@
 /* ---------- tokens ---------- */
 :root{
-  --night:#071A24;
-  --navy:#0F2D3D;
-  --steel:#18465D;
-  --cyan:#1DACB5;
-  --green:#39B44A;
-  --ice:#EDF2F3;
+  /* the brand standards' colours (Brand Standards Guide, May 2026) */
+  --black:#000000;
+  --denim:#05364C;        /* Denim Blue */
+  --green:#3BB657;
+  --blue:#1F83A7;         /* Bright Blue: secondary, used sparingly */
+  --purple:#544197;       /* Purple: secondary, used sparingly */
+  --sky:linear-gradient(180deg,var(--black),var(--denim));   /* Sky Gradient */
   --paper:#FFFFFF;
-  --rule:rgba(15,45,61,.14);
+  --ice:#EDF2F3;          /* a neutral for light sections */
+  /* working names used through the stylesheet, set to the brand colours */
+  --night:var(--denim);   /* dark section ground */
+  --navy:var(--denim);    /* text and panels on light sections */
+  --steel:var(--denim);
+  --cyan:var(--green);    /* accent text on dark grounds: green, which holds contrast on Denim Blue */
+  --rule:rgba(5,54,76,.14);
   --rule-dark:rgba(255,255,255,.16);
-  --aurora:linear-gradient(90deg,var(--green),var(--cyan));
+  --aurora:linear-gradient(90deg,var(--green),var(--blue));
 
   --sans:"Noto Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
   --serif:"Noto Serif",Georgia,"Times New Roman",serif;
@@ -35,7 +42,7 @@ a{color:inherit}
   color:var(--steel);margin:0 0 1.25rem;
 }
 .on-dark .eyebrow{color:var(--cyan)}
-h1,h2,h3,.h{font-family:var(--sans);font-weight:800;letter-spacing:-.025em;line-height:1.06;margin:0}
+h1,h2,h3,.h{font-family:var(--sans);font-weight:700;letter-spacing:-.025em;line-height:1.06;margin:0}
 h2{font-size:clamp(1.9rem,3.6vw,3rem)}
 h3{font-size:1.12rem;letter-spacing:-.01em;line-height:1.3;font-weight:700}
 p{margin:0 0 1rem}
@@ -52,7 +59,7 @@ section{padding-block:clamp(4rem,9vw,7.5rem)}
    occupies is given back as padding on main. */
 header{
   position:fixed;top:0;left:0;right:0;z-index:60;
-  background:rgba(7,26,36,.94);
+  background:rgba(5,54,76,.94);
   border-bottom:1px solid var(--rule-dark);
 }
 main{padding-top:74px}
@@ -89,8 +96,8 @@ nav a:hover::after{right:0}
   text-decoration:none;padding:.92rem 1.6rem;border-radius:2px;display:inline-block;
   transition:transform .2s ease,background .25s ease,color .25s ease,border-color .25s ease;
 }
-.btn-solid{background:var(--green);color:#04141B}
-.btn-solid:hover{background:#48c95a;transform:translateY(-2px)}
+.btn-solid{background:var(--green);color:#000000}
+.btn-solid:hover{background:#55c46d;transform:translateY(-2px)}
 .btn-ghost{border:1px solid var(--rule-dark);color:#fff}
 .btn-ghost:hover{border-color:var(--cyan);color:var(--cyan);transform:translateY(-2px)}
 
@@ -107,13 +114,13 @@ nav a:hover::after{right:0}
 .axis{position:relative;height:1px;background:rgba(255,255,255,.16);margin-bottom:5.4rem}
 .axis-run{
   position:absolute;left:0;top:0;height:1px;width:0;
-  background:linear-gradient(90deg,rgba(57,180,74,0),rgba(57,180,74,.35) 45%,var(--green));
+  background:linear-gradient(90deg,rgba(59,182,87,0),rgba(59,182,87,.35) 45%,var(--green));
   pointer-events:none;
 }
 .axis-dot{
   position:absolute;top:50%;left:0;width:7px;height:7px;margin:-3.5px 0 0 -3.5px;
   border-radius:50%;background:var(--green);opacity:0;pointer-events:none;
-  box-shadow:0 0 12px rgba(57,180,74,.85),0 0 3px rgba(180,255,200,.9);
+  box-shadow:0 0 12px rgba(59,182,87,.85),0 0 3px rgba(180,255,200,.9);
 }
 .station{
   position:absolute;top:0;transform:translate(-50%,-50%);
@@ -140,7 +147,7 @@ nav a:hover::after{right:0}
 .station.passed .dot{background:var(--green);border-color:var(--green)}
 .station.passed .txt{color:rgba(255,255,255,.72)}
 .station.passed .txt b{color:var(--green)}
-.station.hit .dot{transform:scale(1.6);box-shadow:0 0 14px rgba(57,180,74,.8)}
+.station.hit .dot{transform:scale(1.6);box-shadow:0 0 14px rgba(59,182,87,.8)}
 .station:hover .txt b,.station:focus-visible .txt b{color:var(--green)}
 @media (max-width:720px){
   /* Vancouver and Port Alice are barely a degree apart: on a phone only the
@@ -248,7 +255,7 @@ nav a:hover::after{right:0}
 .proj:hover .proj-media img{filter:saturate(1.08) brightness(1.05)}
 .proj-meta{font-family:var(--mono);font-size:.63rem;letter-spacing:.18em;text-transform:uppercase;color:var(--green);margin-bottom:.9rem;display:flex;gap:.7rem;align-items:center}
 .proj-meta i{font-style:normal;color:var(--steel);opacity:.65}
-.proj h3{font-size:clamp(1.35rem,2.4vw,1.85rem);letter-spacing:-.025em;font-weight:800;margin-bottom:.7rem}
+.proj h3{font-size:clamp(1.35rem,2.4vw,1.85rem);letter-spacing:-.025em;font-weight:700;margin-bottom:.7rem}
 .proj-foot{
   margin:2rem 0 0;font-family:var(--mono);font-size:.66rem;letter-spacing:.14em;
   text-transform:uppercase;line-height:2;color:var(--steel);max-width:70ch;
@@ -262,11 +269,11 @@ nav a:hover::after{right:0}
 .stats{display:grid;grid-template-columns:repeat(3,1fr);margin:clamp(2.5rem,5vw,3.5rem) 0 clamp(2.5rem,5vw,3.5rem)}
 .stat{padding:clamp(1.6rem,3vw,2.4rem) 1.25rem;text-align:center}
 .stat:nth-child(1){background:var(--night)}
-.stat:nth-child(2){background:var(--cyan);color:#04141B}
+.stat:nth-child(2){background:var(--cyan);color:#000000}
 .stat:nth-child(3){background:var(--steel)}
 .stat b{
   display:flex;justify-content:center;align-items:flex-start;
-  font-family:var(--sans);font-weight:800;font-size:clamp(2.2rem,5vw,3.4rem);
+  font-family:var(--sans);font-weight:700;font-size:clamp(2.2rem,5vw,3.4rem);
   letter-spacing:-.04em;line-height:1;font-variant-numeric:tabular-nums;
 }
 .reel{display:block;height:1.06em;overflow:hidden}
@@ -299,7 +306,7 @@ nav a:hover::after{right:0}
 .contact{background:var(--night);color:#fff;position:relative;overflow:hidden}
 .contact::before{
   content:"";position:absolute;inset:auto 0 0 0;height:180px;
-  background:radial-gradient(120% 100% at 50% 100%,rgba(57,180,74,.22),transparent 70%);
+  background:radial-gradient(120% 100% at 50% 100%,rgba(59,182,87,.22),transparent 70%);
   pointer-events:none;
 }
 .contact .wrap{position:relative;z-index:2}
@@ -335,7 +342,7 @@ footer{background:var(--night);color:rgba(255,255,255,.45);border-top:1px solid 
 .rv.in{opacity:1;transform:none}
 :focus-visible{outline:2px solid var(--green);outline-offset:3px}
 .skip{position:absolute;left:-9999px}
-.skip:focus{left:1rem;top:1rem;z-index:99;background:var(--green);color:#04141B;padding:.6rem 1rem;font-family:var(--sans);font-weight:700}
+.skip:focus{left:1rem;top:1rem;z-index:99;background:var(--green);color:#000000;padding:.6rem 1rem;font-family:var(--sans);font-weight:700}
 @media (prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
   *{animation:none!important;transition:none!important}
@@ -355,7 +362,7 @@ nav a[aria-current="page"]::after{right:0}
   .menu-btn{display:block}
   nav{
     display:block;position:absolute;top:100%;left:0;right:0;
-    background:rgba(7,26,36,.98);border-bottom:1px solid var(--rule-dark);
+    background:rgba(5,54,76,.98);border-bottom:1px solid var(--rule-dark);
     padding:.5rem var(--pad) 1.25rem;
     max-height:0;overflow:hidden;visibility:hidden;transition:max-height .3s ease,visibility .3s;
   }
@@ -382,7 +389,7 @@ nav a[aria-current="page"]::after{right:0}
   padding:clamp(1.5rem,3vw,2.2rem);display:flex;flex-direction:column;text-decoration:none;color:inherit;
   transition:transform .3s cubic-bezier(.2,.7,.3,1),box-shadow .3s ease;
 }
-.teaser:hover{transform:translateY(-4px);box-shadow:0 18px 40px -24px rgba(15,45,61,.55)}
+.teaser:hover{transform:translateY(-4px);box-shadow:0 18px 40px -24px rgba(5,54,76,.55)}
 .teaser .kicker{font-family:var(--mono);font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;color:var(--steel);margin-bottom:1rem}
 .teaser h3{margin-bottom:.6rem;font-size:1.25rem}
 .teaser p{font-size:.97rem;margin-bottom:1.6rem}
@@ -408,7 +415,7 @@ nav a[aria-current="page"]::after{right:0}
 }
 .field textarea{min-height:130px;resize:vertical}
 .field input:focus,.field textarea:focus,.field select:focus{
-  outline:none;border-color:var(--green);background:rgba(57,180,74,.07);
+  outline:none;border-color:var(--green);background:rgba(59,182,87,.07);
 }
 .field input::placeholder,.field textarea::placeholder{color:rgba(255,255,255,.32)}
 .form .btn-solid{justify-self:start;border:0;cursor:pointer;font-size:.88rem}
@@ -427,7 +434,7 @@ nav a[aria-current="page"]::after{right:0}
 .hero-ridge{display:none}
 .nightsky{display:none}
 /* the wide-screen hero's own layers; the phone hero never shows them */
-.hero-aurora,.hero-word{display:none}
+.hero-aurora,.hero-badge{display:none}
 
 /* ---------- mobile hero: the badge, held still ---------- */
 @media (max-width:860px){
@@ -471,7 +478,7 @@ nav a[aria-current="page"]::after{right:0}
    wordmark until the hero has scrolled past */
 header.hero-page{background:transparent;border-bottom-color:transparent;
   transition:background .45s ease,border-color .45s ease}
-header.hero-page.brand-on{background:rgba(7,26,36,.94);border-bottom-color:var(--rule-dark)}
+header.hero-page.brand-on{background:rgba(5,54,76,.94);border-bottom-color:var(--rule-dark)}
 /* over the hero the bar is transparent and the wordmark is held back — the
    drawn wordmark is already the hero — but the links stay at full strength.
    The logo and the bar background arrive together once it is past. */
@@ -482,7 +489,7 @@ header.hero-page .brand{
 header.hero-page.brand-on .brand{opacity:1;pointer-events:auto;transform:none}
 header.hero-page::before{
   content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;
-  background:linear-gradient(180deg,rgba(4,14,21,.55),rgba(4,14,21,0));
+  background:linear-gradient(180deg,rgba(0,0,0,.55),rgba(0,0,0,0));
   opacity:1;transition:opacity .45s ease;
 }
 header.hero-page.brand-on::before{opacity:0}
@@ -506,7 +513,7 @@ header.hero-page.brand-on::before{opacity:0}
   /* light range rising into the night */
   .teasers{--ridge:var(--ice);--ridge-back:#C9D6D8}
   /* dark range against the light above it */
-  .contact{--ridge:var(--night);--ridge-back:#12313F}
+  .contact{--ridge:var(--night);--ridge-back:#042E41}
 }
 
 
@@ -567,8 +574,8 @@ header.hero-page.brand-on::before{opacity:0}
   height:clamp(190px,34%,340px);z-index:1;pointer-events:none;
 }
 .setup-ridge svg{width:100%;height:100%;display:block}
-.setup-ridge .sr-far{fill:#0F3244}
-.setup-ridge .sr-mid{fill:#0B2634}
+.setup-ridge .sr-far{fill:#042E41}
+.setup-ridge .sr-mid{fill:#042635}
 .setup-ridge .sr-near{fill:var(--night)}
 #rig{position:relative;z-index:2}
 
@@ -589,7 +596,7 @@ header.hero-page.brand-on::before{opacity:0}
   .stage-ready .ht-tr{transition-delay:.5s}
   .stage-ready .ht-bl{transition-delay:.65s}
   .stage-ready .ht-br{transition-delay:.8s}
-  .ht-k{color:rgba(140,200,205,.55)}
+  .ht-k{color:rgba(143,193,211,.55)}
   .ht-v{color:rgba(226,238,240,.82);letter-spacing:.12em}
   .ht-tl{top:calc(74px + 2.2rem);left:var(--pad)}
   .ht-tr{top:calc(74px + 2.2rem);right:var(--pad)}
@@ -597,10 +604,10 @@ header.hero-page.brand-on::before{opacity:0}
   .ht-br{bottom:2.4rem;right:var(--pad)}
   .ht::before{
     content:"";position:absolute;top:50%;width:22px;height:1px;
-    background:linear-gradient(90deg,rgba(130,205,205,.5),transparent);
+    background:linear-gradient(90deg,rgba(143,193,211,.5),transparent);
   }
   .ht-tl::before,.ht-bl::before{left:-30px}
-  .ht-tr::before,.ht-br::before{right:-30px;background:linear-gradient(270deg,rgba(130,205,205,.5),transparent)}
+  .ht-tr::before,.ht-br::before{right:-30px;background:linear-gradient(270deg,rgba(143,193,211,.5),transparent)}
 
   /* the headline resolves a line at a time, from behind its own baseline */
   .intro h1 .ln{display:block;overflow:hidden}
@@ -621,7 +628,7 @@ header.hero-page.brand-on::before{opacity:0}
   /* a rule that draws itself under the eyebrow, like a baseline being set */
   .intro .eyebrow::after{
     content:"";display:block;height:1px;margin-top:.9rem;width:0;
-    background:linear-gradient(90deg,var(--green),rgba(29,172,181,0));
+    background:linear-gradient(90deg,var(--green),rgba(31,131,167,0));
     transition:width 1.4s cubic-bezier(.16,.84,.28,1) .3s;
   }
   .intro.lines-in .eyebrow::after{width:min(340px,34vw)}
@@ -657,13 +664,13 @@ header.hero-page.brand-on::before{opacity:0}
   /* each note is pinned to the instrument by a drawn leader */
   .setup .beat::before{
     content:"";position:absolute;top:.45rem;width:0;height:1px;
-    background:linear-gradient(90deg,var(--green),rgba(29,172,181,0));
+    background:linear-gradient(90deg,var(--green),rgba(31,131,167,0));
     transition:width 1.1s cubic-bezier(.16,.84,.28,1);
   }
   .setup .beat{position:relative}
   .setup .beat::before{left:calc(100% + 1.4rem)}
   .setup .beat[data-beat="1"]::before{left:auto;right:calc(100% + 1.4rem);
-    background:linear-gradient(270deg,var(--green),rgba(29,172,181,0))}
+    background:linear-gradient(270deg,var(--green),rgba(31,131,167,0))}
   .setup .beat.live::before{width:clamp(60px,9vw,150px)}
   .readout{left:var(--pad);bottom:clamp(2rem,6vh,4rem)}
 }
@@ -684,7 +691,7 @@ header.hero-page.brand-on::before{opacity:0}
 }
 .sp-row{display:flex;justify-content:space-between;gap:2rem;
   border-top:1px solid rgba(255,255,255,.10);padding-top:.5rem}
-.sp-k{color:rgba(140,200,205,.55)}
+.sp-k{color:rgba(143,193,211,.55)}
 .sp-v{color:rgba(232,242,244,.9);letter-spacing:.08em}
 .survey-steps{list-style:none;margin:0;padding:0;position:relative;z-index:2}
 .survey-steps li{
@@ -739,7 +746,7 @@ header.hero-page.brand-on::before{opacity:0}
 .capture-count{
   position:absolute;right:var(--pad);bottom:clamp(2rem,7vh,4.5rem);z-index:2;
   font-family:var(--mono);font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;
-  color:rgba(140,200,205,.6);
+  color:rgba(143,193,211,.6);
 }
 .capture-count b{color:rgba(232,244,246,.95);font-weight:500;letter-spacing:.06em}
 .capture-steps{list-style:none;margin:0;padding:0;position:relative;z-index:2}
@@ -787,7 +794,7 @@ header.hero-page.brand-on::before{opacity:0}
 }
 .pm-row{display:flex;justify-content:space-between;gap:1.5rem;
   padding:.5rem 0;border-bottom:1px solid var(--rule)}
-.pm-k{color:rgba(24,70,93,.55)}
+.pm-k{color:rgba(5,54,76,.55)}
 .pm-v{color:var(--navy);text-align:right}
 @media (min-width:861px){
   .proj{grid-template-columns:minmax(0,6fr) minmax(0,7fr);gap:clamp(2rem,5vw,4.5rem);
@@ -797,8 +804,8 @@ header.hero-page.brand-on::before{opacity:0}
   .proj-media::after{
     content:"";position:absolute;inset:0;pointer-events:none;
     background:
-      linear-gradient(90deg,rgba(57,180,74,.5) 1px,transparent 1px) 50% 0/1px 14px repeat-y,
-      linear-gradient(0deg,rgba(57,180,74,.5) 1px,transparent 1px) 0 50%/14px 1px repeat-x;
+      linear-gradient(90deg,rgba(59,182,87,.5) 1px,transparent 1px) 50% 0/1px 14px repeat-y,
+      linear-gradient(0deg,rgba(59,182,87,.5) 1px,transparent 1px) 0 50%/14px 1px repeat-x;
     opacity:0;transition:opacity .45s ease;
   }
   .proj:hover .proj-media::after{opacity:.5}
@@ -820,23 +827,23 @@ header.hero-page.brand-on::before{opacity:0}
   }
   .thread-run{
     position:absolute;left:-1px;top:0;width:3px;height:0;
-    background:linear-gradient(180deg,rgba(57,180,74,0),var(--green));
+    background:linear-gradient(180deg,rgba(59,182,87,0),var(--green));
   }
   .thread-run::after{
     content:"";position:absolute;left:-2.5px;bottom:-3px;width:7px;height:7px;
     border-radius:50%;background:var(--green);
-    box-shadow:0 0 10px rgba(57,180,74,.8);
+    box-shadow:0 0 10px rgba(59,182,87,.8);
   }
   .thread-read{
     position:absolute;top:calc(18vh - 1.6rem);left:-.35rem;
     font-family:var(--mono);font-size:.55rem;letter-spacing:.18em;
-    color:rgba(140,200,205,.55);
+    color:rgba(143,193,211,.55);
   }
   /* the thread reads dark over the light sections */
   .thread.on-light .thread-line{
-    background:linear-gradient(180deg,transparent,rgba(15,45,61,.16) 12%,rgba(15,45,61,.16) 88%,transparent);
+    background:linear-gradient(180deg,transparent,rgba(5,54,76,.16) 12%,rgba(5,54,76,.16) 88%,transparent);
   }
-  .thread.on-light .thread-read{color:rgba(24,70,93,.5)}
+  .thread.on-light .thread-read{color:rgba(5,54,76,.5)}
 }
 
 /* ---------- 09 · micro-interactions ---------- */
@@ -910,7 +917,7 @@ header.hero-page.brand-on::before{opacity:0}
   }
   .rig-leads{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
   .rl-ring{
-    fill:none;stroke:rgba(150,206,208,.16);stroke-width:.12;
+    fill:none;stroke:rgba(143,193,211,.16);stroke-width:.12;
     stroke-dasharray:1.2 1.6;
     opacity:0;transition:opacity .8s ease;
     transform-origin:50% 50%;transform:scale(.86);
@@ -918,7 +925,7 @@ header.hero-page.brand-on::before{opacity:0}
   }
   .rig-ann.on .rl-ring{opacity:1;transform:scale(1)}
   .rl-lines line{
-    stroke:rgba(150,206,208,.34);stroke-width:.11;
+    stroke:rgba(143,193,211,.34);stroke-width:.11;
     stroke-dasharray:60;stroke-dashoffset:60;
     transition:stroke-dashoffset .9s cubic-bezier(.16,.84,.28,1);
   }
@@ -935,13 +942,13 @@ header.hero-page.brand-on::before{opacity:0}
     transition:opacity .6s ease,transform .6s cubic-bezier(.2,.8,.3,1);
   }
   .ra.on{opacity:1;transform:none}
-  .ra-k{font-size:.55rem;letter-spacing:.24em;text-transform:uppercase;color:rgba(150,206,208,.5)}
+  .ra-k{font-size:.55rem;letter-spacing:.24em;text-transform:uppercase;color:rgba(143,193,211,.5)}
   .ra-v{font-size:.72rem;letter-spacing:.1em;color:rgba(228,240,242,.92)}
   /* the active measurement is the only green thing here */
   .ra-sd.on .ra-v,.ra-hz.on .ra-v{color:#8ef0b4}
   .ra::before{
     content:"";position:absolute;top:.36rem;width:5px;height:5px;
-    border:1px solid rgba(150,206,208,.55);
+    border:1px solid rgba(143,193,211,.55);
     transform:rotate(45deg) scale(.4);opacity:0;
     transition:transform .5s cubic-bezier(.16,.84,.28,1),opacity .5s ease;
   }
@@ -1024,23 +1031,20 @@ header.hero-page.brand-on::before{opacity:0}
 }
 
 
-/* ---------- desktop / tablet hero: the brand, opened out to the screen ----------
-   Above 860px the hero is the logo taken apart and set at the scale of the
-   room: no frame, the aurora blades of the badge rising from its mountain
-   line across the whole width, and the AURORA SURVEYS wordmark set enormous
-   along the foot of the screen. Three layers, back to front: the night sky
-   and the instrument readouts, the aurora canvas with its mountain, and the
-   wordmark. The phone hero above is untouched; none of this applies below
-   861px. */
+/* ---------- desktop / tablet hero: the official Badge SHORT, centred ----------
+   Above 860px the hero is the brand's own Badge SHORT, set once in the middle
+   of the screen with plenty of sky around it, on the official Sky Gradient
+   (black at the top to Denim Blue at the bottom). The frame, the AURORA
+   wordmark and SURVEYS are the supplied vector artwork, untouched; the
+   aurora lines are drawn on a canvas from that same artwork so they can move
+   without changing their shapes, spacing or the mountain edge they stand on.
+   The phone hero above is untouched; none of this applies below 861px. */
 @media (min-width:861px){
-  /* one measure for the wordmark, shared by the readouts and (through its
-     box) by the aurora canvas, so the three always line up. 441/1691 is the
-     artwork's own height to width. */
   :root{
-    --word-w:min(90vw, 153svh);
-    --word-h:calc(var(--word-w) * .2608);
-    --word-b:clamp(1.6rem, 4.5svh, 3.25rem);
-    --word-l:calc(50% - var(--word-w) / 2);
+    /* 199.143 x 157.475 is the artwork's own width to height. The badge takes
+       a little over half the height of the screen, never more than 46% of its
+       width, so the sky around it stays generous. */
+    --badge-w:min(46vw, calc(58svh * 1.2646));
   }
   .stage{height:100svh;min-height:600px;margin-top:-74px;position:relative;overflow:hidden;z-index:0}
   .stage-sticky{position:absolute;inset:0;height:auto;min-height:0;padding:0;display:block;overflow:hidden;z-index:auto}
@@ -1050,41 +1054,42 @@ header.hero-page.brand-on::before{opacity:0}
   }
   .badge-live{display:none}
 
-  /* middle layer: the blades and the mountain they stand behind */
-  .hero-aurora{display:block;position:absolute;inset:0;width:100%;height:100%;z-index:1;pointer-events:none}
-
-  /* front layer: the wordmark. The outer box follows the scroll (it sinks
-     and fades as the page moves on); the image inside does the entrance, so
-     the two never fight over the same transform. */
-  .hero-word{
-    display:block;position:absolute;z-index:2;
-    left:var(--word-l);bottom:var(--word-b);width:var(--word-w);
-    transform:translate3d(0, calc(var(--hero-p, 0) * 14svh), 0);
-    opacity:calc(1 - var(--hero-p, 0) * 1.25);
+  /* the badge: centred on both axes. The outer box follows the scroll (it
+     sinks a little and fades as the page moves on); the artwork inside does
+     the entrance, so the two never fight over the same transform. */
+  .hero-badge{
+    display:block;position:absolute;z-index:2;left:50%;top:50%;
+    width:var(--badge-w);aspect-ratio:199.143 / 157.475;
+    transform:translate3d(-50%, calc(-50% + var(--hero-p, 0) * 9svh), 0);
+    opacity:calc(1 - var(--hero-p, 0) * 1.3);
+    pointer-events:none;
   }
-  .hero-word img{
-    display:block;width:100%;height:auto;
-    opacity:0;transform:translateY(22px);
-    transition:opacity 1.5s ease .35s, transform 1.8s cubic-bezier(.16,.84,.28,1) .35s;
+  .hero-aurora{display:block;position:absolute;inset:0;width:100%;height:100%}
+  .hero-badge img{
+    position:absolute;inset:0;width:100%;height:100%;display:block;
+    opacity:0;transform:translateY(14px);
+    transition:opacity 1.4s ease .25s, transform 1.6s cubic-bezier(.16,.84,.28,1) .25s;
   }
-  .stage-ready .hero-word img{opacity:1;transform:none}
+  .stage-ready .hero-badge img{opacity:1;transform:none}
 
-  /* the hero carries its own mountain into the next section now */
+  /* the phone hero's range is not part of the wide-screen composition */
   .hero-ridge{display:none}
   .intro{margin-top:0;padding-block:clamp(3.5rem,6vw,6rem) 0;overflow:visible}
   .intro .wrap{position:relative;z-index:1}
-
-  /* readouts keep to the wordmark's edges: two at the top corners, and two
-     on the instrument baseline in the open ground left of SURVEYS */
-  .ht-tl{left:var(--word-l)}
-  .ht-tr{right:var(--word-l)}
-  .ht-bl,.ht-br{bottom:calc(var(--word-b) + var(--word-h) * .02)}
-  .ht-bl{left:var(--word-l)}
-  .ht-br{left:calc(var(--word-l) + var(--word-w) * .24);right:auto}
-  .ht-br::before{left:-30px;right:auto;background:linear-gradient(90deg,rgba(130,205,205,.5),transparent)}
 }
 @media (min-width:861px) and (prefers-reduced-motion:reduce){
-  .hero-word img{opacity:1;transform:none;transition:none}
+  .hero-badge img{opacity:1;transform:none;transition:none}
+}
+
+/* ---------- phone hero keeps its own night palette ----------
+   The phone hero (the stage and the first screen of the intro) is approved as
+   it is and has not been re-coloured with the rest of the site. These three
+   values are its original ground, accent and green. */
+@media (max-width:860px){
+  .stage,.intro{--night:#071A24;--cyan:#1DACB5;--green:#39B44A;--aurora:linear-gradient(90deg,#39B44A,#1DACB5)}
+  .intro h1{font-weight:800}
+  .intro .btn-solid{color:#04141B}
+  header.hero-page::before{background:linear-gradient(180deg,rgba(4,14,21,.55),rgba(4,14,21,0))}
 }
 
 /* ---------- temporary holding page ----------
