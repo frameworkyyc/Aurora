@@ -1525,55 +1525,52 @@ window.__rig2D = function(){
   }
 })();
 
-/* ---- wide-screen hero: the badge's aurora opened out to the whole screen ----
-   The same blades as the logo (window.__AURORA_BLADES), unframed and set over
-   the wordmark the way the badge sets them: the blade span matches the AURORA
-   letters and the mountain line sits the badge's own distance above them.
-   Heights keep the logo's variation but are fitted to the screen. The blades
-   stand behind a continuous mountain silhouette that carries on to both
-   edges, and live quietly: brightness drifting blade to blade, and a soft
-   light running up each one, staggered across the curtain. As the page
-   scrolls the blades reach a little higher while the wordmark sinks away.
-   Wide screens only; with reduced motion it is drawn once and holds. */
+/* ---- wide-screen hero: the logo's aurora, set large above the wordmark ----
+   The artwork is the official aurora graphic (the 24 tapered lines standing
+   on the mountain-shaped lower edge), carried over point for point from the
+   supplied file: shapes, spacing, relative heights and the lower edge are the
+   logo's own, drawn at one uniform scale. Nothing is stretched sideways and
+   the mountain is not extended; below the feet is plain sky, as in the logo.
+   The movement is the badge's original: each line breathes in length with a
+   slow crest running across the curtain, feet fixed on the mountain edge, and
+   the tips drift from green through teal and blue to violet. Only wide
+   screens run it; with reduced motion it is drawn once and holds. */
+window.__HERO_BLADES = {"w":830,"h":657,"blades":[{"pts":[[52.6,214.0],[53.0,219.8],[53.2,220.1],[53.5,222.3],[54.1,231.4],[61.7,355.1],[60.7,355.9],[59.6,356.1],[58.3,356.8],[57.4,357.0],[52.1,359.0],[51.1,359.2],[49.8,359.9],[48.8,360.0],[47.7,360.6],[45.5,361.3],[44.7,361.8],[44.0,361.5],[43.9,361.2],[44.1,353.7],[44.8,344.6],[45.2,336.4],[51.9,228.6],[52.0,223.3],[52.3,220.7]],"ymin":214.0,"ymax":361.8,"fx0":43,"foot":[362.0,362.0,361.0,361.0,361.0,360.0,360.0,360.0,359.0,359.0,358.0,358.0,358.0,357.0,357.0,357.0,356.0,356.0,355.0,355.0]},{"pts":[[84.5,189.0],[91.3,304.9],[92.2,322.3],[92.8,330.2],[93.1,339.5],[92.8,340.2],[92.4,340.6],[90.8,341.4],[90.6,341.7],[90.0,342.0],[89.3,342.1],[88.6,342.8],[87.3,343.2],[86.5,343.9],[85.3,344.2],[84.7,344.8],[83.5,345.2],[82.8,345.8],[81.7,346.2],[80.8,346.9],[79.9,347.1],[78.8,347.9],[77.9,348.1],[76.9,348.7],[75.6,349.2],[75.1,349.0],[75.1,347.8],[81.4,238.7],[83.5,203.3]],"ymin":189.0,"ymax":349.2,"fx0":75,"foot":[349.0,349.0,348.0,348.0,347.0,347.0,346.0,346.0,345.0,345.0,344.0,344.0,343.0,343.0,342.0,342.0,341.0,341.0,341.0,341.0]},{"pts":[[115.6,181.0],[116.0,185.8],[116.4,186.8],[116.5,187.7],[116.9,193.8],[117.0,197.2],[121.4,268.4],[123.2,300.2],[124.1,313.2],[124.4,320.6],[124.3,322.1],[124.0,322.7],[116.9,326.8],[116.1,327.1],[111.1,330.1],[109.1,331.1],[108.2,331.8],[107.6,332.0],[106.9,331.8],[107.0,327.4],[114.9,197.4]],"ymin":181.0,"ymax":332.0,"fx0":106,"foot":[332.0,332.0,332.0,331.0,330.0,330.0,329.0,329.0,328.0,328.0,327.0,326.0,326.0,325.0,325.0,324.0,324.0,323.0,322.0,322.0]},{"pts":[[147.5,219.0],[147.7,221.7],[148.0,223.1],[151.8,264.3],[152.3,268.3],[153.3,280.5],[153.7,283.2],[154.3,290.8],[154.7,293.5],[155.8,306.7],[153.7,307.4],[152.9,307.9],[151.2,308.4],[148.2,309.9],[147.3,310.1],[146.4,310.8],[145.3,311.1],[144.4,311.8],[143.3,312.1],[142.4,312.8],[141.3,313.1],[140.8,313.5],[139.6,314.0],[138.6,313.8],[138.7,310.8],[146.9,224.3],[147.1,222.4],[147.4,221.6]],"ymin":219.0,"ymax":314.0,"fx0":138,"foot":[314.0,314.0,314.0,313.0,313.0,312.0,312.0,311.0,311.0,310.0,310.0,309.0,309.0,308.0,308.0,308.0,307.0,307.0,307.0]},{"pts":[[179.3,183.0],[179.4,186.7],[179.9,191.9],[180.3,199.5],[180.7,203.2],[181.7,218.5],[188.1,305.9],[188.2,307.8],[188.1,308.5],[187.9,309.0],[187.6,309.2],[186.0,309.1],[183.2,308.1],[182.2,308.0],[176.0,306.0],[175.1,305.9],[172.5,305.0],[171.3,304.8],[170.4,304.2],[170.3,303.6],[170.4,299.3],[174.8,240.4],[175.4,230.4],[177.8,198.9],[178.1,193.4],[178.6,188.0],[179.0,186.6]],"ymin":183.0,"ymax":309.2,"fx0":170,"foot":[305.0,305.0,305.0,305.0,306.0,306.0,306.0,307.0,307.0,307.0,307.0,308.0,308.0,308.0,309.0,309.0,309.0,309.0,309.0,309.0]},{"pts":[[210.5,221.0],[212.3,238.3],[219.2,314.8],[219.4,318.8],[218.7,319.0],[216.9,318.7],[209.0,316.0],[208.5,316.0],[206.1,315.1],[205.4,315.0],[202.1,313.8],[202.3,309.9],[203.2,301.4]],"ymin":221.0,"ymax":319.0,"fx0":202,"foot":[314.0,314.0,315.0,315.0,315.0,316.0,316.0,316.0,317.0,317.0,317.0,318.0,318.0,318.0,319.0,319.0,319.0,319.0,319.0]},{"pts":[[242.3,197.0],[242.5,201.2],[242.8,203.9],[243.2,212.6],[244.4,229.0],[251.1,331.4],[251.2,333.7],[251.1,334.5],[250.8,334.8],[250.2,334.6],[249.5,334.1],[246.5,331.4],[244.8,330.1],[239.2,327.1],[238.2,326.9],[237.3,326.2],[235.8,325.7],[233.7,324.4],[233.7,321.7],[234.2,313.8],[240.6,217.2],[241.6,203.4],[242.3,201.1]],"ymin":197.0,"ymax":334.8,"fx0":233,"foot":[325.0,325.0,326.0,326.0,326.0,327.0,327.0,328.0,328.0,329.0,329.0,330.0,331.0,331.0,332.0,333.0,334.0,335.0,335.0,335.0]},{"pts":[[273.5,219.0],[273.6,221.1],[273.9,221.5],[274.4,227.9],[281.8,338.9],[282.7,350.5],[282.8,352.3],[282.7,353.4],[282.5,353.9],[282.1,353.9],[278.9,352.3],[274.3,349.8],[274.0,349.6],[274.0,349.4],[273.5,349.1],[271.4,348.1],[269.9,347.1],[268.1,346.2],[266.7,345.2],[266.0,345.0],[265.5,344.6],[265.2,343.7],[265.3,339.9],[266.8,319.3],[269.3,280.6],[269.7,276.4],[271.3,250.7],[271.8,245.1],[273.0,224.1],[273.4,221.2]],"ymin":219.0,"ymax":353.9,"fx0":265,"foot":[345.0,345.0,346.0,346.0,347.0,348.0,348.0,349.0,349.0,350.0,350.0,351.0,352.0,352.0,353.0,353.0,354.0,354.0,354.0]},{"pts":[[305.3,253.0],[305.6,256.9],[305.8,257.1],[306.0,258.4],[306.2,264.6],[306.7,268.9],[311.7,327.9],[314.0,353.2],[313.9,354.7],[313.6,355.1],[313.3,355.2],[307.2,354.6],[299.4,354.2],[297.0,353.9],[296.5,353.7],[296.3,353.4],[297.2,344.3],[298.3,330.4],[298.8,326.2],[299.2,320.1],[303.3,273.9],[304.3,261.0],[304.7,258.0],[305.1,257.0]],"ymin":253.0,"ymax":355.2,"fx0":296,"foot":[354.0,354.0,354.0,354.0,354.0,354.0,354.0,354.0,354.0,355.0,355.0,355.0,355.0,355.0,355.0,355.0,355.0,355.0,355.0]},{"pts":[[336.5,226.0],[336.6,228.8],[336.8,229.6],[337.3,234.9],[339.4,266.9],[344.6,352.0],[345.7,367.8],[345.6,369.4],[344.8,369.1],[337.7,363.6],[336.3,362.9],[335.1,361.9],[331.6,360.0],[330.7,359.8],[329.3,359.0],[328.2,358.7],[328.4,357.6],[329.2,345.8],[335.2,247.2],[335.8,239.6],[336.1,230.8]],"ymin":226.0,"ymax":369.4,"fx0":328,"foot":[359.0,359.0,360.0,360.0,361.0,361.0,362.0,362.0,363.0,364.0,364.0,365.0,366.0,367.0,367.0,368.0,369.0,370.0,370.0]},{"pts":[[368.3,181.0],[368.5,186.7],[368.7,186.9],[368.9,187.8],[369.0,189.7],[369.2,202.1],[377.3,387.7],[377.3,393.6],[376.8,393.6],[374.1,392.0],[366.2,386.5],[360.9,382.4],[359.7,381.1],[359.6,380.1],[367.2,200.7],[367.7,192.8],[368.0,190.4],[368.0,188.2],[368.2,186.9]],"ymin":181.0,"ymax":393.6,"fx0":359,"foot":[381.0,382.0,383.0,384.0,384.0,385.0,386.0,387.0,387.0,388.0,389.0,390.0,390.0,391.0,392.0,392.0,393.0,394.0,394.0,394.0]},{"pts":[[399.6,206.0],[400.0,214.8],[400.4,217.9],[400.7,222.4],[407.3,371.8],[408.8,402.3],[408.9,408.4],[408.7,408.7],[408.2,408.7],[406.9,408.1],[405.8,407.9],[404.2,407.1],[403.4,407.0],[398.9,405.1],[397.6,404.8],[396.5,404.0],[395.6,403.9],[394.5,403.1],[393.3,402.8],[392.3,402.2],[391.4,401.9],[391.2,401.6],[391.0,399.4],[394.2,325.4],[394.6,319.0],[398.3,236.5],[399.1,213.4],[399.4,211.0]],"ymin":206.0,"ymax":408.7,"fx0":391,"foot":[402.0,402.0,403.0,403.0,404.0,404.0,405.0,405.0,405.0,406.0,406.0,407.0,407.0,407.0,408.0,408.0,408.0,409.0,409.0]},{"pts":[[431.5,69.0],[431.9,78.6],[432.5,111.1],[440.5,411.5],[440.4,415.6],[440.3,415.9],[439.6,416.2],[436.3,415.8],[435.6,415.5],[430.9,414.6],[429.2,414.1],[427.4,413.9],[424.9,413.1],[422.2,412.7],[422.4,399.6],[430.3,99.4],[431.0,78.9],[431.1,76.7],[431.4,74.8]],"ymin":69.0,"ymax":416.2,"fx0":422,"foot":[413.0,413.0,413.0,413.0,414.0,414.0,414.0,414.0,415.0,415.0,415.0,415.0,415.0,416.0,416.0,416.0,416.0,416.0,416.0,416.0]},{"pts":[[462.6,124.0],[462.8,132.8],[463.4,138.9],[463.7,145.4],[466.2,231.8],[466.8,247.8],[470.2,362.5],[471.7,407.9],[471.9,421.6],[471.6,421.9],[470.7,421.9],[455.3,419.1],[454.0,418.7],[453.8,418.1]],"ymin":124.0,"ymax":421.9,"fx0":453,"foot":[419.0,419.0,419.0,419.0,420.0,420.0,420.0,420.0,420.0,420.0,421.0,421.0,421.0,421.0,421.0,421.0,422.0,422.0,422.0,422.0]},{"pts":[[494.5,97.0],[494.6,102.2],[494.9,104.4],[495.1,119.6],[495.7,142.2],[503.3,415.4],[503.5,426.0],[503.4,427.4],[503.2,427.8],[502.7,428.0],[494.4,426.0],[492.9,425.9],[491.1,425.4],[486.6,424.6],[485.2,424.0],[485.8,406.1],[493.1,137.8]],"ymin":97.0,"ymax":428.0,"fx0":485,"foot":[424.0,425.0,425.0,425.0,425.0,425.0,426.0,426.0,426.0,426.0,426.0,427.0,427.0,427.0,427.0,427.0,428.0,428.0,428.0,428.0]},{"pts":[[525.7,54.0],[525.7,64.5],[525.8,66.2],[526.2,67.5],[526.3,68.4],[526.5,72.4],[527.7,119.4],[531.6,283.2],[534.8,409.9],[535.0,425.9],[534.2,426.5],[531.3,427.4],[530.1,428.0],[529.3,428.1],[527.9,428.9],[526.7,429.2],[526.3,429.4],[526.0,429.8],[524.3,430.4],[522.1,431.5],[521.6,432.0],[520.7,432.2],[519.7,432.9],[518.5,432.6],[516.5,431.6],[516.9,419.8],[517.3,398.8]],"ymin":54.0,"ymax":432.9,"fx0":516,"foot":[432.0,432.0,433.0,433.0,432.0,432.0,431.0,431.0,430.0,430.0,429.0,429.0,429.0,428.0,428.0,427.0,427.0,427.0,426.0,426.0]},{"pts":[[557.3,2.0],[557.5,7.8],[557.7,8.0],[557.9,9.8],[559.2,78.1],[559.9,104.9],[566.7,421.4],[566.6,422.1],[559.2,421.6],[551.5,422.0],[548.8,422.5],[548.5,422.4],[548.3,422.1],[548.3,415.2],[557.0,14.2],[557.3,8.2]],"ymin":2.0,"ymax":422.5,"fx0":548,"foot":[422.0,422.0,422.0,422.0,422.0,422.0,422.0,422.0,422.0,422.0,422.0,422.0,422.0,422.0,422.0,422.0,422.0,422.0,422.0,422.0]},{"pts":[[588.5,74.0],[589.0,80.0],[589.3,81.4],[589.6,88.8],[597.8,409.4],[598.0,423.7],[594.3,425.4],[592.0,426.2],[587.6,427.1],[585.5,427.2],[581.4,426.9],[580.4,426.6],[580.2,426.4],[580.0,426.1],[579.9,425.4],[579.9,420.1],[588.1,101.4]],"ymin":74.0,"ymax":427.2,"fx0":579,"foot":[427.0,427.0,427.0,427.0,427.0,427.0,427.0,427.0,427.0,427.0,427.0,427.0,426.0,426.0,426.0,425.0,425.0,424.0,424.0,424.0]},{"pts":[[620.5,45.0],[621.0,54.9],[622.4,110.3],[629.2,383.5],[629.6,407.3],[626.7,408.8],[625.3,409.2],[624.5,409.9],[623.5,410.1],[622.2,410.9],[621.1,411.2],[620.3,411.9],[619.3,412.2],[618.5,412.9],[617.7,413.0],[616.5,413.9],[611.4,416.5],[611.2,416.3],[611.1,415.4],[612.3,364.3],[619.8,66.9],[620.0,53.0],[620.3,50.6]],"ymin":45.0,"ymax":416.5,"fx0":611,"foot":[417.0,416.0,415.0,415.0,414.0,414.0,413.0,413.0,412.0,412.0,411.0,411.0,410.0,410.0,409.0,409.0,408.0,408.0,407.0,407.0]},{"pts":[[652.4,206.0],[653.2,230.3],[660.7,398.0],[660.9,403.1],[660.8,403.8],[660.4,404.0],[659.2,403.8],[657.9,403.3],[652.8,402.8],[644.1,402.9],[643.8,397.9],[643.9,387.1],[644.2,378.9],[646.1,338.8],[649.6,257.6],[651.5,216.0],[651.7,213.6],[652.0,212.4]],"ymin":206.0,"ymax":404.0,"fx0":643,"foot":[403.0,403.0,403.0,403.0,403.0,403.0,403.0,403.0,403.0,403.0,403.0,403.0,403.0,403.0,403.0,404.0,404.0,404.0,404.0]},{"pts":[[683.5,181.0],[684.3,195.4],[686.3,252.5],[691.7,395.9],[692.2,412.0],[692.1,413.5],[691.8,414.1],[691.2,414.2],[689.9,413.8],[688.5,413.0],[687.6,412.9],[686.1,412.1],[684.8,411.8],[683.6,411.1],[682.3,410.8],[681.3,410.2],[679.8,409.9],[678.5,409.2],[676.8,408.8],[675.7,408.3],[675.1,407.8],[682.8,199.9],[683.0,188.5],[683.1,186.2],[683.4,185.1]],"ymin":181.0,"ymax":414.2,"fx0":675,"foot":[408.0,409.0,409.0,409.0,410.0,410.0,410.0,411.0,411.0,412.0,412.0,412.0,413.0,413.0,414.0,414.0,414.0,414.0,414.0]},{"pts":[[715.3,227.0],[715.5,232.7],[715.7,233.1],[715.9,234.9],[716.4,252.7],[723.2,409.2],[723.7,422.5],[723.7,425.3],[723.4,425.7],[722.9,425.7],[720.6,425.0],[711.8,422.0],[711.0,421.9],[707.4,420.5],[706.6,419.6],[713.9,249.1],[714.5,236.1],[714.7,233.8],[715.0,232.9]],"ymin":227.0,"ymax":425.7,"fx0":706,"foot":[421.0,421.0,421.0,421.0,422.0,422.0,422.0,423.0,423.0,423.0,424.0,424.0,424.0,425.0,425.0,425.0,426.0,426.0,426.0]},{"pts":[[746.5,259.0],[747.3,268.5],[755.1,427.9],[755.4,431.7],[755.3,432.7],[754.7,433.0],[742.4,430.4],[739.4,429.9],[738.3,429.3],[738.1,428.9],[745.8,274.1],[746.1,262.3]],"ymin":259.0,"ymax":433.0,"fx0":738,"foot":[430.0,430.0,430.0,430.0,430.0,431.0,431.0,431.0,431.0,432.0,432.0,432.0,432.0,432.0,433.0,433.0,433.0,433.0,433.0]},{"pts":[[778.3,282.0],[787.3,435.3],[787.2,437.6],[787.1,437.8],[786.2,438.0],[783.6,437.8],[775.8,436.6],[774.3,436.2],[770.1,435.7],[769.6,435.5],[769.3,434.4],[769.3,431.0],[769.7,424.0],[776.9,301.7],[777.7,290.2],[778.3,286.3]],"ymin":282.0,"ymax":438.0,"fx0":769,"foot":[436.0,436.0,436.0,436.0,436.0,436.0,437.0,437.0,437.0,437.0,437.0,437.0,437.0,438.0,438.0,438.0,438.0,438.0,438.0,438.0]}]};
 (function(){
   var stage = document.getElementById('top');
   var cv    = stage && stage.querySelector('.hero-aurora');
   var word  = stage && stage.querySelector('.hero-word');
-  if(!cv || !word || !window.__AURORA_BLADES) return;
+  var ART   = window.__HERO_BLADES;
+  if(!cv || !word || !ART) return;
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  /* where the AURORA letters sit in the badge, in the blades' own units */
-  var AX0 = 0.0627, AX1 = 0.9349, ATOP = 0.7867;
-  var BLADES = window.__AURORA_BLADES;
-  var FEET = BLADES.map(function(b){ return {x:b.x, y:b.base}; });
-  var N = FEET.length;
-
-  /* the mountain line: Catmull-Rom through the blades' feet, as on the badge,
-     then carried on past the end blades at their own slope, flattening out */
-  function foot(u){
-    if(u <= FEET[0].x){
-      var sl = (FEET[1].y - FEET[0].y) / (FEET[1].x - FEET[0].x);
-      var d = FEET[0].x - u;
-      return FEET[0].y - sl * 0.18 * (1 - Math.exp(-d / 0.18));
-    }
-    if(u >= FEET[N-1].x){
-      var sr = (FEET[N-1].y - FEET[N-2].y) / (FEET[N-1].x - FEET[N-2].x);
-      var e = u - FEET[N-1].x;
-      return FEET[N-1].y + sr * 0.18 * (1 - Math.exp(-e / 0.18));
-    }
-    var i = 0;
-    while(i < N-2 && FEET[i+1].x < u) i++;
-    var p0 = FEET[Math.max(0,i-1)], p1 = FEET[i], p2 = FEET[i+1], p3 = FEET[Math.min(N-1,i+2)];
-    var t = (u - p1.x) / (p2.x - p1.x || 1), t2 = t*t, t3 = t2*t;
-    return 0.5*((2*p1.y) + (-p0.y + p2.y)*t +
-                (2*p0.y - 5*p1.y + 4*p2.y - p3.y)*t2 +
-                (-p0.y + 3*p1.y - 3*p2.y + p3.y)*t3);
+  /* the artwork's own extent: the lowest foot and the tallest tip */
+  var B = ART.blades, N = B.length;
+  var FOOT_MAX = 0, TIP_MIN = 1e9, XMIN = 1e9, XMAX = -1e9;
+  B.forEach(function(b){
+    var xs = b.pts.map(function(p){ return p[0]; });
+    b.xa = Math.min.apply(null, xs); b.xb = Math.max.apply(null, xs);
+    b.cx = (b.xa + b.xb) / 2;
+    b.mid = b.foot[Math.min(b.foot.length-1, Math.round(b.cx - b.fx0))];
+    FOOT_MAX = Math.max(FOOT_MAX, Math.max.apply(null, b.foot));
+    TIP_MIN = Math.min(TIP_MIN, b.ymin);
+    XMIN = Math.min(XMIN, b.xa); XMAX = Math.max(XMAX, b.xb);
+  });
+  var ART_H = FOOT_MAX - TIP_MIN, ART_CX = (XMIN + XMAX) / 2;
+  B.forEach(function(b){
+    b.u = 0.064 + 0.871 * (b.cx - XMIN) / (XMAX - XMIN);   /* position along the curtain, as in the badge */
+    b.tall = (b.mid - b.ymin) > ART_H * 0.88;               /* the tallest lines swing less */
+  });
+  function footAt(b, x){
+    var f = b.foot, i = x - b.fx0;
+    if(i <= 0) return f[0];
+    if(i >= f.length-1) return f[f.length-1];
+    var j = Math.floor(i), r = i - j;
+    return f[j] + (f[j+1] - f[j]) * r;
   }
 
   var ctx = null, W = 0, H = 0, dpr = 1;
-  var g = {wl:0, ww:0, sx:1, sy:1, top:0};      /* badge units -> screen */
-  function X(u){ return g.wl + (u - AX0) * g.sx; }
-  function Y(v){ return g.top + v * g.sy; }
+  var g = {k:1, ox:0, yb:0, ceil:0};
 
   function measure(){
     dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -1581,125 +1578,78 @@ window.__rig2D = function(){
     if(!W || !H) return false;
     cv.width = Math.round(W*dpr); cv.height = Math.round(H*dpr);
     ctx.setTransform(dpr,0,0,dpr,0,0);
-    /* offset* ignore the scroll transform on the wordmark, which is what we
-       want: the blades are laid out against where the wordmark rests */
-    g.wl = word.offsetLeft;
-    g.ww = word.offsetWidth;
-    g.sx = g.ww / (AX1 - AX0);
-    var wordTop = word.offsetTop;
-    g.top = 74 + Math.max(20, H * 0.045);       /* clear of the navigation */
-    g.sy = (wordTop - g.top) / ATOP;            /* the badge's gap above AURORA */
-    return g.sy > 0;
+    /* the lines stand above the wordmark and below the navigation; at rest
+       they take about 60% of the hero's height where there is room, and as
+       much as there is where there is not */
+    var gap  = Math.max(46, H * 0.05);                /* clear of the two readouts above the wordmark */
+    g.yb     = word.offsetTop - gap;                  /* the mountain's lowest point */
+    g.ceil   = 74 + Math.max(8, H * 0.012);           /* under the navigation bar */
+    var room = g.yb - g.ceil;
+    /* the tallest line reaches this at the crest of its swing and averages a
+       little under it, so the graphic reads as about 60% of the hero */
+    var rest = Math.min(H * 0.62, room);
+    g.k      = rest / ART_H;
+    g.ox     = W/2 - ART_CX * g.k;
+    return room > 40;
   }
+  function X(x){ return g.ox + x * g.k; }
+  function Y(y){ return g.yb - (FOOT_MAX - y) * g.k; }
 
   var ease = function(v){ v = v<0?0:v>1?1:v; return 1 - Math.pow(1-v, 3); };
-  var t = 0, born = 0, p = 0;                   /* clock, entrance start, scroll */
-
-  function silhouette(){
-    var steps = 96, x, u;
-    ctx.beginPath();
-    ctx.moveTo(0, H);
-    for(var s=0; s<=steps; s++){
-      x = W * s / steps; u = AX0 + (x - g.wl) / g.sx;
-      ctx.lineTo(x, Y(foot(u)));
-    }
-    ctx.lineTo(W, H);
-    ctx.closePath();
-  }
+  var t = reduce ? 4 : 0, born = 0, p = 0;
 
   function draw(){
     if(!W || !H) return;
     ctx.clearRect(0,0,W,H);
-
-    /* a low haze where the curtain is brightest, so it lights the sky a
-       little rather than sitting on it */
-    var breath = reduce ? 0.6 : 0.5 + 0.5*Math.sin(t*0.11);
-    var hx = X(0.62), hy = Y(0.36), rx = g.ww*0.62, ry = g.sy*0.62;
-    ctx.save();
-    ctx.translate(hx, hy); ctx.scale(rx, ry);
-    var hz = ctx.createRadialGradient(0,0,0, 0,0,1);
-    hz.addColorStop(0,   'hsla(158,62%,46%,' + (0.075 + 0.035*breath).toFixed(3) + ')');
-    hz.addColorStop(0.6, 'hsla(176,58%,44%,' + (0.028 + 0.012*breath).toFixed(3) + ')');
-    hz.addColorStop(1,   'hsla(190,55%,40%,0)');
-    ctx.fillStyle = hz;
-    ctx.beginPath(); ctx.arc(0,0,1,0,Math.PI*2); ctx.fill();
-    ctx.restore();
-
     var age = t - born;
-    for(var i=0; i<BLADES.length; i++){
-      var b = BLADES[i];
-      /* entrance: each blade rises from the mountain in turn, left to right */
+    var ceil = g.ceil + (4 - g.ceil) * p;             /* the lines may reach higher as the page moves on */
+    for(var i=0; i<N; i++){
+      var b = B[i];
       var grow = reduce ? 1 : ease((age - 0.25 - i*0.045) / 1.5);
       if(grow <= 0.002) continue;
 
-      /* the screen stretches the badge sideways more than upwards, so the
-         blades are narrowed to keep the logo's slender spikes */
-      var cx = X(b.x), bw = b.w * g.sx * 0.56, half = bw/2;
-      var yb = Y(foot(b.x));
-      var len = (b.base - b.tip) * g.sy * (1 + 0.22*p) * grow;
-      var yt = Math.max(8, yb - len);
+      /* the badge's movement: one long crest sweeping left to right with a
+         slower swell under it, so the curtain moves as a sheet */
+      var travel  = t*0.42 - b.u*6.4;
+      var swell   = 0.66*Math.sin(travel) + 0.34*Math.sin(travel*0.47 + t*0.14);
+      var swing   = b.tall ? 0.22 : 0.32;
+      var breathe = (reduce ? 1 : 1 + swing*swell) * (1 + 0.14*p);
+      var rise    = Y(b.mid) - Y(b.ymin);                /* this line's length at rest, on screen */
+      var maxS    = (Y(b.mid) - ceil) / rise;            /* never past the navigation */
+      var s       = Math.min(breathe, maxS) * grow;
 
-      /* brightness drifts along the curtain, never in step */
-      var lum = reduce ? 0.8
-        : 0.78 + 0.13*Math.sin(t*0.42 - b.x*7.0) + 0.09*Math.sin(t*0.23 + i*1.7);
-      var hueTip = 180 + 28*(0.5 + 0.5*Math.sin(t*0.07 - b.x*3.2));    /* teal to blue */
+      /* colour: green at the foot always, the tip drifting up through teal
+         and cyan into blue and violet */
+      var s1  = 0.5 + 0.5*Math.sin(t*0.20 - b.u*4.2);
+      var s2  = 0.5 + 0.5*Math.sin(t*0.09 + 1.1);
+      var raw = Math.max(0, Math.min(1, 0.62*s1 + 0.55*s2 - 0.09));
+      var mix = Math.pow(raw, 2.0);
+      var hueTip = 116 + 190*mix;
+      var hueMid = 120 + 96*Math.pow(mix, 1.4);
 
+      /* the foot stays on the mountain's edge; everything above it scales */
       ctx.beginPath();
-      var fu = b.w * 0.56;
-      ctx.moveTo(cx - half, Y(foot(b.x - fu/2)) + 2);
-      for(var k=1;k<=6;k++){
-        ctx.lineTo(cx - half + bw*(k/6), Y(foot(b.x - fu/2 + fu*(k/6))) + 2);
+      var top = 1e9;
+      for(var k=0; k<b.pts.length; k++){
+        var x = b.pts[k][0], y = b.pts[k][1];
+        var fy = footAt(b, x);
+        var yy = Y(fy - (fy - y) * s);
+        if(yy < top) top = yy;
+        k ? ctx.lineTo(X(x), yy) : ctx.moveTo(X(x), yy);
       }
-      ctx.lineTo(cx + bw*0.045, yt);
-      ctx.lineTo(cx - bw*0.045, yt);
       ctx.closePath();
-
-      var gr = ctx.createLinearGradient(0, yb, 0, yt);
-      gr.addColorStop(0,    'hsla(134,50%,34%,' + (0.95*lum).toFixed(3) + ')');
-      gr.addColorStop(0.45, 'hsla(156,58%,49%,' + (0.92*lum).toFixed(3) + ')');
-      gr.addColorStop(1,    'hsla(' + hueTip.toFixed(1) + ',74%,68%,' + (0.85*lum).toFixed(3) + ')');
+      var yb = Y(b.mid);
+      var gr = ctx.createLinearGradient(0, yb, 0, Math.min(top, yb - 1));
+      gr.addColorStop(0,    'hsl(' + (132 + 10*mix).toFixed(1) + ',48%,' + (32 + 7*mix).toFixed(1) + '%)');
+      gr.addColorStop(0.46, 'hsl(' + hueMid.toFixed(1) + ',' + (56 + 16*mix).toFixed(1) + '%,' + (51 + 6*mix).toFixed(1) + '%)');
+      gr.addColorStop(1,    'hsl(' + hueTip.toFixed(1) + ',' + (62 + 26*mix).toFixed(1) + '%,' + (76 - 8*mix).toFixed(1) + '%)');
       ctx.fillStyle = gr;
       ctx.fill();
-
-      /* a soft band of light travelling up the blade */
-      if(!reduce){
-        var s = (t*0.075 + i*0.137) % 1;
-        var lo = Math.max(0, s - 0.14), hi = Math.min(1, s + 0.14);
-        var sh = ctx.createLinearGradient(0, yb, 0, yt);
-        sh.addColorStop(0, 'rgba(210,255,236,0)');
-        sh.addColorStop(lo, 'rgba(210,255,236,0)');
-        sh.addColorStop(s,  'rgba(210,255,236,' + (0.20*lum*grow).toFixed(3) + ')');
-        sh.addColorStop(hi, 'rgba(210,255,236,0)');
-        sh.addColorStop(1, 'rgba(210,255,236,0)');
-        ctx.globalCompositeOperation = 'lighter';
-        ctx.fillStyle = sh;
-        ctx.fill();
-        ctx.globalCompositeOperation = 'source-over';
-      }
     }
-
-    /* the mountain the blades stand behind: it masks their feet and runs on
-       to both edges, deepening into the page colour at the foot */
-    silhouette();
-    var mg = ctx.createLinearGradient(0, Y(0.62), 0, H);
-    mg.addColorStop(0,    '#0B2533');
-    mg.addColorStop(0.35, '#081D29');
-    mg.addColorStop(1,    '#071A24');
-    ctx.fillStyle = mg;
-    ctx.fill();
-    /* and a hairline along its crest, like a surveyed profile */
-    ctx.beginPath();
-    for(var s2=0; s2<=96; s2++){
-      var x2 = W*s2/96, u2 = AX0 + (x2 - g.wl)/g.sx;
-      s2 ? ctx.lineTo(x2, Y(foot(u2))) : ctx.moveTo(x2, Y(foot(u2)));
-    }
-    ctx.strokeStyle = 'rgba(120,214,200,0.22)';
-    ctx.lineWidth = 1;
-    ctx.stroke();
   }
 
   /* scroll: 0 at the top, 1 once the hero has gone. The wordmark reads it
-     through --hero-p; the blades read it in draw() */
+     through --hero-p; the lines read it in draw() */
   function scrollP(){
     var h = stage.offsetHeight || 1;
     var v = -stage.getBoundingClientRect().top / h;
@@ -1715,12 +1665,10 @@ window.__rig2D = function(){
   function frame(now){
     raf = 0;
     if(!visible) return;
-    var moved = applyScroll();
-    if(moved || now - last > 33){                /* the curtain holds at 30fps */
-      t += last ? Math.min(now - last, 100) / 1000 : 0.016;
-      last = now;
-      draw();
-    }
+    applyScroll();
+    t += last ? Math.min(now - last, 100) / 1000 : 0.016;
+    last = now;
+    draw();
     raf = requestAnimationFrame(frame);
   }
   function go(){ if(!raf && !reduce) raf = requestAnimationFrame(frame); }
@@ -1740,12 +1688,10 @@ window.__rig2D = function(){
         if(stage.classList.contains('stage-ready')) born = t;
       }).observe(stage, {attributes:true, attributeFilter:['class']});
     }
-    window.addEventListener('scroll', function(){ if(visible) go(); }, {passive:true});
     if('IntersectionObserver' in window){
       new IntersectionObserver(function(es){
         visible = es[es.length-1].isIntersecting;
         if(visible){ last = 0; go(); }
-        else { applyScroll(); }
       },{threshold:0}).observe(stage);
     }
     go();

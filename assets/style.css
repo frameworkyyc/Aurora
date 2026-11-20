@@ -1026,20 +1026,20 @@ header.hero-page.brand-on::before{opacity:0}
 
 /* ---------- desktop / tablet hero: the brand, opened out to the screen ----------
    Above 860px the hero is the logo taken apart and set at the scale of the
-   room: no frame, the aurora blades of the badge rising from its mountain
-   line across the whole width, and the AURORA SURVEYS wordmark set enormous
-   along the foot of the screen. Three layers, back to front: the night sky
-   and the instrument readouts, the aurora canvas with its mountain, and the
+   room: no frame, the official aurora graphic (its tapered lines on their
+   mountain-shaped edge) drawn large above the AURORA wordmark, which is set
+   enormous along the foot of the screen. Three layers, back to front: the
+   night sky and the instrument readouts, the aurora canvas, and the
    wordmark. The phone hero above is untouched; none of this applies below
    861px. */
 @media (min-width:861px){
   /* one measure for the wordmark, shared by the readouts and (through its
-     box) by the aurora canvas, so the three always line up. 441/1691 is the
-     artwork's own height to width. */
+     box) by the aurora canvas, so the three always line up. .1719 is the
+     wordmark artwork's own height to width. */
   :root{
-    --word-w:min(90vw, 153svh);
-    --word-h:calc(var(--word-w) * .2608);
-    --word-b:clamp(1.6rem, 4.5svh, 3.25rem);
+    --word-w:min(88vw, 330svh);
+    --word-h:calc(var(--word-w) * .1719);
+    --word-b:clamp(1rem, 3svh, 2.25rem);
     --word-l:calc(50% - var(--word-w) / 2);
   }
   .stage{height:100svh;min-height:600px;margin-top:-74px;position:relative;overflow:hidden;z-index:0}
@@ -1078,10 +1078,9 @@ header.hero-page.brand-on::before{opacity:0}
      on the instrument baseline in the open ground left of SURVEYS */
   .ht-tl{left:var(--word-l)}
   .ht-tr{right:var(--word-l)}
-  .ht-bl,.ht-br{bottom:calc(var(--word-b) + var(--word-h) * .02)}
+  .ht-bl,.ht-br{bottom:calc(var(--word-b) + var(--word-h) + 1.25rem)}
   .ht-bl{left:var(--word-l)}
-  .ht-br{left:calc(var(--word-l) + var(--word-w) * .24);right:auto}
-  .ht-br::before{left:-30px;right:auto;background:linear-gradient(90deg,rgba(130,205,205,.5),transparent)}
+  .ht-br{right:var(--word-l)}
 }
 @media (min-width:861px) and (prefers-reduced-motion:reduce){
   .hero-word img{opacity:1;transform:none;transition:none}
