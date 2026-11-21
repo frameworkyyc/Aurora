@@ -1462,3 +1462,34 @@ header.hero-page:focus-within{
 .wr-anim.is-blend{mix-blend-mode:screen}   /* on the slot itself: its transform isolates its children from the backdrop */
 .wwd-ridge .wr-figure{transition:opacity .5s ease}
 .wwd-ridge.anim-on .wr-figure{opacity:0}
+
+/* ---------- What we do: heading, introduction, a wide photograph, two service columns ---------- */
+.wwd-intro{align-items:start}
+.wwd-statement{max-width:16ch;font-size:clamp(1.6rem,2.9vw,2.5rem);line-height:1.12;letter-spacing:-.025em}
+.wwd-lede p{margin:0 0 1.1rem;font-size:clamp(1rem,1.25vw,1.12rem);line-height:1.72;max-width:58ch}
+.wwd-lede p:last-child{margin-bottom:0}
+.wwd-head{margin-bottom:clamp(2.75rem,5.5vw,5rem)}
+.wwd-photo{margin:0 auto;max-width:var(--maxw);padding-inline:var(--pad)}
+.wwd-photo img{display:block;width:100%;height:auto;aspect-ratio:21/9;object-fit:cover;object-position:46% 58%;border-radius:2px}
+.wwd-photo figcaption{margin-top:.8rem;font-family:var(--mono);font-size:.6rem;letter-spacing:.16em;text-transform:uppercase;color:rgba(5,54,76,.6)}
+.wwd-services{display:grid;grid-template-columns:1fr 1fr;gap:clamp(2rem,6vw,6rem);margin-top:clamp(3rem,6vw,5rem)}
+.wwd-svc{border-top:2px solid var(--navy);padding-top:clamp(1.2rem,2vw,1.6rem)}
+.wwd-svc:nth-child(2){border-top-color:var(--green)}
+.wwd-svc-k{margin:0 0 .7rem;font-family:var(--mono);font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;color:var(--steel)}
+.wwd-svc-k--g{color:var(--green)}
+.wwd-svc h3{font-size:clamp(1.35rem,2vw,1.7rem);letter-spacing:-.02em;margin:0 0 1.1rem}
+.wwd-svc ul{list-style:none;margin:0 0 1.4rem;padding:0}
+.wwd-svc li{padding:.7rem 0;border-bottom:1px solid var(--rule);font-size:1rem;line-height:1.45}
+.wwd-svc li:first-child{border-top:1px solid var(--rule)}
+.wwd-svc-link{display:inline-block;font-family:var(--sans);font-weight:600;font-size:.9rem;color:var(--navy);text-decoration:none;
+  border-bottom:1px solid var(--green);padding-bottom:2px;transition:color .2s ease}
+.wwd-svc-link:hover,.wwd-svc-link:focus-visible{color:#1f7a3a}
+.wwd-cta{margin-top:clamp(2.5rem,5vw,4rem)}
+@media (max-width:860px){
+  .wwd-intro{grid-template-columns:1fr;gap:1.2rem}
+  .wwd-photo{padding-inline:0}
+  .wwd-photo img{aspect-ratio:4/3;border-radius:0}
+  .wwd-photo figcaption{padding-inline:var(--pad)}
+}
+@media (max-width:640px){ .wwd-services{grid-template-columns:1fr;gap:2.5rem} }
+.wwd-photo + .wrap{padding-top:0}
