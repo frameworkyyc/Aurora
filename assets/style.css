@@ -275,6 +275,10 @@ nav a[href="contact.html"]:hover,nav a[href="contact.html"]:focus-visible,nav a[
 .stat:nth-child(1){background:var(--night)}
 .stat:nth-child(2){background:var(--cyan);color:#000000}
 .stat:nth-child(3){background:var(--steel)}
+/* The figures are white on the two dark panels. They used to inherit white from
+   the dark Safety section; in the light About section they inherited the page's
+   dark navy instead, which is the panel's own colour, so the numbers vanished. */
+.stat:nth-child(1),.stat:nth-child(3){color:#fff}
 .stat b{
   display:flex;justify-content:center;align-items:flex-start;
   font-family:var(--sans);font-weight:700;font-size:clamp(2.2rem,5vw,3.4rem);
@@ -1503,3 +1507,9 @@ header.hero-page:focus-within{
 .wwd-svc-link{align-self:flex-start;margin-top:auto}
 /* when the longer heading wraps on tablets, keep both lists starting level */
 @media (min-width:641px) and (max-width:1000px){ .wwd-svc h3{min-height:2.5em} }
+
+/* reduced motion: the figures simply appear, in place, with no rolling or fading */
+@media (prefers-reduced-motion:reduce){
+  .stat b .suffix{opacity:1;transform:none;transition:none}
+  .reel-strip{transition:none}
+}
