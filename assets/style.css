@@ -434,7 +434,7 @@ nav a[aria-current="page"]::after{right:0}
 .hero-ridge{display:none}
 .nightsky{display:none}
 /* the wide-screen hero's own layers; the phone hero never shows them */
-.hero-aurora,.hero-badge,.hero-glow,.hero-tag,.hero-range{display:none}
+.hero-aurora,.hero-badge,.hero-glow,.hero-tag,.hero-nav,.hero-cta{display:none}
 
 /* ---------- mobile hero: the badge, held still ---------- */
 @media (max-width:860px){
@@ -1079,20 +1079,47 @@ header.hero-page.brand-on::before{opacity:0}
     pointer-events:none;mix-blend-mode:screen;
   }
 
-  /* a mountain range across the foot of the hero, three layers of dark denim
-     silhouettes in the manner of the logo's own mountain edge: the far range
-     hazy and pale, the near one dark, each fading into the sky's last colour at
-     the bottom so it joins the page without a seam. They sit behind the badge.
-     On scroll they lag the page by different amounts, the far ones most, for a
-     gentle sense of depth. */
-  .hero-range{
-    display:block;position:absolute;left:0;right:0;bottom:0;z-index:1;
-    width:100%;height:56svh;object-fit:cover;object-position:50% 100%;
-    pointer-events:none;will-change:transform;
+  /* navigation: a quiet row of text links across the top of the sky. It fades
+     and drifts away with the badge as the page scrolls, and the site header
+     takes over once the hero has gone. */
+  .hero-nav{
+    display:flex;position:absolute;z-index:3;left:0;right:0;top:clamp(1.4rem,3.6svh,2.4rem);
+    justify-content:flex-end;gap:clamp(1.6rem,2.6vw,2.6rem);padding-right:clamp(2rem,4vw,4.2rem);
+    transform:translate3d(0, calc(var(--hero-p, 0) * -3svh), 0);
+    opacity:calc(1 - var(--hero-p, 0) * 2);
   }
-  .hero-range--far{transform:translate3d(0, calc(var(--hero-p, 0) * 13svh), 0)}
-  .hero-range--mid{transform:translate3d(0, calc(var(--hero-p, 0) * 8svh), 0)}
-  .hero-range--near{transform:translate3d(0, calc(var(--hero-p, 0) * 3svh), 0)}
+  .hero-nav a{
+    font-family:var(--sans);font-weight:500;font-size:.74rem;letter-spacing:.08em;
+    text-decoration:none;color:rgba(255,255,255,.66);padding:.5rem .1rem;position:relative;
+    transition:color .25s ease;
+  }
+  .hero-nav a::after{
+    content:"";position:absolute;left:0;right:0;bottom:.12rem;height:1px;background:var(--green);
+    transform:scaleX(0);transform-origin:left;transition:transform .3s ease;
+  }
+  .hero-nav a:hover,.hero-nav a:focus-visible,.hero-nav a[aria-current]{color:#fff}
+  .hero-nav a:hover::after,.hero-nav a:focus-visible::after,.hero-nav a[aria-current]::after{transform:scaleX(1)}
+
+  /* two small buttons under the tagline: one filled, one outlined */
+  .hero-cta{
+    display:flex;position:absolute;z-index:3;left:50%;gap:.9rem;white-space:nowrap;
+    top:calc(50% + var(--badge-w) * .3955 + clamp(1.4rem, 3.4svh, 2.6rem) + clamp(2.6rem, 6svh, 4rem));
+    transform:translate3d(-50%, calc(var(--hero-p, 0) * 9svh), 0);
+    opacity:calc(1 - var(--hero-p, 0) * 1.6);
+  }
+  .hero-btn{
+    font-family:var(--sans);font-weight:600;font-size:.72rem;letter-spacing:.04em;text-decoration:none;
+    padding:.58rem 1.1rem;border-radius:3px;border:1px solid transparent;
+    transition:background .25s ease,border-color .25s ease,color .25s ease;
+  }
+  .hero-btn--primary{background:var(--green);color:#000}
+  .hero-btn--primary:hover,.hero-btn--primary:focus-visible{background:#55c46d}
+  .hero-btn--ghost{color:rgba(255,255,255,.86);border-color:rgba(255,255,255,.34)}
+  .hero-btn--ghost:hover,.hero-btn--ghost:focus-visible{border-color:rgba(255,255,255,.8);color:#fff}
+  .hero-nav a:focus-visible,.hero-btn:focus-visible{outline:2px solid var(--green);outline-offset:3px}
+  .hero-nav,.hero-cta{opacity:0}
+  .stage-ready .hero-nav,.stage-ready .hero-cta{opacity:calc(1 - var(--hero-p, 0) * 1.6)}
+  .hero-nav,.hero-cta{transition:opacity 1.6s ease 1.1s}
 
   /* the tagline, under the badge: small, light and widely spaced. It follows
      the badge as the page scrolls, and comes in just after it. */
@@ -1116,6 +1143,7 @@ header.hero-page.brand-on::before{opacity:0}
 @media (min-width:861px) and (prefers-reduced-motion:reduce){
   .hero-badge img{opacity:1;transform:none;transition:none}
   .hero-tag span{opacity:1;transition:none}
+  .hero-nav,.hero-cta{opacity:calc(1 - var(--hero-p, 0) * 1.6);transition:none}
 }
 
 /* ---------- phone hero keeps its own night palette ----------
