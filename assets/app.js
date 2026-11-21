@@ -2119,7 +2119,8 @@ window.__BADGE_SHORT = {"w":199.143,"h":157.475,"blades":[{"pts":[[10.469,86.535
 
   var W=0,H=0,dpr=1,p=0,t=0,raf=0,live=false;
   var narrowNow = function(){ return window.matchMedia('(max-width:860px)').matches; };
-  var sel = -1, fk = -1, fcur = 0, ftgt = 0, hov = -1, runT = 0;   /* selected station, focus station, focus amount, hovered */
+  var sel = -1, fk = -1, fcur = 0, ftgt = 0, hov = -1, runT = 0;
+  var fly = {from:null, t0:0}, lastFocus = null, ORDER = [];   /* switching between stations: a glide that pulls back and settles */   /* selected station, focus station, focus amount, hovered */
   var started = false, t0 = 0, DUR = 8200;                          /* the arrival run, in ms */
   var pins = [], card = null, lastArr = [];
 
@@ -2162,6 +2163,24 @@ window.__BADGE_SHORT = {"w":199.143,"h":157.475,"blades":[{"pts":[[10.469,86.535
     return {n:n, s:n-Lh, w:w, e:w+Lw};
   }
 
+  /* The focus view for the selected station; while a switch is under way it
+     glides from the previous one, pulling back part-way so a long hop (the
+     coast to Baffin) reads as travel and not as a smear across the map. */
+  function currentFocus(){
+    var to = focusView(fk);
+    var s = fly.from ? Math.min(1, (performance.now() - fly.t0) / 1250) : 1;
+    if(!fly.from || s >= 1){ fly.from = null; lastFocus = to; return to; }
+    var e = sm(s), A = fly.from;
+    var cx = ((A.w+A.e)/2) + (((to.w+to.e)/2) - ((A.w+A.e)/2)) * e;
+    var cy = ((A.n+A.s)/2) + (((to.n+to.s)/2) - ((A.n+A.s)/2)) * e;
+    var hw = ((A.e-A.w) + ((to.e-to.w) - (A.e-A.w)) * e) / 2;
+    var hh = ((A.n-A.s) + ((to.n-to.s) - (A.n-A.s)) * e) / 2;
+    var dist = Math.abs(((to.n+to.s)/2) - ((A.n+A.s)/2)) / (to.n-to.s);
+    var bump = 1 + Math.min(6, dist * 1.1) * Math.sin(Math.PI * s);
+    lastFocus = {n:cy+hh*bump, s:cy-hh*bump, w:cx-hw*bump, e:cx+hw*bump};
+    return lastFocus;
+  }
+
   function setView(p){
     /* On a wide screen the drawing keeps to the right of the notes. On a
        phone it has the whole panel, less the heading at the top and the
@@ -2181,7 +2200,7 @@ window.__BADGE_SHORT = {"w":199.143,"h":157.475,"blades":[{"pts":[[10.469,86.535
       ? lerpView(VIEW_NEAR, VIEW_MID, sm(p/0.45))
       : lerpView(VIEW_MID,  VIEW_FAR, sm((p-0.45)/0.55));
     /* then, if a station is selected, ease in on it */
-    if(fcur > 0.0005 && fk >= 0) v = lerpView(v, focusView(fk), sm(fcur));
+    if(fcur > 0.0005 && fk >= 0) v = lerpView(v, currentFocus(), sm(fcur));
     view.n=v.n; view.s=v.s; view.w=v.w; view.e=v.e;
   }
 
@@ -2400,15 +2419,36 @@ window.__BADGE_SHORT = {"w":199.143,"h":157.475,"blades":[{"pts":[[10.469,86.535
   }
   function select(i){
     if(i >= 0 && (!STN[i].proj || !fill(i))) i = -1;
+    var switching = i >= 0 && sel >= 0 && i !== sel;
+    if(switching && !reduce){
+      fly.from = lastFocus || focusView(fk); fly.t0 = performance.now();
+      if(card){ card.classList.add('swap'); setTimeout(function(){ card.classList.remove('swap'); }, 220); }
+    } else if(i >= 0 && sel < 0){ fly.from = null; }
     sel = i;
     if(i >= 0){ fk = i; ftgt = 1; } else { ftgt = 0; }
-    if(reduce){ fcur = ftgt; }
+    if(reduce){ fcur = ftgt; fly.from = null; }
+    if(i >= 0 && card){
+      var pos = ORDER.indexOf(i);
+      var cnt = card.querySelector('.mc-count');
+      if(cnt) cnt.textContent = ('0'+(pos+1)).slice(-2) + ' / ' + ('0'+ORDER.length).slice(-2);
+    }
     pins.forEach(function(b, k){ if(b) b.setAttribute('aria-pressed', k === sel ? 'true' : 'false'); });
     sec.classList.toggle('map-open', sel >= 0);
     if(card){ card.hidden = false; card.classList.toggle('open', sel >= 0); card.setAttribute('aria-hidden', sel >= 0 ? 'false' : 'true'); }
     if(!live) { p = progress(); draw(); }
   }
+  /* the projects in the order they appear on the page */
+  ORDER = STN.map(function(S, i){ return i; }).filter(function(i){ return STN[i].proj && document.getElementById(STN[i].proj); })
+    .sort(function(a, b){ return document.getElementById(STN[a].proj).getBoundingClientRect().top - document.getElementById(STN[b].proj).getBoundingClientRect().top; });
+  function step(d){
+    if(sel < 0 || ORDER.length < 2) return;
+    var pos = ORDER.indexOf(sel);
+    select(ORDER[(pos + d + ORDER.length) % ORDER.length]);
+  }
   if(card){
+    var pv = card.querySelector('.mc-prev'), nx = card.querySelector('.mc-next');
+    if(pv) pv.addEventListener('click', function(){ step(-1); });
+    if(nx) nx.addEventListener('click', function(){ step(1); });
     card.querySelector('.mc-close').addEventListener('click', function(){ select(-1); });
     card.querySelector('.mc-link').addEventListener('click', function(){ /* the page scrolls to the full entry; the map stays as it is */ });
   }
@@ -2418,7 +2458,12 @@ window.__BADGE_SHORT = {"w":199.143,"h":157.475,"blades":[{"pts":[[10.469,86.535
     if(ev.target.closest('.map-card, .map-pin')) return;
     select(-1);
   });
-  document.addEventListener('keydown', function(ev){ if(ev.key === 'Escape' && sel >= 0) select(-1); });
+  document.addEventListener('keydown', function(ev){
+    if(sel < 0) return;
+    if(ev.key === 'Escape') select(-1);
+    else if(ev.key === 'ArrowRight') step(1);
+    else if(ev.key === 'ArrowLeft') step(-1);
+  });
 
   function loop(){
     if(live){ t += 0.016; p = progress(); fcur += (ftgt - fcur) * 0.085; if(Math.abs(ftgt - fcur) < 0.0008) fcur = ftgt; draw(); }
