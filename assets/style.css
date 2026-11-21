@@ -502,7 +502,7 @@ header.hero-page.brand-on::before{opacity:0}
 /* ---------- mountain section breaks (phones only) ---------- */
 .ridge{display:none}
 @media (max-width:860px){
-  .teasers,.contact{position:relative}
+  .teasers,.contact,.about{position:relative}
   .contact{overflow:visible}   /* the section clipped its own ridge away */
   .ridge{
     /* sunk 2px into the section below: on a phone the address bar resizing
@@ -516,6 +516,7 @@ header.hero-page.brand-on::before{opacity:0}
   .ridge-back{fill:var(--ridge-back);will-change:transform}
   /* light range rising into the night */
   .teasers{--ridge:var(--ice);--ridge-back:#C9D6D8}
+  .about{--ridge:var(--paper);--ridge-back:#C9D6D8}
   /* dark range against the light above it */
   .contact{--ridge:var(--night);--ridge-back:#042E41}
 }
@@ -526,6 +527,7 @@ header.hero-page.brand-on::before{opacity:0}
 @media (max-width:860px){
   .setup-copy{padding-bottom:calc(clamp(66px,19vw,104px) + 2rem)}
   .teasers,.advantage,.projects,.safety{padding-bottom:calc(clamp(66px,19vw,104px) + 2.5rem)}
+  section.exp{padding-bottom:calc(clamp(66px,19vw,104px) + 1.5rem)}
 }
 
 

@@ -62,35 +62,23 @@
     return y < 0 ? 0 : y > max ? max : y;
   }
 
-  /* The scroll range over which a section's own animation plays. These mirror
-     how app.js measures each section's progress, so a fraction f of the span is
-     the same fraction of the animation:
-       wide screens   the section is pinned: top -> bottom less one screen
-       phones         progress runs from the section entering to leaving, except
-                      the reality-capture drawing, which pins at the top      */
-  function span(id){
-    var s = el(id), T = absTop(s), h = s.offsetHeight, vh = window.innerHeight;
-    if(!phone.matches) return [T, T + h - vh];
-    if(id === 'capture'){
-      var pin = s.querySelector('.capture-sticky');
-      return [T, T + h - (pin ? pin.offsetHeight : vh)];
-    }
-    return [T - vh * 0.3, T + h - vh];
-  }
-  function at(id, f){ return function(){ var r = span(id); return clampY(r[0] + (r[1] - r[0]) * f); }; }
+  /* The homepage is now a run of ordinary sections: the demo glides to the top
+     of each in turn, with the section's own reveal animations playing as it
+     arrives. */
+  var hdr = function(){ return phone.matches ? 60 : 74; };
+  function at(id){ return function(){ var s = el(id); return s ? clampY(absTop(s) - hdr()) : 0; }; }
   function intro(){ return clampY(absTop(el('intro')) - window.innerHeight * 0.12); }
 
-  /* view the section -> its animation plays -> pause -> glide to the next.
-     dur is the glide in ms, dwell the pause in ms. About 28 seconds in all, with the fade back to the start. */
+  /* view the section -> pause -> glide to the next. dur is the glide in ms,
+     dwell the pause in ms. About 28 seconds in all, with the fade back to the start. */
   var STEPS = [
     {y:function(){ return 0; },   dur:0,    dwell:3000},   /* hero: badge, aurora, readouts */
-    {y:at('setup',   0),          dur:2400, dwell:400},    /* total station, stage 1 */
-    {y:at('setup',   0.5),        dur:2100, dwell:300},    /*   stage 2 */
-    {y:at('setup',   1),          dur:2100, dwell:600},    /*   stage 3 */
-    {y:at('capture', 0),          dur:1000, dwell:400},    /* reality capture: point cloud */
-    {y:at('capture', 0.5),        dur:2200, dwell:300},
-    {y:at('capture', 1),          dur:2200, dwell:600},
-    {y:intro,                     dur:3200, dwell:1500},   /* headline resolves line by line */
+    {y:at('what'),                dur:1800, dwell:2600},   /* what we do */
+    {y:at('industries'),          dur:1800, dwell:2600},   /* industries we serve */
+    {y:at('expertise'),           dur:1800, dwell:2600},   /* our expertise */
+    {y:at('about'),               dur:1800, dwell:2600},   /* about Aurora */
+    {y:at('careers'),             dur:1800, dwell:1800},   /* careers */
+    {y:intro,                     dur:2200, dwell:2800},   /* headline resolves line by line */
     {restart:true}
   ];
 

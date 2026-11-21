@@ -1,0 +1,66 @@
+<section class="setup on-dark" id="setup">
+  <div class="setup-back" aria-hidden="true">
+      <canvas class="setup-sky" aria-hidden="true"></canvas>
+      <div class="setup-ridge" aria-hidden="true">
+        <svg viewBox="0 0 600 300" preserveAspectRatio="none">
+          <path class="sr-far" d="M-60.00,304.00 L-60.00,189.86 C-55.20,191.17 -40.80,195.30 -31.20,197.70 C-21.60,200.11 -12.00,204.08 -2.40,204.29 C7.20,204.51 16.80,199.82 26.40,198.98 C36.00,198.14 45.60,201.41 55.20,199.23 C64.80,197.06 74.40,189.76 84.00,185.93 C93.60,182.10 103.20,176.05 112.80,176.27 C122.40,176.49 132.00,183.13 141.60,187.26 C151.20,191.39 160.80,197.26 170.40,201.05 C180.00,204.84 189.60,208.15 199.20,210.00 C208.80,211.86 218.40,213.03 228.00,212.17 C237.60,211.31 247.20,208.14 256.80,204.87 C266.40,201.59 276.00,196.88 285.60,192.53 C295.20,188.17 304.80,180.85 314.40,178.76 C324.00,176.67 333.60,176.99 343.20,179.98 C352.80,182.97 362.40,193.64 372.00,196.68 C381.60,199.72 391.20,197.04 400.80,198.21 C410.40,199.38 420.00,203.32 429.60,203.70 C439.20,204.08 448.80,202.37 458.40,200.51 C468.00,198.65 477.60,195.33 487.20,192.54 C496.80,189.75 506.40,188.03 516.00,183.78 C525.60,179.53 535.20,174.43 544.80,167.04 C554.40,159.66 564.00,147.11 573.60,139.46 C583.20,131.82 592.80,125.64 602.40,121.16 C612.00,116.69 621.60,117.80 631.20,112.61 C640.80,107.42 655.20,93.80 660.00,90.03 L660.00,304.00 Z"/>
+          <path class="sr-mid" d="M-60.00,304.00 L-60.00,134.80 C-55.20,134.40 -40.80,131.10 -31.20,132.42 C-21.60,133.74 -12.00,138.16 -2.40,142.72 C7.20,147.28 16.80,154.44 26.40,159.76 C36.00,165.09 45.60,170.98 55.20,174.66 C64.80,178.35 74.40,177.11 84.00,181.86 C93.60,186.62 103.20,196.28 112.80,203.19 C122.40,210.09 132.00,218.16 141.60,223.30 C151.20,228.44 160.80,231.14 170.40,234.03 C180.00,236.91 189.60,238.47 199.20,240.63 C208.80,242.79 218.40,246.31 228.00,247.01 C237.60,247.71 247.20,245.41 256.80,244.83 C266.40,244.25 276.00,244.96 285.60,243.54 C295.20,242.12 304.80,239.47 314.40,236.29 C324.00,233.10 333.60,225.40 343.20,224.44 C352.80,223.49 362.40,227.53 372.00,230.55 C381.60,233.57 391.20,239.15 400.80,242.58 C410.40,246.01 420.00,249.02 429.60,251.15 C439.20,253.27 448.80,255.49 458.40,255.33 C468.00,255.17 477.60,252.58 487.20,250.17 C496.80,247.76 506.40,244.45 516.00,240.89 C525.60,237.34 535.20,231.44 544.80,228.83 C554.40,226.22 564.00,223.62 573.60,225.22 C583.20,226.83 592.80,235.48 602.40,238.48 C612.00,241.48 621.60,241.98 631.20,243.21 C640.80,244.45 655.20,245.44 660.00,245.88 L660.00,304.00 Z"/>
+          <path class="sr-near" d="M-60.00,304.00 L-60.00,235.69 C-55.20,235.15 -40.80,235.29 -31.20,232.41 C-21.60,229.53 -12.00,223.34 -2.40,218.42 C7.20,213.50 16.80,206.46 26.40,202.89 C36.00,199.33 45.60,196.87 55.20,197.05 C64.80,197.22 74.40,200.77 84.00,203.97 C93.60,207.17 103.20,211.72 112.80,216.23 C122.40,220.74 132.00,227.65 141.60,231.03 C151.20,234.41 160.80,233.15 170.40,236.51 C180.00,239.86 189.60,245.65 199.20,251.16 C208.80,256.67 218.40,264.73 228.00,269.57 C237.60,274.40 247.20,277.44 256.80,280.16 C266.40,282.87 276.00,284.01 285.60,285.89 C295.20,287.76 304.80,290.33 314.40,291.39 C324.00,292.45 333.60,292.60 343.20,292.24 C352.80,291.89 362.40,290.17 372.00,289.25 C381.60,288.34 391.20,289.08 400.80,286.75 C410.40,284.42 420.00,276.96 429.60,275.27 C439.20,273.59 448.80,274.78 458.40,276.65 C468.00,278.53 477.60,283.54 487.20,286.52 C496.80,289.51 506.40,292.44 516.00,294.55 C525.60,296.66 535.20,298.86 544.80,299.19 C554.40,299.53 564.00,298.10 573.60,296.54 C583.20,294.98 592.80,292.60 602.40,289.84 C612.00,287.09 621.60,282.70 631.20,280.03 C640.80,277.36 655.20,274.87 660.00,273.84 L660.00,304.00 Z"/>
+        </svg>
+      </div>
+  </div>
+  <div class="wrap setup-grid">
+    <div class="setup-stage">
+      <div class="rig-ann" aria-hidden="true">
+        <svg class="rig-leads" viewBox="0 0 100 100" preserveAspectRatio="none">
+          <circle class="rl-ring" cx="50" cy="50" r="27"/>
+          <g class="rl-lines">
+            <line data-lead="elev"   x1="50" y1="50" x2="24" y2="26"/>
+            <line data-lead="target" x1="50" y1="50" x2="21" y2="46"/>
+            <line data-lead="temp"   x1="50" y1="50" x2="24" y2="66"/>
+            <line data-lead="stn"    x1="50" y1="50" x2="84" y2="26"/>
+            <line data-lead="prism"  x1="50" y1="50" x2="86" y2="46"/>
+            <line data-lead="press"  x1="50" y1="50" x2="84" y2="66"/>
+          </g>
+        </svg>
+        <div class="ra ra-elev"   data-stage="0"><span class="ra-k">Elev</span><span class="ra-v" data-num="412.000">0.000 m</span></div>
+        <div class="ra ra-stn"    data-stage="0"><span class="ra-k">Station</span><span class="ra-v">AUR-01</span></div>
+        <div class="ra ra-target" data-stage="1"><span class="ra-k">Target ht</span><span class="ra-v" data-num="1.500">0.000 m</span></div>
+        <div class="ra ra-prism"  data-stage="1"><span class="ra-k">Prism</span><span class="ra-v">0 mm</span></div>
+        <div class="ra ra-temp"   data-stage="1"><span class="ra-k">Temp</span><span class="ra-v">12&#176;C</span></div>
+        <div class="ra ra-press"  data-stage="1"><span class="ra-k">Pressure</span><span class="ra-v">101.3 kPa</span></div>
+        <div class="ra ra-hz"     data-stage="2"><span class="ra-k">HZ</span><span class="ra-v">128&#176;44&#8242;12&#8243;</span></div>
+        <div class="ra ra-v"      data-stage="2"><span class="ra-k">V</span><span class="ra-v">91&#176;02&#8242;55&#8243;</span></div>
+        <div class="ra ra-sd"     data-stage="2"><span class="ra-k">SD</span><span class="ra-v" data-num="42.318">0.000 m</span></div>
+      </div>
+      <canvas id="rig" aria-hidden="true"></canvas>
+      <div class="readout" id="readout">
+        <span><b>HZ</b>128°44'12"</span>
+        <span><b>V</b>91°02'55"</span>
+        <span><b>SD</b>42.318 m</span>
+      </div>
+    </div>
+    <div class="setup-copy">
+      <div class="setup-head">
+        <p class="eyebrow">In the field</p>
+        <h2>Every observation starts the same way.</h2>
+      </div>
+      <div class="beat" data-beat="0">
+        <p class="beat-no">01 · Occupy</p>
+        <h3>Set up over the point</h3>
+        <p>Tripod centred on the control point, legs footed, plate roughly level. Nothing downstream is better than this step.</p>
+      </div>
+      <div class="beat" data-beat="1">
+        <p class="beat-no">02 · Orient</p>
+        <h3>Level, backsight, close</h3>
+        <p>Level the tribrach, sight a known backsight and close the loop before a single new point is collected.</p>
+      </div>
+      <div class="beat" data-beat="2">
+        <p class="beat-no">03 · Observe</p>
+        <h3>Measure and check on site</h3>
+        <p>Angles and distances tied to the network and checked in the field — not back at the office three days later.</p>
+      </div>
+      <a class="beat-more" href="services.html">See our services</a>
+    </div>
+  </div>
+</section>
