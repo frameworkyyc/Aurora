@@ -282,7 +282,7 @@ nav a[href="contact.html"]:hover,nav a[href="contact.html"]:focus-visible,nav a[
 .stat b{
   display:flex;justify-content:center;align-items:flex-start;
   font-family:var(--sans);font-weight:700;font-size:clamp(2.2rem,5vw,3.4rem);
-  letter-spacing:-.04em;line-height:1;font-variant-numeric:tabular-nums;
+  letter-spacing:-.04em;line-height:1.06;font-variant-numeric:tabular-nums;   /* the reels' own digit height, so a figure shown as plain text sits level with the rolling ones */
 }
 .reel{display:block;height:1.06em;overflow:hidden}
 .reel-strip{display:block;transform:translateY(0);will-change:transform;
