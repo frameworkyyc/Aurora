@@ -1321,28 +1321,33 @@ window.__rig2D = function(){
 })();
 
 
-/* ---- the surveyor on the ridge: an optional transparent animation ----
-   The slot in the markup (.wr-anim) names the finished files. With none set,
-   nothing happens and the static SVG figure stays. With files set, the video
-   is loaded when the ridge comes near the screen, placed so its feet stand on
-   the same summit as the static figure (the SVG's own coordinates, so it
-   scales and crops with the range), and only then swapped in. It loops
-   while visible and pauses off screen or in a hidden tab. With reduced
-   motion it is never played: the poster still, if given, else the static
-   figure, is shown instead. */
+/* ---- the surveyor on the ridge: a transparent, looping animation ----
+   The slot in the markup (.wr-anim) names the files and where the scene's
+   ground point sits in the mountain SVG's own coordinates, so it scales and
+   crops with the range at every width. Near the screen, the still (the
+   loop's first frame) is shown in place of the static SVG figure, then the
+   video plays over it from that same frame.
+   Chrome, Edge and Firefox play VP9 WebM with a real alpha channel. Safari
+   (and every iOS browser, all WebKit) cannot decode VP9 alpha, so it gets an
+   H.264 copy of the same white-on-black frames, blended with
+   mix-blend-mode:screen: black adds nothing, white stays white, so the
+   background disappears without an alpha channel. The loop pauses off
+   screen and in a hidden tab; with reduced motion only the still is shown.
+   With no files set, the static SVG figure stays. */
 (function(){
   var slot = document.querySelector('.wr-anim');
   var band = slot && slot.closest('.wwd-ridge');
   var svg = band && band.querySelector('svg');
   if(!slot || !svg) return;
   var d = slot.dataset;
-  var webm = (d.webm || '').trim(), hevc = (d.hevc || '').trim(), poster = (d.poster || '').trim();
+  var webm = (d.webm || '').trim(), mp4 = (d.mp4 || '').trim(), poster = (d.poster || '').trim();
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if(!webm && !hevc && !(reduce && poster)) return;          /* nothing supplied yet */
+  if(!poster && !webm && !mp4) return;                        /* nothing supplied */
+  if(reduce && !poster) return;
 
-  var anchor = (d.anchor || '1472 108').split(/\s+/).map(Number);
-  var foot = (d.foot || '0.5 0.96').split(/\s+/).map(Number);
-  var unitsW = +d.width || 128, aspect = +d.aspect || 1;       /* width / height */
+  var anchor = (d.anchor || '1488 108').split(/\s+/).map(Number);
+  var foot = (d.foot || '0.5 0.98').split(/\s+/).map(Number);
+  var unitsW = +d.width || 80, aspect = +d.aspect || 1;       /* width / height */
 
   function place(){
     var m = svg.getScreenCTM(), r = band.getBoundingClientRect();
@@ -1360,30 +1365,37 @@ window.__rig2D = function(){
 
   function show(){ slot.classList.add('is-on'); band.classList.add('anim-on'); }
 
-  if(reduce){                                                  /* a still, never motion */
-    var img = new Image();
-    img.alt = ''; img.decoding = 'async';
-    img.onload = show;
-    img.src = poster;
-    slot.appendChild(img);
-    return;
+  /* WebKit (Safari, and all browsers on iOS) gets the blended H.264 copy */
+  var webkit = /Apple/.test(navigator.vendor || '');
+  var probe = document.createElement('video');
+  var useWebm = !!webm && !webkit && !!probe.canPlayType && probe.canPlayType('video/webm; codecs="vp9"') !== '';
+  var src = useWebm ? webm : mp4;
+  if(!useWebm) slot.classList.add('is-blend');
+
+  var still = null, v = null, started = false, inView = false;
+  function start(){
+    if(started) return;
+    started = true;
+    if(poster){
+      still = new Image();
+      still.alt = ''; still.decoding = 'async';
+      still.onload = show;
+      still.src = poster;
+      slot.appendChild(still);
+    }
+    if(reduce || !src) return;                                 /* a still, never motion */
+    v = document.createElement('video');
+    v.muted = true; v.defaultMuted = true; v.loop = true; v.playsInline = true;
+    v.setAttribute('muted', ''); v.setAttribute('playsinline', ''); v.setAttribute('aria-hidden', 'true');
+    v.disablePictureInPicture = true; v.preload = 'auto';
+    v.addEventListener('playing', function(){ show(); slot.classList.add('is-playing'); }, {once:true});
+    v.src = src;
+    slot.appendChild(v);
   }
-
-  var v = document.createElement('video');
-  v.muted = true; v.defaultMuted = true; v.loop = true; v.playsInline = true;
-  v.setAttribute('muted', ''); v.setAttribute('playsinline', ''); v.setAttribute('aria-hidden', 'true');
-  v.preload = 'none'; v.disablePictureInPicture = true;
-  if(poster) v.poster = poster;
-  /* Safari plays HEVC with alpha; Chrome, Edge and Firefox play VP9 with alpha */
-  if(hevc){ var s1 = document.createElement('source'); s1.src = hevc; s1.type = 'video/mp4; codecs="hvc1"'; v.appendChild(s1); }
-  if(webm){ var s2 = document.createElement('source'); s2.src = webm; s2.type = 'video/webm; codecs="vp9"'; v.appendChild(s2); }
-  slot.appendChild(v);
-
-  var loaded = false, inView = false;
-  v.addEventListener('playing', show, {once:true});
   function sync(){
+    if(inView) start();
+    if(!v) return;
     if(inView && !document.hidden){
-      if(!loaded){ loaded = true; v.preload = 'auto'; v.load(); }
       var pr = v.play(); if(pr && pr.catch) pr.catch(function(){});
     } else if(!v.paused){ v.pause(); }
   }

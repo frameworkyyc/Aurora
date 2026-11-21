@@ -1453,8 +1453,12 @@ header.hero-page:focus-within{
 /* the animated surveyor: a transparent video placed by script so its feet sit
    on the same summit as the static figure, at the same scale as the range */
 .wr-anim{position:absolute;left:0;top:0;width:var(--wr-w,0);height:var(--wr-h,0);
-  transform:translate3d(var(--wr-x,0),var(--wr-y,0),0);opacity:0;transition:opacity .6s ease;pointer-events:none}
-.wr-anim video,.wr-anim img{display:block;width:100%;height:100%;object-fit:contain}
+  transform:translate3d(var(--wr-x,0),var(--wr-y,0),0);opacity:0;transition:opacity .5s ease;pointer-events:none}
+.wr-anim video,.wr-anim img{position:absolute;inset:0;display:block;width:100%;height:100%;object-fit:contain}
 .wr-anim.is-on{opacity:1}
-.wwd-ridge .wr-figure{transition:opacity .6s ease}
+/* the still sits under the video until it is actually playing */
+.wr-anim.is-playing img{visibility:hidden}
+/* Safari: white-on-black H.264, black blended away (see app.js) */
+.wr-anim.is-blend{mix-blend-mode:screen}   /* on the slot itself: its transform isolates its children from the backdrop */
+.wwd-ridge .wr-figure{transition:opacity .5s ease}
 .wwd-ridge.anim-on .wr-figure{opacity:0}
