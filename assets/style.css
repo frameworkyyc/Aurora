@@ -1404,3 +1404,19 @@ header.hero-page:focus-within{
   .gal-e{grid-column:1 / -1;aspect-ratio:16/10}
   .why-grid{grid-template-columns:1fr}
 }
+
+/* ---------- hero -> What we do, and the photographic bands around the intro ----------
+   The hero ends in the page's night colour, so What we do rises out of it
+   through a long gradient into white instead of meeting it at an edge. The
+   photographic call-outs either side of the "shovel-holder to stakeholder"
+   section fade into the same night colour where they meet it. */
+.wwd{--wwd-from:#05364C;--wwd-band:clamp(100px,16svh,170px);position:relative;padding-top:calc(var(--wwd-band) + clamp(1.5rem,3vw,3rem))}
+.wwd::before{content:"";position:absolute;left:0;right:0;top:0;height:var(--wwd-band);pointer-events:none;
+  background:linear-gradient(180deg,var(--wwd-from) 0%,#fff 100%)}
+@media (max-width:860px){ .wwd{--wwd-from:#071A24} }
+.careers-cta::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:clamp(70px,16%,150px);z-index:1;pointer-events:none;
+  background:linear-gradient(180deg,rgba(5,54,76,0),var(--night))}
+@media (max-width:860px){ .careers-cta::after{background:linear-gradient(180deg,rgba(7,26,36,0),#071A24)} }
+.contact--photo::after{content:"";position:absolute;left:0;right:0;top:0;height:clamp(80px,18%,170px);z-index:1;pointer-events:none;
+  background:linear-gradient(180deg,#05364C,rgba(5,54,76,0))}
+@media (max-width:860px){ .contact--photo::after{background:linear-gradient(180deg,#071A24,rgba(7,26,36,0))} }
