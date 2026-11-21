@@ -1321,6 +1321,58 @@ window.__rig2D = function(){
 })();
 
 
+/* ---- industries: a rail of photographs, one open at a time. Hover, focus,
+        tap or the arrow keys open a card; each card is a real button. ---- */
+(function(){
+  var rail = document.querySelector('.ind-rail');
+  if(!rail) return;
+  var cards = [].slice.call(rail.querySelectorAll('.ind-card'));
+  var hoverOK = window.matchMedia('(hover:hover) and (min-width:861px)');
+  function open(c){
+    cards.forEach(function(k){
+      var on = k === c;
+      k.classList.toggle('is-open', on);
+      k.querySelector('.ind-tab').setAttribute('aria-expanded', on ? 'true' : 'false');
+    });
+  }
+  cards.forEach(function(c, i){
+    var tab = c.querySelector('.ind-tab');
+    tab.addEventListener('click', function(){ open(c); });
+    tab.addEventListener('focus', function(){ open(c); });
+    c.addEventListener('mouseenter', function(){ if(hoverOK.matches) open(c); });
+    tab.addEventListener('keydown', function(e){
+      var d = e.key === 'ArrowRight' || e.key === 'ArrowDown' ? 1 : e.key === 'ArrowLeft' || e.key === 'ArrowUp' ? -1 : 0;
+      if(!d) return;
+      e.preventDefault();
+      var n = cards[(i + d + cards.length) % cards.length];
+      n.querySelector('.ind-tab').focus();
+    });
+  });
+})();
+
+/* ---- careers enquiry: composes an email, like the project enquiry ---- */
+(function(){
+  var form = document.getElementById('careers-form');
+  if(!form) return;
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    var get = function(n){ var el = form.elements[n]; return el ? el.value.trim() : ''; };
+    var name = get('name'), email = get('email'), phone = get('phone');
+    var area = get('area'), message = get('message');
+    var subject = 'Careers enquiry' + (name ? ' \u2014 ' + name : '');
+    var body = [
+      name ? 'Name: ' + name : '',
+      email ? 'Email: ' + email : '',
+      phone ? 'Phone: ' + phone : '',
+      area ? 'Area of interest: ' + area : '',
+      '',
+      message
+    ].filter(Boolean).join('\n');
+    window.location.href = 'mailto:info@aurorasurveys.ca?subject=' +
+      encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
+  });
+})();
+
 /* ---- the wordmark is already the hero; the header only takes it over
         once the hero has scrolled away ---- */
 (function(){
@@ -2774,7 +2826,7 @@ window.__BADGE_SHORT = {"w":199.143,"h":157.475,"blades":[{"pts":[[10.469,86.535
     var el = document.elementFromPoint(2, y);
     while(el && el !== document.body){
       if(el.classList && (el.classList.contains('services') || el.classList.contains('teasers') ||
-         el.classList.contains('advantage') || el.classList.contains('projects'))) return true;
+         el.classList.contains('advantage') || el.classList.contains('projects') || el.classList.contains('is-light'))) return true;
       if(el.classList && el.classList.contains('on-dark')) return false;
       el = el.parentElement;
     }
