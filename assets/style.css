@@ -1239,7 +1239,7 @@ header.hero-page:focus-within{
 .wwd-title{font-family:var(--sans);font-weight:700;font-size:clamp(3.2rem,9vw,8.2rem);line-height:.92;letter-spacing:-.045em;
   color:var(--navy);margin:0;max-width:none}
 .wwd-intro{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(1.5rem,5vw,5rem);align-items:start;
-  margin-top:clamp(1.6rem,3.4vw,2.8rem);padding-top:clamp(1.4rem,2.6vw,2rem);border-top:1px solid var(--rule)}
+  margin-top:clamp(1.8rem,3.6vw,3rem)}
 .wwd-statement{font-family:var(--sans);font-weight:600;font-size:clamp(1.35rem,2.3vw,2rem);line-height:1.2;letter-spacing:-.02em;
   color:var(--navy);margin:0;max-width:20ch}
 .wwd-intro .lede{margin:0}
@@ -1442,3 +1442,12 @@ header.hero-page:focus-within{
 .contact--photo::after{content:"";position:absolute;left:0;right:0;top:0;height:clamp(80px,18%,170px);z-index:1;pointer-events:none;
   background:linear-gradient(180deg,#05364C,rgba(5,54,76,0))}
 @media (max-width:860px){ .contact--photo::after{background:linear-gradient(180deg,#071A24,rgba(7,26,36,0))} }
+
+/* the animated surveyor: a transparent video placed by script so its feet sit
+   on the same summit as the static figure, at the same scale as the range */
+.wr-anim{position:absolute;left:0;top:0;width:var(--wr-w,0);height:var(--wr-h,0);
+  transform:translate3d(var(--wr-x,0),var(--wr-y,0),0);opacity:0;transition:opacity .6s ease;pointer-events:none}
+.wr-anim video,.wr-anim img{display:block;width:100%;height:100%;object-fit:contain}
+.wr-anim.is-on{opacity:1}
+.wwd-ridge .wr-figure{transition:opacity .6s ease}
+.wwd-ridge.anim-on .wr-figure{opacity:0}

@@ -1321,6 +1321,79 @@ window.__rig2D = function(){
 })();
 
 
+/* ---- the surveyor on the ridge: an optional transparent animation ----
+   The slot in the markup (.wr-anim) names the finished files. With none set,
+   nothing happens and the static SVG figure stays. With files set, the video
+   is loaded when the ridge comes near the screen, placed so its feet stand on
+   the same summit as the static figure (the SVG's own coordinates, so it
+   scales and crops with the range), and only then swapped in. It loops
+   while visible and pauses off screen or in a hidden tab. With reduced
+   motion it is never played: the poster still, if given, else the static
+   figure, is shown instead. */
+(function(){
+  var slot = document.querySelector('.wr-anim');
+  var band = slot && slot.closest('.wwd-ridge');
+  var svg = band && band.querySelector('svg');
+  if(!slot || !svg) return;
+  var d = slot.dataset;
+  var webm = (d.webm || '').trim(), hevc = (d.hevc || '').trim(), poster = (d.poster || '').trim();
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(!webm && !hevc && !(reduce && poster)) return;          /* nothing supplied yet */
+
+  var anchor = (d.anchor || '1472 52').split(/\s+/).map(Number);
+  var foot = (d.foot || '0.5 0.96').split(/\s+/).map(Number);
+  var unitsW = +d.width || 96, aspect = +d.aspect || 1;       /* width / height */
+
+  function place(){
+    var m = svg.getScreenCTM(), r = band.getBoundingClientRect();
+    if(!m || !r.width) return;
+    var w = unitsW * m.a, h = w / aspect;
+    var fx = m.e + anchor[0] * m.a - r.left, fy = m.f + anchor[1] * m.d - r.top;
+    slot.style.setProperty('--wr-w', w.toFixed(1) + 'px');
+    slot.style.setProperty('--wr-h', h.toFixed(1) + 'px');
+    slot.style.setProperty('--wr-x', (fx - w * foot[0]).toFixed(1) + 'px');
+    slot.style.setProperty('--wr-y', (fy - h * foot[1]).toFixed(1) + 'px');
+  }
+  place();
+  if('ResizeObserver' in window) new ResizeObserver(place).observe(band);
+  window.addEventListener('resize', place);
+
+  function show(){ slot.classList.add('is-on'); band.classList.add('anim-on'); }
+
+  if(reduce){                                                  /* a still, never motion */
+    var img = new Image();
+    img.alt = ''; img.decoding = 'async';
+    img.onload = show;
+    img.src = poster;
+    slot.appendChild(img);
+    return;
+  }
+
+  var v = document.createElement('video');
+  v.muted = true; v.defaultMuted = true; v.loop = true; v.playsInline = true;
+  v.setAttribute('muted', ''); v.setAttribute('playsinline', ''); v.setAttribute('aria-hidden', 'true');
+  v.preload = 'none'; v.disablePictureInPicture = true;
+  if(poster) v.poster = poster;
+  /* Safari plays HEVC with alpha; Chrome, Edge and Firefox play VP9 with alpha */
+  if(hevc){ var s1 = document.createElement('source'); s1.src = hevc; s1.type = 'video/mp4; codecs="hvc1"'; v.appendChild(s1); }
+  if(webm){ var s2 = document.createElement('source'); s2.src = webm; s2.type = 'video/webm; codecs="vp9"'; v.appendChild(s2); }
+  slot.appendChild(v);
+
+  var loaded = false, inView = false;
+  v.addEventListener('playing', show, {once:true});
+  function sync(){
+    if(inView && !document.hidden){
+      if(!loaded){ loaded = true; v.preload = 'auto'; v.load(); }
+      var pr = v.play(); if(pr && pr.catch) pr.catch(function(){});
+    } else if(!v.paused){ v.pause(); }
+  }
+  document.addEventListener('visibilitychange', sync);
+  if('IntersectionObserver' in window){
+    new IntersectionObserver(function(es){ inView = es[es.length-1].isIntersecting; sync(); },
+      {rootMargin:'200px 0px'}).observe(band);
+  } else { inView = true; sync(); }
+})();
+
 /* ---- industries: a rail of photographs, one open at a time. Hover, focus,
         tap or the arrow keys open a card; each card is a real button. ---- */
 (function(){
