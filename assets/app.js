@@ -1370,7 +1370,11 @@ window.__rig2D = function(){
   var probe = document.createElement('video');
   var useWebm = !!webm && !webkit && !!probe.canPlayType && probe.canPlayType('video/webm; codecs="vp9"') !== '';
   var src = useWebm ? webm : mp4;
-  if(!useWebm) slot.classList.add('is-blend');
+  /* Safari's H.264 copy has no alpha, so it is blended; Firefox gets the same
+     blend on the WebM in case its decoder drops the alpha channel. Screen
+     leaves real transparency unchanged, so it is harmless where alpha works.
+     Chrome and Edge are left exactly as they were. */
+  if(!useWebm || /Firefox\//.test(navigator.userAgent)) slot.classList.add('is-blend');
 
   var still = null, v = null, started = false, inView = false;
   function start(){
