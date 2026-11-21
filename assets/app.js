@@ -484,6 +484,8 @@ window.__BADGE_SHORT = {"w":199.143,"h":157.475,"blades":[{"pts":[[10.469,86.535
       if(opts.brandSky && window.matchMedia('(min-width:861px)').matches){
         /* the brand's Sky Gradient: Black at the top to Denim Blue at the bottom */
         g.addColorStop(0, '#000000');
+        g.addColorStop(0.38, '#00080d');   /* deeper through the middle and lower sky; the foot still lands on Denim Blue */
+        g.addColorStop(0.72, '#020f17');
         g.addColorStop(1, '#05364c');
       } else if(opts.aurora){
         /* a section's own sky: Denim Blue at both ends so it meets the sections

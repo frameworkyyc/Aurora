@@ -1045,6 +1045,7 @@ header.hero-page.brand-on::before{opacity:0}
        a little over half the height of the screen, never more than 46% of its
        width, so the sky around it stays generous. */
     --badge-w:min(46vw, calc(58svh * 1.2646));
+    --lift:6svh;   /* the composition sits this far above true centre */
   }
   .stage{height:100svh;min-height:600px;margin-top:-74px;position:relative;overflow:hidden;z-index:0}
   .stage-sticky{position:absolute;inset:0;height:auto;min-height:0;padding:0;display:block;overflow:hidden;z-index:auto}
@@ -1058,7 +1059,7 @@ header.hero-page.brand-on::before{opacity:0}
      sinks a little and fades as the page moves on); the artwork inside does
      the entrance, so the two never fight over the same transform. */
   .hero-badge{
-    display:block;position:absolute;z-index:2;left:50%;top:50%;
+    display:block;position:absolute;z-index:2;left:50%;top:calc(50% - var(--lift));
     width:var(--badge-w);aspect-ratio:199.143 / 157.475;
     transform:translate3d(-50%, calc(-50% + var(--hero-p, 0) * 9svh), 0);
     opacity:calc(1 - var(--hero-p, 0) * 1.3);
@@ -1083,7 +1084,7 @@ header.hero-page.brand-on::before{opacity:0}
      the badge as the page scrolls, and comes in just after it. */
   .hero-tag{
     display:block;position:absolute;z-index:2;left:50%;margin:0;
-    top:calc(50% + var(--badge-w) * .3955 + clamp(1.4rem, 3.4svh, 2.6rem));
+    top:calc(50% - var(--lift) + var(--badge-w) * .3955 + clamp(1.4rem, 3.4svh, 2.6rem));
     transform:translate3d(-50%, calc(var(--hero-p, 0) * 9svh), 0);
     opacity:calc(1 - var(--hero-p, 0) * 1.6);
     font-family:var(--sans);font-weight:400;font-size:clamp(.62rem, .82vw, .86rem);
