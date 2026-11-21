@@ -1230,10 +1230,19 @@ header.hero-page:focus-within{
 .kicker--g{color:var(--green) !important}
 
 /* What we do */
-.wwd{padding-block:clamp(4rem,8vw,7.5rem)}
+.wwd{padding-block:clamp(3.5rem,7vw,6.5rem) clamp(4rem,8vw,7.5rem)}
 .wwd-grid{display:grid;grid-template-columns:minmax(0,1.08fr) minmax(0,.92fr);gap:clamp(2rem,5vw,5rem);align-items:start}
-.wwd h2{max-width:17ch}
-.wwd .section-head{margin-bottom:clamp(1.6rem,3vw,2.4rem)}
+.wwd-head{margin-bottom:clamp(2.5rem,5vw,4.5rem)}
+.wwd-kicker{display:flex;align-items:center;gap:.9rem;margin:0 0 clamp(1rem,2vw,1.6rem);
+  font-family:var(--mono);font-size:.66rem;letter-spacing:.2em;text-transform:uppercase;color:var(--steel)}
+.wwd-kicker span{color:var(--green);padding-right:.9rem;border-right:1px solid var(--rule)}
+.wwd-title{font-family:var(--sans);font-weight:700;font-size:clamp(3.2rem,9vw,8.2rem);line-height:.92;letter-spacing:-.045em;
+  color:var(--navy);margin:0;max-width:none}
+.wwd-intro{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(1.5rem,5vw,5rem);align-items:start;
+  margin-top:clamp(1.6rem,3.4vw,2.8rem);padding-top:clamp(1.4rem,2.6vw,2rem);border-top:1px solid var(--rule)}
+.wwd-statement{font-family:var(--sans);font-weight:600;font-size:clamp(1.35rem,2.3vw,2rem);line-height:1.2;letter-spacing:-.02em;
+  color:var(--navy);margin:0;max-width:20ch}
+.wwd-intro .lede{margin:0}
 .wwd-disc{display:grid;grid-template-columns:1fr 1fr;gap:clamp(1.2rem,2.6vw,2.2rem)}
 .wwd-disc .kicker{font-family:var(--mono);font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;color:var(--steel);margin:0 0 .9rem}
 .wwd-disc h3{font-size:1.2rem;letter-spacing:-.02em;margin-bottom:.8rem}
@@ -1343,6 +1352,7 @@ header.hero-page:focus-within{
   .wwd-grid,.about-grid{grid-template-columns:1fr}
   .wwd-fig{position:relative;top:auto;aspect-ratio:4/3}
   .wwd-disc{grid-template-columns:1fr}
+  .wwd-intro{grid-template-columns:1fr;gap:1rem}
   .about-figs{padding-bottom:16%}
   .about-fig--b{right:0;width:50%}
   .about-pts{grid-template-columns:1fr}
@@ -1410,10 +1420,22 @@ header.hero-page:focus-within{
    through a long gradient into white instead of meeting it at an edge. The
    photographic call-outs either side of the "shovel-holder to stakeholder"
    section fade into the same night colour where they meet it. */
-.wwd{--wwd-from:#05364C;--wwd-band:clamp(100px,16svh,170px);position:relative;padding-top:calc(var(--wwd-band) + clamp(1.5rem,3vw,3rem))}
-.wwd::before{content:"";position:absolute;left:0;right:0;top:0;height:var(--wwd-band);pointer-events:none;
-  background:linear-gradient(180deg,var(--wwd-from) 0%,#fff 100%)}
-@media (max-width:860px){ .wwd{--wwd-from:#071A24} }
+/* the hero meets What we do at a mountain range: a crisp white silhouette
+   (the section's own colour) rising into the bottom of the dark hero, a paler
+   range behind it, and a surveyor at a total station on one summit. It is
+   one SVG, cropped from the middle on narrow screens so the figure stays in
+   view; the white section starts immediately below the ridge. */
+.wwd{position:relative;z-index:2;padding-top:0 !important}
+.wwd > .wrap{padding-top:clamp(3rem,6vw,5.5rem)}
+.wwd-ridge{
+  --ridge-bg:#05364C;
+  position:relative;height:clamp(110px,15vw,240px);background:var(--ridge-bg);
+  margin-bottom:-1px;pointer-events:none;line-height:0;
+}
+@media (max-width:860px){ .wwd-ridge{--ridge-bg:#071A24} }
+.wwd-ridge svg{display:block;width:100%;height:100%}
+.wwd-ridge .wr-front{fill:var(--paper)}
+.wwd-ridge .wr-back{fill:#fff;fill-opacity:.08}
 .careers-cta::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:clamp(70px,16%,150px);z-index:1;pointer-events:none;
   background:linear-gradient(180deg,rgba(5,54,76,0),var(--night))}
 @media (max-width:860px){ .careers-cta::after{background:linear-gradient(180deg,rgba(7,26,36,0),#071A24)} }
