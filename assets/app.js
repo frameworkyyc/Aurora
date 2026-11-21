@@ -1340,9 +1340,9 @@ window.__rig2D = function(){
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   if(!webm && !hevc && !(reduce && poster)) return;          /* nothing supplied yet */
 
-  var anchor = (d.anchor || '1472 52').split(/\s+/).map(Number);
+  var anchor = (d.anchor || '1472 108').split(/\s+/).map(Number);
   var foot = (d.foot || '0.5 0.96').split(/\s+/).map(Number);
-  var unitsW = +d.width || 96, aspect = +d.aspect || 1;       /* width / height */
+  var unitsW = +d.width || 128, aspect = +d.aspect || 1;       /* width / height */
 
   function place(){
     var m = svg.getScreenCTM(), r = band.getBoundingClientRect();

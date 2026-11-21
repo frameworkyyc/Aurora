@@ -37,13 +37,13 @@ ffmpeg -framerate 30 -i frame_%04d.png -c:v libvpx-vp9 -pix_fmt yuva420p -b:v 0 
 2. In `index.html`, fill the slot's attributes (inside `.wwd-ridge`):
 
 ```html
-<div class="wr-anim" data-anchor="1472 52" data-width="96" data-aspect="1" data-foot="0.5 0.96"
+<div class="wr-anim" data-anchor="1472 108" data-width="128" data-aspect="1" data-foot="0.5 0.96"
      data-webm="assets/anim/surveyor.webm" data-hevc="assets/anim/surveyor-hevc.mov"
      data-poster="assets/anim/surveyor-still.png" aria-hidden="true"></div>
 ```
 
 - `data-anchor` — the summit point in the mountain SVG's own coordinates (do not change unless the range changes).
-- `data-width` — the animation's width in those coordinates (96 ≈ 100 px wide on a 1440 px screen, ≈ 53 px on a phone).
+- `data-width` — the animation's width in those coordinates (128 ≈ 96 px wide on a 1440 px screen, ≈ 58 px on a phone).
 - `data-foot` — where the feet sit in the frame, as fractions of width and height.
 
 The page loads the video only when the mountains come near the screen, swaps it
