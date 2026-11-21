@@ -34,12 +34,32 @@
   <span class="thread-read" data-thread>0.00</span>
 </div>
 <main id="main">
-<section class="page-head">
-  <div class="wrap">
+<section class="map-hero on-dark" id="map" aria-label="Project locations, 49.28°N to 66.00°N">
+  <canvas class="survey-map" aria-hidden="true"></canvas>
+  <div class="wrap map-head">
     <p class="eyebrow">Selected work</p>
     <h1>What we did when the plan changed.</h1>
     <p class="lede">Real jobs, real latitudes. Each of these started as one scope and became another.</p>
+    <p class="map-hint">Select a marker to preview a project</p>
   </div>
+  <div class="survey-panel" aria-hidden="true">
+    <div class="sp-row"><span class="sp-k">Station</span><span class="sp-v" data-sp="id">&#8212;</span></div>
+    <div class="sp-row"><span class="sp-k">Latitude</span><span class="sp-v" data-sp="lat">&#8212;</span></div>
+    <div class="sp-row"><span class="sp-k">Elevation</span><span class="sp-v" data-sp="elev">&#8212;</span></div>
+    <div class="sp-row"><span class="sp-k">Method</span><span class="sp-v" data-sp="method">&#8212;</span></div>
+    <div class="sp-row"><span class="sp-k">Traverse</span><span class="sp-v" data-sp="run">0.0 km</span></div>
+  </div>
+  <div class="map-pins"></div>
+  <aside class="map-card" aria-label="Project preview" aria-hidden="true" hidden>
+    <button class="mc-close" type="button" aria-label="Close preview">&times;</button>
+    <img class="mc-img" alt="" width="640" height="360" hidden>
+    <div class="mc-body">
+      <p class="mc-loc"></p>
+      <h2 class="mc-title"></h2>
+      <p class="mc-desc"></p>
+      <a class="mc-link" href="#projects">View full project <span aria-hidden="true">&rarr;</span></a>
+    </div>
+  </aside>
 </section>
 
 <section class="projects" id="projects">

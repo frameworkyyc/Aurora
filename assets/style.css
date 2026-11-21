@@ -682,51 +682,97 @@ header.hero-page.brand-on::before{opacity:0}
   .setup .beat::before{transition:none}
 }
 
-/* ---------- 04 · where we work, as a survey drawing ---------- */
-.survey{position:relative;background:var(--night);padding:0}
-.survey-sticky{position:sticky;top:0;height:100svh;overflow:hidden}
+
+/* ---------- Projects hero: the survey map ----------
+   Full width and one screen tall under the header. The drawing fills it; the
+   heading and the project preview sit in the left-hand column on a wide screen
+   and in the head and foot of the screen on a phone. The station readout stays
+   bottom right. */
+.map-hero{
+  position:relative;background:var(--night);padding:0;overflow:hidden;
+  height:calc(100svh - 74px);min-height:640px;
+}
 .survey-map{position:absolute;inset:0;width:100%;height:100%;display:block;z-index:0}
-.survey-head{position:absolute;top:calc(74px + clamp(2rem,6vw,4rem));left:0;right:0;z-index:2}
-.survey-head h2{color:#fff;max-width:14ch}
+.map-head{position:absolute;top:clamp(2rem,6vh,3.6rem);left:0;right:0;z-index:2;pointer-events:none}
+.map-head > *{max-width:min(24rem,28vw);transition:opacity .45s ease,transform .45s ease}
+.map-head h1{color:#fff;font-size:clamp(1.9rem,3vw,2.7rem);max-width:min(22rem,28vw)}
+.map-head .lede{color:rgba(255,255,255,.72);margin-top:1.1rem;font-size:clamp(.95rem,1.1vw,1.05rem)}
+.map-hint{
+  margin:1.6rem 0 0;font-family:var(--mono);font-size:.62rem;letter-spacing:.16em;text-transform:uppercase;
+  color:rgba(143,193,211,.7);opacity:0;transform:translateY(4px);
+}
+.map-ready .map-hint{opacity:1;transform:none}
+.map-open .map-head .lede,.map-open .map-hint{opacity:0;transform:translateY(-6px)}
 .survey-panel{
   position:absolute;right:var(--pad);bottom:clamp(2rem,7vh,4.5rem);z-index:2;
-  display:grid;gap:.55rem;min-width:15rem;
+  display:grid;gap:.55rem;min-width:15rem;pointer-events:none;
   font-family:var(--mono);font-size:.62rem;letter-spacing:.14em;text-transform:uppercase;
 }
-.sp-row{display:flex;justify-content:space-between;gap:2rem;
-  border-top:1px solid rgba(255,255,255,.10);padding-top:.5rem}
+.sp-row{display:flex;justify-content:space-between;gap:2rem;border-top:1px solid rgba(255,255,255,.10);padding-top:.5rem}
 .sp-k{color:rgba(143,193,211,.55)}
 .sp-v{color:rgba(232,242,244,.9);letter-spacing:.08em}
-.survey-steps{list-style:none;margin:0;padding:0;position:relative;z-index:2}
-.survey-steps li{
-  min-height:78svh;display:flex;flex-direction:column;justify-content:flex-end;
-  padding-bottom:16svh;max-width:32ch;margin-left:var(--pad);opacity:.22;
-  transition:opacity .5s ease;
+
+/* markers: a real button over each project station on the drawing */
+.map-pins{position:absolute;inset:0;z-index:3;pointer-events:none}
+.map-pin{
+  position:absolute;left:0;top:0;width:44px;height:44px;padding:0;border:0;border-radius:50%;
+  background:transparent;cursor:pointer;pointer-events:auto;-webkit-tap-highlight-color:transparent;
 }
-.survey-steps li.live{opacity:1}
-.survey-steps h3{color:#fff;font-size:clamp(1.3rem,2.4vw,1.9rem);margin-bottom:.6rem}
-.survey-steps p{color:rgba(255,255,255,.7);margin:0}
+.map-pin[hidden]{display:none}
+.map-pin:focus-visible{outline:2px solid var(--green);outline-offset:-2px}
+
+/* the preview card */
+.map-card{
+  position:absolute;z-index:4;left:max(var(--pad),calc((100% - var(--maxw)) / 2 + var(--pad)));bottom:clamp(2rem,7vh,4.5rem);
+  width:min(22.5rem,calc(100% - var(--pad) * 2));
+  background:rgba(4,40,57,.92);border:1px solid rgba(143,193,211,.22);border-radius:4px;
+  box-shadow:0 18px 50px rgba(0,0,0,.35);overflow:hidden;
+  opacity:0;transform:translateY(14px);visibility:hidden;
+  transition:opacity .4s ease,transform .45s cubic-bezier(.2,.8,.3,1),visibility 0s linear .45s;
+}
+.map-card.open{opacity:1;transform:none;visibility:visible;transition-delay:.12s,.12s,0s}
+.mc-img{display:block;width:100%;height:auto;aspect-ratio:16/7;object-fit:cover}
+.mc-body{padding:1.1rem 1.25rem 1.25rem}
+.mc-loc{margin:0 0 .5rem;font-family:var(--mono);font-size:.62rem;letter-spacing:.14em;text-transform:uppercase;color:rgba(143,193,211,.75)}
+.mc-title{color:#fff;font-size:1.25rem;letter-spacing:-.015em;margin:0 0 .55rem}
+.mc-desc{color:rgba(255,255,255,.74);font-size:.9rem;line-height:1.55;margin:0 0 1rem}
+.mc-link{
+  display:inline-block;color:var(--green);font-weight:600;font-size:.86rem;text-decoration:none;
+  border-bottom:1px solid rgba(59,182,87,.4);padding-bottom:2px;transition:color .2s ease,border-color .2s ease;
+}
+.mc-link:hover,.mc-link:focus-visible{color:#fff;border-color:#fff}
+.mc-close{
+  position:absolute;top:.5rem;right:.5rem;z-index:2;width:34px;height:34px;border:0;border-radius:50%;
+  background:rgba(2,24,35,.7);color:#fff;font-size:1.3rem;line-height:1;cursor:pointer;
+}
+.mc-close:hover,.mc-close:focus-visible{background:rgba(2,24,35,.95)}
+.proj{scroll-margin-top:96px}
+
 @media (max-width:860px){
-  /* The drawing is pinned to the top of the screen and given most of it, so
-     the route runs all the way to Baffin while still in view. The notes pass
-     through the band beneath it and slide away underneath, which keeps the
-     two from ever crossing. */
-  .survey-sticky{
-    position:sticky;top:0;height:62svh;height:62dvh;
-    display:block;overflow:hidden;background:var(--night);z-index:2;
-  }
-  .survey-map{position:absolute;inset:0;width:100%;height:100%}
-  .survey-head{position:absolute;top:calc(74px + 1rem);left:0;right:0}
-  .survey-head h2{font-size:clamp(1.4rem,5.8vw,1.8rem);max-width:none}
+  .map-hero{height:calc(100svh - 74px);height:calc(100dvh - 74px);min-height:560px}
+  .map-head{top:1.1rem}
+  .map-head > *,.map-head h1{max-width:none}
+  .map-head h1{font-size:clamp(1.45rem,6.4vw,1.9rem)}
+  .map-head .lede{display:none}
+  .map-hint{margin-top:.7rem;font-size:.56rem}
   .survey-panel{
-    position:absolute;left:var(--pad);right:var(--pad);bottom:.7rem;
-    min-width:0;font-size:.52rem;grid-template-columns:1fr 1fr;gap:.25rem .9rem;
+    left:var(--pad);right:var(--pad);bottom:.7rem;min-width:0;font-size:.52rem;
+    grid-template-columns:1fr 1fr;gap:.25rem .9rem;transition:opacity .3s ease;
   }
-  .survey-steps{position:relative;z-index:1;padding-top:1.5rem}
-  .survey-steps li{
-    min-height:60svh;justify-content:center;padding-bottom:0;
-    margin-inline:var(--pad);max-width:none;
+  .map-open .survey-panel{opacity:0}
+  /* the card rises from the foot of the drawing */
+  .map-card{
+    left:var(--pad);right:var(--pad);bottom:.8rem;width:auto;
+    display:grid;grid-template-columns:7.2rem 1fr;
   }
+  .mc-img{width:100%;height:100%;aspect-ratio:auto;min-height:100%}
+  .mc-body{padding:.85rem 2.4rem .9rem .95rem}
+  .mc-title{font-size:1.05rem;margin-bottom:.35rem}
+  .mc-desc{font-size:.8rem;line-height:1.45;margin-bottom:.65rem;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+  .mc-link{font-size:.8rem}
+}
+@media (prefers-reduced-motion:reduce){
+  .map-card,.map-head > *,.map-hint{transition:none}
 }
 
 /* ---------- 06 · reality capture ---------- */
@@ -998,43 +1044,6 @@ header.hero-page.brand-on::before{opacity:0}
   .intro{z-index:2}
 }
 
-/* ---------- 04 · the map on a phone ----------
-   The drawing was a short block that scrolled away long before the traverse
-   reached Baffin. It is now pinned to the top of the screen and given most of
-   it, so the whole route runs while it is still in view; the notes pass
-   through the band beneath and slide away under it. */
-@media (max-width:860px){
-  .survey-sticky{
-    position:sticky;top:0;height:64svh;height:64dvh;
-    display:block;overflow:hidden;background:var(--night);z-index:2;
-    margin-bottom:0;
-  }
-  .survey-map{position:absolute;inset:0;width:100%;height:100%}
-  .survey-head{position:absolute;top:calc(74px + .9rem);left:0;right:0;z-index:2}
-  .survey-head h2{font-size:clamp(1.35rem,5.6vw,1.75rem);max-width:none}
-  .survey-panel{
-    position:absolute;left:var(--pad);right:var(--pad);bottom:.7rem;
-    min-width:0;font-size:.52rem;grid-template-columns:1fr 1fr;gap:.25rem .9rem;
-    z-index:2;
-  }
-  .survey-steps{
-    position:relative;z-index:1;margin:0 var(--pad);
-    padding-top:1.4rem;padding-bottom:clamp(3rem,9vw,5rem);
-  }
-  /* each note sits in the middle of its own run, so it passes through the
-     band under the map rather than flashing past its top edge */
-  .survey-steps li{
-    display:flex;align-items:center;min-height:42svh;
-    padding:0;margin-block:0;max-width:none;
-    opacity:1;border-top:1px solid var(--rule-dark);
-  }
-  .survey-steps li:first-child{border-top:0}
-  .survey-steps .step-in{position:static;padding:1.5rem 0}
-  .survey-steps h3{font-size:1.05rem;margin-bottom:.4rem}
-  .survey-steps p{font-size:.9rem}
-}
-
-
 /* ---------- desktop / tablet hero: the official Badge SHORT, centred ----------
    Above 860px the hero is the brand's own Badge SHORT, set once in the middle
    of the screen with plenty of sky around it, on the official Sky Gradient
@@ -1138,6 +1147,20 @@ header.hero-page.brand-on::before{opacity:0}
   }
   .hero-tag span{display:block;opacity:0;transition:opacity 1.8s ease .9s}
   .stage-ready .hero-tag span{opacity:1}
+
+  /* the foot of the hero melts into the Denim Blue of the next section: a long
+     fade over the last stretch of the screen (so nothing, star or readout,
+     ends on a hard edge), and as the page scrolls the stars and sky let go of
+     progressively more of the hero, the surveying readouts fading with it. */
+  .stage-sticky::after{
+    content:"";position:absolute;left:0;right:0;bottom:-1px;height:38svh;z-index:1;pointer-events:none;
+    background:linear-gradient(180deg,rgba(5,54,76,0) 0%,rgba(5,54,76,.55) 45%,rgba(5,54,76,.92) 82%,#05364c 100%);
+  }
+  .nightsky{
+    -webkit-mask-image:linear-gradient(180deg,#000 calc(72% - var(--hero-p, 0) * 52%),rgba(0,0,0,0) 100%);
+            mask-image:linear-gradient(180deg,#000 calc(72% - var(--hero-p, 0) * 52%),rgba(0,0,0,0) 100%);
+  }
+  .hero-tech{opacity:calc(1 - var(--hero-p, 0) * 2.4)}
 
   /* the phone hero's range is not part of the wide-screen composition */
   .hero-ridge{display:none}

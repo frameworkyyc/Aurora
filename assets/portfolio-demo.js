@@ -88,9 +88,6 @@
     {y:at('setup',   0),          dur:1100, dwell:400},    /* total station, stage 1 */
     {y:at('setup',   0.5),        dur:2100, dwell:300},    /*   stage 2 */
     {y:at('setup',   1),          dur:2100, dwell:600},    /*   stage 3 */
-    {y:at('where',   0),          dur:1000, dwell:400},    /* where we work: the traverse */
-    {y:at('where',   0.5),        dur:2000, dwell:300},
-    {y:at('where',   1),          dur:2000, dwell:600},
     {y:at('capture', 0),          dur:1000, dwell:400},    /* reality capture: point cloud */
     {y:at('capture', 0.5),        dur:2200, dwell:300},
     {y:at('capture', 1),          dur:2200, dwell:1000},

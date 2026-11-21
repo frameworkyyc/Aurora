@@ -2045,17 +2045,19 @@ window.__BADGE_SHORT = {"w":199.143,"h":157.475,"blades":[{"pts":[[10.469,86.535
   }
 })();
 
-/* ---- 04 · where we work -----------------------------------------------
-   A survey drawing rather than a map: terrain read as contour lines, a
+/* ---- Projects hero: where we work -------------------------------------
+   A survey drawing rather than an atlas: terrain read as contour lines, a
    traverse run between control points, and each station resolving as the
-   line reaches it. Nothing here is a pin. */
+   line reaches it. It plays itself once on arrival (the view opens from the
+   south coast to the whole reach), and then every project station can be
+   selected: the map eases in on it and a preview card opens. Vancouver is a
+   control point only; it has no project page, so it is not selectable. */
 (function(){
-  var sec = document.getElementById('where');
+  var sec = document.getElementById('map');
   var cv  = sec && sec.querySelector('.survey-map');
   if(!sec || !cv) return;
   var ctx = cv.getContext('2d');
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var steps = [].slice.call(sec.querySelectorAll('.survey-steps li'));
   var out = {};
   sec.querySelectorAll('[data-sp]').forEach(function(el){ out[el.getAttribute('data-sp')] = el; });
 
@@ -2063,10 +2065,10 @@ window.__BADGE_SHORT = {"w":199.143,"h":157.475,"blades":[{"pts":[[10.469,86.535
      below are heavily simplified — this is a survey drawing, not an atlas —
      but the geography underneath is genuine, so the positions mean something. */
   var STN = [
-    {id:'AS-VAN', name:'Vancouver',     lat:49.28, lon:-123.12, elev:12,   method:'Layout \u00b7 machine control'},
-    {id:'AS-PTA', name:'Port Alice',    lat:50.42, lon:-127.45, elev:8,    method:'LiDAR \u00b7 sonar merge'},
-    {id:'AS-KSM', name:'KSM Mine',      lat:56.52, lon:-130.35, elev:1180, method:'Layout \u00b7 monitoring'},
-    {id:'AS-BAF', name:'Baffin Island', lat:66.00, lon:-70.50,  elev:212,  method:'As-built \u00b7 30 km'}
+    {id:'AS-VAN', name:'Vancouver',     lat:49.28, lon:-123.12, elev:12,   method:'Layout \u00b7 machine control', proj:null},
+    {id:'AS-PTA', name:'Port Alice',    lat:50.42, lon:-127.45, elev:8,    method:'LiDAR \u00b7 sonar merge', proj:'proj-50'},
+    {id:'AS-KSM', name:'KSM Mine',      lat:56.52, lon:-130.35, elev:1180, method:'Layout \u00b7 monitoring', proj:'proj-56'},
+    {id:'AS-BAF', name:'Baffin Island', lat:66.00, lon:-70.50,  elev:212,  method:'As-built \u00b7 30 km', proj:'proj-66'}
   ];
 
   /* [lat, lon] runs. Mainland BC coast, the island, Haida Gwaii, and the
@@ -2116,6 +2118,10 @@ window.__BADGE_SHORT = {"w":199.143,"h":157.475,"blades":[{"pts":[[10.469,86.535
   var frame = {x:0,y:0,w:0,h:0};
 
   var W=0,H=0,dpr=1,p=0,t=0,raf=0,live=false;
+  var narrowNow = function(){ return window.matchMedia('(max-width:860px)').matches; };
+  var sel = -1, fk = -1, fcur = 0, ftgt = 0, hov = -1, runT = 0;   /* selected station, focus station, focus amount, hovered */
+  var started = false, t0 = 0, DUR = 8200;                          /* the arrival run, in ms */
+  var pins = [], card = null, lastArr = [];
 
   function resize(){
     dpr = Math.min(window.devicePixelRatio||1, 2);
@@ -2125,7 +2131,11 @@ window.__BADGE_SHORT = {"w":199.143,"h":157.475,"blades":[{"pts":[[10.469,86.535
     ctx.setTransform(dpr,0,0,dpr,0,0);
   }
 
-  function progress(){ return window.__sectionProgress(sec); }
+  function progress(){
+    if(reduce) return 1;
+    if(!started) return 0;
+    return Math.max(0, Math.min(1, (performance.now() - t0) / DUR));
+  }
 
   /* the view opens northward as the visitor descends: British Columbia first,
      then it keeps widening until Baffin is in the frame */
@@ -2139,23 +2149,40 @@ window.__BADGE_SHORT = {"w":199.143,"h":157.475,"blades":[{"pts":[[10.469,86.535
   }
   var sm = function(v){ v=v<0?0:v>1?1:v; return v*v*v*(v*(v*6-15)+10); };
 
-  function setView(p){
-    /* two stages, so the widening has a beat rather than one long drift */
-    var v = p < 0.45
-      ? lerpView(VIEW_NEAR, VIEW_MID, sm(p/0.45))
-      : lerpView(VIEW_MID,  VIEW_FAR, sm((p-0.45)/0.55));
-    view.n=v.n; view.s=v.s; view.w=v.w; view.e=v.e;
+  /* where the selected station should sit within the drawing: the middle of
+     it beside the notes on a wide screen; in the upper part on a phone, clear
+     of the card that slides up from the foot */
+  function focusView(k){
+    var S = STN[k], narrow = narrowNow();
+    var fx = 0.5, fy = narrow ? 0.30 : 0.5;
+    var Lh = 3.8;
+    var cosf = Math.cos(S.lat*Math.PI/180);
+    var Lw = Lh * (frame.w/frame.h) / cosf;
+    var n = S.lat + fy*Lh, w = S.lon - fx*Lw;
+    return {n:n, s:n-Lh, w:w, e:w+Lw};
+  }
 
+  function setView(p){
     /* On a wide screen the drawing keeps to the right of the notes. On a
        phone it has the whole panel, less the heading at the top and the
        readout along the foot. */
     var narrow = W <= 900;
     var pad = Math.min(W,H)*(narrow ? 0.05 : 0.08);
-    var x0 = narrow ? pad : W*0.34;
-    var top = narrow ? H*0.17 : pad;          /* clear of the heading */
-    var bot = narrow ? H*0.13 : pad;          /* clear of the readout */
+    var headEl = sec.querySelector('.map-head h1');
+    var lx = headEl ? headEl.getBoundingClientRect().left - sec.getBoundingClientRect().left : pad;   /* the text column's left edge */
+    var x0 = narrow ? pad : Math.max(W*0.3, lx + 24.5*16);
+    var top = narrow ? H*0.27 : pad;          /* clear of the heading */
+    var bot = narrow ? H*0.10 : pad;          /* clear of the readout */
     frame.x = x0; frame.y = top;
     frame.w = (W - pad) - x0; frame.h = H - top - bot;
+
+    /* two stages, so the widening has a beat rather than one long drift */
+    var v = p < 0.45
+      ? lerpView(VIEW_NEAR, VIEW_MID, sm(p/0.45))
+      : lerpView(VIEW_MID,  VIEW_FAR, sm((p-0.45)/0.55));
+    /* then, if a station is selected, ease in on it */
+    if(fcur > 0.0005 && fk >= 0) v = lerpView(v, focusView(fk), sm(fcur));
+    view.n=v.n; view.s=v.s; view.w=v.w; view.e=v.e;
   }
 
   function poly(pts, close, alpha, width){
@@ -2242,7 +2269,7 @@ window.__BADGE_SHORT = {"w":199.143,"h":157.475,"blades":[{"pts":[[10.469,86.535
 
     /* the traverse between control points */
     var legs = STN.length-1;
-    var runT = Math.max(0, Math.min(1, (p-0.06)/0.86)) * legs;
+    runT = Math.max(0, Math.min(1, (p-0.06)/0.86)) * legs;
     var done = Math.floor(runT), frac = runT-done;
 
     ctx.beginPath();
@@ -2260,9 +2287,21 @@ window.__BADGE_SHORT = {"w":199.143,"h":157.475,"blades":[{"pts":[[10.469,86.535
       var P = pt(k);
       var arrive = Math.max(0, Math.min(1, (runT-(k-0.55))/0.55));
       if(arrive<=0) continue;
-      var sz = 7 + 5*arrive;
+      var isSel = (k === sel), isHov = (k === hov && STN[k].proj);
+      var dim = (sel >= 0 && !isSel) ? 0.5 : 1;
+      var sz = 7 + 5*arrive + (isSel ? 3 : isHov ? 1.5 : 0);
+      lastArr[k] = arrive;
       ctx.save();
       ctx.translate(P[0],P[1]);
+      if(isSel || isHov){
+        /* the chosen station: a ring that breathes, so it reads as live */
+        var pr = 17 + (isSel ? 3*Math.sin(t*2.6) : 0);
+        ctx.beginPath(); ctx.arc(0,0,pr,0,Math.PI*2);
+        ctx.strokeStyle = 'rgba(160,255,200,'+(isSel ? .75 : .45)+')'; ctx.lineWidth = 1.2; ctx.stroke();
+        ctx.beginPath(); ctx.arc(0,0,pr+6,0,Math.PI*2);
+        ctx.strokeStyle = 'rgba(120,240,170,.16)'; ctx.stroke();
+      }
+      ctx.globalAlpha = dim;
       ctx.strokeStyle = 'rgba(120,240,170,'+(0.35+0.6*arrive).toFixed(2)+')';
       ctx.lineWidth = 1.2;
       ctx.beginPath();
@@ -2270,7 +2309,7 @@ window.__BADGE_SHORT = {"w":199.143,"h":157.475,"blades":[{"pts":[[10.469,86.535
       ctx.closePath(); ctx.stroke();
       ctx.beginPath(); ctx.arc(0,0,1.6,0,Math.PI*2);
       ctx.fillStyle='rgba(160,255,200,.95)'; ctx.fill();
-      ctx.globalAlpha = 0.45*arrive;
+      ctx.globalAlpha = 0.45*arrive*dim;
       ctx.beginPath();
       ctx.moveTo(-sz*1.9,0); ctx.lineTo(-sz*1.15,0);
       ctx.moveTo(sz*1.15,0); ctx.lineTo(sz*1.9,0);
@@ -2278,8 +2317,8 @@ window.__BADGE_SHORT = {"w":199.143,"h":157.475,"blades":[{"pts":[[10.469,86.535
       ctx.stroke();
       ctx.restore();
 
-      ctx.globalAlpha = arrive;
-      ctx.font = '500 11px ui-monospace,Menlo,monospace';
+      ctx.globalAlpha = arrive*dim;
+      ctx.font = (isSel ? '700' : '500') + ' 11px ui-monospace,Menlo,monospace';
       var lx = P[0]+sz*1.6, ly = P[1]-5;
       if(lx > frame.x+frame.w-130) lx = P[0]-sz*1.6-120;
       ctx.fillStyle = 'rgba(226,240,242,.92)';
@@ -2306,7 +2345,7 @@ window.__BADGE_SHORT = {"w":199.143,"h":157.475,"blades":[{"pts":[[10.469,86.535
     ctx.fillText('VIEW  ' + view.s.toFixed(1) + '\u00b0N \u2013 ' + view.n.toFixed(1) + '\u00b0N',
                  frame.x, frame.y - 8);
 
-    var cur = Math.max(0, Math.min(STN.length-1, Math.round(runT)));
+    var cur = sel >= 0 ? sel : Math.max(0, Math.min(STN.length-1, Math.round(runT)));
     var st = STN[cur];
     if(out.id && out.id.textContent !== st.id){
       out.id.textContent = st.id;
@@ -2315,11 +2354,74 @@ window.__BADGE_SHORT = {"w":199.143,"h":157.475,"blades":[{"pts":[[10.469,86.535
       out.method.textContent = st.method;
     }
     if(out.run) out.run.textContent = (runT/legs*4180).toFixed(0)+' km';
-    for(var q2=0;q2<steps.length;q2++) steps[q2].classList.toggle('live', q2 === cur);
+    placePins();
   }
 
+  /* ---- selecting a station ------------------------------------------------
+     Each project station has a real button laid over its marker, so it can be
+     reached by mouse, touch and keyboard alike. The preview card is filled from
+     the project's own entry further down the page: nothing is written twice. */
+  var pinHost = sec.querySelector('.map-pins');
+  card = sec.querySelector('.map-card');
+  STN.forEach(function(S, i){
+    if(!S.proj || !pinHost) return;
+    var b = document.createElement('button');
+    b.type = 'button'; b.className = 'map-pin'; b.hidden = true;
+    b.setAttribute('aria-label', S.name + ': preview project');
+    b.setAttribute('aria-pressed', 'false');
+    b.addEventListener('click', function(ev){ ev.stopPropagation(); select(sel === i ? -1 : i); });
+    b.addEventListener('pointerenter', function(){ hov = i; });
+    b.addEventListener('pointerleave', function(){ if(hov === i) hov = -1; });
+    pinHost.appendChild(b); pins[i] = b;
+  });
+  function placePins(){
+    for(var i=0;i<STN.length;i++){
+      var b = pins[i]; if(!b) continue;
+      var P = pt(i);
+      var inside = P[0] > frame.x-4 && P[0] < frame.x+frame.w+4 && P[1] > frame.y-4 && P[1] < frame.y+frame.h+4;
+      var ok = inside && (lastArr[i]||0) > 0.7;
+      if(b.hidden === ok) b.hidden = !ok;
+      if(ok) b.style.transform = 'translate3d('+(P[0]-22).toFixed(1)+'px,'+(P[1]-22).toFixed(1)+'px,0)';
+    }
+    sec.classList.toggle('map-ready', runT >= STN.length-1.05);
+  }
+  function fill(i){
+    var art = document.getElementById(STN[i].proj);
+    if(!art || !card) return false;
+    var img = art.querySelector('.proj-media img');
+    var ci = card.querySelector('.mc-img');
+    if(img){ ci.src = img.getAttribute('src'); ci.alt = img.getAttribute('alt') || ''; ci.hidden = false; } else ci.hidden = true;
+    var h = art.querySelector('h3'), d = art.querySelector('h3 + p'), loc = art.querySelector('.proj-meta i');
+    card.querySelector('.mc-title').textContent = h ? h.textContent : STN[i].name;
+    card.querySelector('.mc-loc').textContent = (loc ? loc.textContent : STN[i].name) + ' \u00b7 ' + STN[i].lat.toFixed(2) + '\u00b0N';
+    card.querySelector('.mc-desc').textContent = d ? d.textContent : '';
+    card.querySelector('.mc-link').setAttribute('href', '#' + STN[i].proj);
+    return true;
+  }
+  function select(i){
+    if(i >= 0 && (!STN[i].proj || !fill(i))) i = -1;
+    sel = i;
+    if(i >= 0){ fk = i; ftgt = 1; } else { ftgt = 0; }
+    if(reduce){ fcur = ftgt; }
+    pins.forEach(function(b, k){ if(b) b.setAttribute('aria-pressed', k === sel ? 'true' : 'false'); });
+    sec.classList.toggle('map-open', sel >= 0);
+    if(card){ card.hidden = false; card.classList.toggle('open', sel >= 0); card.setAttribute('aria-hidden', sel >= 0 ? 'false' : 'true'); }
+    if(!live) { p = progress(); draw(); }
+  }
+  if(card){
+    card.querySelector('.mc-close').addEventListener('click', function(){ select(-1); });
+    card.querySelector('.mc-link').addEventListener('click', function(){ /* the page scrolls to the full entry; the map stays as it is */ });
+  }
+  /* an empty part of the drawing, or Escape, lets go of the selection */
+  sec.addEventListener('click', function(ev){
+    if(sel < 0) return;
+    if(ev.target.closest('.map-card, .map-pin')) return;
+    select(-1);
+  });
+  document.addEventListener('keydown', function(ev){ if(ev.key === 'Escape' && sel >= 0) select(-1); });
+
   function loop(){
-    if(live){ t += 0.016; p = progress(); draw(); }
+    if(live){ t += 0.016; p = progress(); fcur += (ftgt - fcur) * 0.085; if(Math.abs(ftgt - fcur) < 0.0008) fcur = ftgt; draw(); }
     raf = live ? requestAnimationFrame(loop) : 0;
   }
   window.addEventListener('resize', function(){ resize(); p=progress(); draw(); });
@@ -2328,11 +2430,13 @@ window.__BADGE_SHORT = {"w":199.143,"h":157.475,"blades":[{"pts":[[10.469,86.535
   if('IntersectionObserver' in window){
     new IntersectionObserver(function(es){
       es.forEach(function(e){
-        if(e.isIntersecting){ if(!raf){ live=true; raf=requestAnimationFrame(loop);} }
+        if(e.isIntersecting){
+          if(!started){ started = true; t0 = performance.now() + 450; }
+          if(!raf){ live=true; raf=requestAnimationFrame(loop);} }
         else { live=false; }
       });
     },{threshold:0}).observe(sec);
-  } else { live=true; loop(); }
+  } else { started = true; t0 = performance.now(); live=true; loop(); }
 })();
 
 /* ---- 06 · reality capture ---------------------------------------------
@@ -2586,7 +2690,7 @@ window.__BADGE_SHORT = {"w":199.143,"h":157.475,"blades":[{"pts":[[10.469,86.535
         never sit on top of each other ---- */
 (function(){
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  [['#where','.survey-head'],['#capture','.capture-head']].forEach(function(pair){
+  [['#capture','.capture-head']].forEach(function(pair){
     var sec = document.querySelector(pair[0]);
     var head = sec && sec.querySelector(pair[1]);
     if(!sec || !head) return;
