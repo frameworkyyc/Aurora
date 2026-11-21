@@ -90,8 +90,8 @@ nav a[href="contact.html"]:hover,nav a[href="contact.html"]:focus-visible,nav a[
   background:var(--night);color:#fff;position:relative;z-index:3;
   margin-top:-50svh;padding-block:clamp(2rem,4vw,3.25rem) 0;
 }
-.intro h1{font-size:clamp(1.95rem,4.6vw,3.7rem);max-width:19ch;color:#fff;text-wrap:balance}
-.intro h1 em{font-style:normal;background:var(--aurora);-webkit-background-clip:text;background-clip:text;color:transparent}
+.intro h2{font-size:clamp(1.95rem,4.6vw,3.7rem);max-width:19ch;color:#fff;text-wrap:balance}
+.intro h2 em{font-style:normal;background:var(--aurora);-webkit-background-clip:text;background-clip:text;color:transparent}
 .intro .lede{color:rgba(255,255,255,.78);margin-top:1.6rem}
 .intro .eyebrow{color:rgba(255,255,255,.55)}
 .cta-row{display:flex;flex-wrap:wrap;gap:.85rem;margin-top:2.2rem}
@@ -537,7 +537,7 @@ header.hero-page.brand-on::before{opacity:0}
 @media (max-width:860px){
   .intro .lede{display:none}
   .intro .cta-row .btn-ghost{display:none}
-  .intro h1{font-size:clamp(1.85rem,7.4vw,2.4rem)}
+  .intro h2{font-size:clamp(1.85rem,7.4vw,2.4rem)}
 
   .setup .beat-no{margin-bottom:.35rem}
   .beat-more{
@@ -619,15 +619,15 @@ header.hero-page.brand-on::before{opacity:0}
   .ht-tr::before,.ht-br::before{right:-30px;background:linear-gradient(270deg,rgba(143,193,211,.5),transparent)}
 
   /* the headline resolves a line at a time, from behind its own baseline */
-  .intro h1 .ln{display:block;overflow:hidden}
-  .intro h1 .ln > span{
+  .intro h2 .ln{display:block;overflow:hidden}
+  .intro h2 .ln > span{
     display:block;transform:translateY(105%);
     transition:transform 1s cubic-bezier(.16,.84,.28,1);
   }
-  .intro.lines-in h1 .ln > span{transform:none}
-  .intro h1 .ln:nth-child(2) > span{transition-delay:.09s}
-  .intro h1 .ln:nth-child(3) > span{transition-delay:.18s}
-  .intro h1 .ln:nth-child(4) > span{transition-delay:.27s}
+  .intro.lines-in h2 .ln > span{transform:none}
+  .intro h2 .ln:nth-child(2) > span{transition-delay:.09s}
+  .intro h2 .ln:nth-child(3) > span{transition-delay:.18s}
+  .intro h2 .ln:nth-child(4) > span{transition-delay:.27s}
   .intro .eyebrow,.intro .cta-row{
     opacity:0;transform:translateY(8px);
     transition:opacity .8s ease,transform .8s cubic-bezier(.2,.8,.3,1);
@@ -644,7 +644,7 @@ header.hero-page.brand-on::before{opacity:0}
 }
 @media (prefers-reduced-motion:reduce){
   .ht{opacity:1 !important;transform:none !important}
-  .intro h1 .ln > span{transform:none !important}
+  .intro h2 .ln > span{transform:none !important}
   .intro .eyebrow,.intro .cta-row{opacity:1 !important;transform:none !important}
 }
 
@@ -1192,7 +1192,7 @@ header.hero-page.brand-on::before{opacity:0}
    values are its original ground, accent and green. */
 @media (max-width:860px){
   .stage,.intro{--night:#071A24;--cyan:#1DACB5;--green:#39B44A;--aurora:linear-gradient(90deg,#39B44A,#1DACB5)}
-  .intro h1{font-weight:800}
+  .intro h2{font-weight:800}
   .intro .btn-solid{color:#04141B}
   header.hero-page::before{background:linear-gradient(180deg,rgba(4,14,21,.55),rgba(4,14,21,0))}
 }
@@ -1230,7 +1230,7 @@ header.hero-page:focus-within{
 .kicker--g{color:var(--green) !important}
 
 /* What we do */
-.wwd{padding-block:clamp(3.5rem,7vw,6.5rem) clamp(4rem,8vw,7.5rem)}
+.wwd{padding-block:clamp(3.5rem,7vw,6.5rem) clamp(3.1rem,6.2vw,5.85rem)}
 .wwd-grid{display:grid;grid-template-columns:minmax(0,1.08fr) minmax(0,.92fr);gap:clamp(2rem,5vw,5rem);align-items:start}
 .wwd-head{margin-bottom:clamp(2.5rem,5vw,4.5rem)}
 .wwd-kicker{display:flex;align-items:center;gap:.9rem;margin:0 0 clamp(1rem,2vw,1.6rem);
@@ -1493,3 +1493,11 @@ header.hero-page:focus-within{
 }
 @media (max-width:640px){ .wwd-services{grid-template-columns:1fr;gap:2.5rem} }
 .wwd-photo + .wrap{padding-top:0}
+/* visually hidden, still read by search engines and screen readers */
+.vh{position:absolute !important;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap;border:0}
+/* the two service columns: equal weight, links aligned at the foot of each */
+.wwd-svc{display:flex;flex-direction:column}
+.wwd-svc ul{flex:1 0 auto}
+.wwd-svc-link{align-self:flex-start;margin-top:auto}
+/* when the longer heading wraps on tablets, keep both lists starting level */
+@media (min-width:641px) and (max-width:1000px){ .wwd-svc h3{min-height:2.5em} }

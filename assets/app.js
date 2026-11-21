@@ -2140,11 +2140,11 @@ window.__BADGE_SHORT = {"w":199.143,"h":157.475,"blades":[{"pts":[[10.469,86.535
 
   function setup(){
     if(!wide.matches || reduce) return;
-    splitLines(intro.querySelector('h1'));
+    splitLines(intro.querySelector('h2'));
   }
   setup();
   window.addEventListener('resize', function(){
-    var h1 = intro.querySelector('h1');
+    var h1 = intro.querySelector('h2');
     if(h1 && h1.dataset.split && wide.matches){
       /* re-measure: line breaks move with the viewport */
       h1.innerHTML = h1.getAttribute('aria-label')
