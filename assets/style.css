@@ -438,7 +438,7 @@ nav a[aria-current="page"]::after{right:0}
 .hero-ridge{display:none}
 .nightsky{display:none}
 /* the wide-screen hero's own layers; the phone hero never shows them */
-.hero-aurora,.hero-badge,.hero-glow,.hero-tag,.hero-nav,.hero-cta,.sky-aurora{display:none}
+.hero-aurora,.hero-badge,.hero-glow,.hero-tag,.hero-nav,.hero-cta{display:none}
 
 /* ---------- mobile hero: the badge, held still ---------- */
 @media (max-width:860px){
@@ -1076,13 +1076,6 @@ header.hero-page.brand-on::before{opacity:0}
     transition:opacity 1.4s ease .25s, transform 1.6s cubic-bezier(.16,.84,.28,1) .25s;
   }
   .stage-ready .hero-badge img{opacity:1;transform:none}
-
-  /* the northern lights: faint curtains of Green, Bright Blue and Purple high
-     in the sky, drawn small and blended on, behind the glow and the badge */
-  .sky-aurora{
-    display:block;position:absolute;inset:0;width:100%;height:100%;z-index:0;
-    pointer-events:none;mix-blend-mode:screen;
-  }
 
   /* atmosphere: a slow glow of Green, Bright Blue and Purple behind the badge,
      between the sky and the badge and never bright enough to compete with it. */
