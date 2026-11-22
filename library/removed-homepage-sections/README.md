@@ -29,3 +29,5 @@ The "We integrate…" message now lives in the About section's copy. To restore 
 
 ## Update
 The total-station sequence and the point-cloud visualization now live on `services.html` (scripts concatenated, unchanged, in `assets/services-motion.js`; sky canvas started in `assets/app.js`). The files here remain the reference copies.
+
+The Services page no longer uses the total-station sequence (`setup-*` files); it now has a code-generated construction-site visualization (`assets/site-scene.js`, vendored `assets/vendor/three.min.js`). Only the point-cloud visualization is still used there.
