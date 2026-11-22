@@ -8,7 +8,10 @@
       scroll as pointercancel, so no distance or time thresholds are needed (strict ones dropped real taps).
    2. click: mouse, keyboard and browsers without pointer events. Opening is idempotent, so a tap that also
       produces a click does the same thing twice, harmlessly.
-   3. pointerenter (mouse only, hover-capable wide screens): hover opens.
+   3. pointerenter, mouse only: hover opens. pointerType is the whole test. iPadOS reports a trackpad or mouse
+      cursor as pointerType 'mouse', so it behaves exactly like desktop at any width. It deliberately has no
+      (hover:hover) or min-width condition: iPadOS does not report hover reliably, and portrait iPads and Split
+      View are narrower than the old 861px gate, which silently disabled hover there.
    Links inside a card are never intercepted: the browser navigates them natively, once.
    Nothing here reacts to touch by changing the page before the tap ends, and no other script on the page
    changes content on a touch pointermove, which is what makes iOS Safari withhold a click.
@@ -18,7 +21,6 @@
   if(!rail) return;
   var cards = [].slice.call(rail.querySelectorAll('.ind-card'));
   if(!cards.length) return;
-  var hoverOK = window.matchMedia('(hover:hover) and (min-width:861px)');
   var hasPointer = 'PointerEvent' in window;
 
   function open(c){
@@ -46,7 +48,7 @@
     c.addEventListener('click', function(e){ if(!inLink(e.target)) open(c); });
     if(hasPointer){
       c.addEventListener('pointerup', function(e){ if(e.pointerType !== 'mouse' && !inLink(e.target)) open(c); });
-      c.addEventListener('pointerenter', function(e){ if(e.pointerType === 'mouse' && hoverOK.matches) open(c); });
+      c.addEventListener('pointerenter', function(e){ if(e.pointerType === 'mouse') open(c); });
     }
   });
 
