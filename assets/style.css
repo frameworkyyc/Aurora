@@ -1607,11 +1607,12 @@ header.hero-page:focus-within{
 .svc-hero-fig::after{content:"";position:absolute;left:50%;top:78%;bottom:0;width:1px;background:linear-gradient(180deg,rgba(59,182,87,0),rgba(59,182,87,.55))}
 .svc-hero-stage{position:relative;height:100%;aspect-ratio:8/7}
 .svc-hero-stage img,.svc-hero-stage canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
-.svc-hero-stage img{transition:opacity .7s ease}
-.svc-hero-stage canvas{opacity:0;transition:opacity .7s ease;pointer-events:auto;cursor:grab;touch-action:pan-y;-webkit-tap-highlight-color:transparent}
+.svc-hero-stage canvas{background:transparent;visibility:hidden;pointer-events:auto;cursor:grab;touch-action:pan-y;-webkit-tap-highlight-color:transparent}
 .svc-hero-stage canvas.is-drag{cursor:grabbing}
-.svc-hero-fig.is-live canvas{opacity:1}
-.svc-hero-fig.is-live img{opacity:0}
+/* the swap is instant (same pose, same frame): the canvas is shown and the static image is taken out of rendering,
+   so the two never overlap. visibility is not touched by the image's entrance animation, opacity is. */
+.svc-hero-fig.is-live canvas{visibility:visible}
+.svc-hero-fig.is-live img{visibility:hidden}
 .svc-hero-ticks{position:absolute;left:0;right:0;bottom:0;height:14px;z-index:1;pointer-events:none;
   background:repeating-linear-gradient(90deg,rgba(255,255,255,.2) 0 1px,transparent 1px 24px) bottom/100% 5px no-repeat,repeating-linear-gradient(90deg,rgba(255,255,255,.3) 0 1px,transparent 1px 120px) bottom/100% 11px no-repeat}
 .svc-hero-ticks span{position:absolute;bottom:18px;font-family:var(--mono);font-size:.6rem;letter-spacing:.14em;color:rgba(255,255,255,.38)}
