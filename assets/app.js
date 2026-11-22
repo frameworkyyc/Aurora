@@ -290,11 +290,22 @@ window.__sectionProgress = function(el){
       k.querySelector('.ind-tab').setAttribute('aria-expanded', on ? 'true' : 'false');
     });
   }
+  /* iPadOS/iOS reports hover whenever a trackpad or keyboard is attached and turns a tap into pointer events,
+     compatibility mouse events and a click. So hover-opening is keyed on a mouse-type pointer only, and a tap
+     anywhere on a card (not just on its label button) opens it, once, with no second tap. */
   cards.forEach(function(c, i){
     var tab = c.querySelector('.ind-tab');
     tab.addEventListener('click', function(){ open(c); });
     tab.addEventListener('focus', function(){ open(c); });
-    c.addEventListener('mouseenter', function(){ if(hoverOK.matches) open(c); });
+    c.addEventListener('click', function(e){
+      if(e.target.closest('.ind-body a')) return;          /* links inside an open card just follow */
+      open(c);
+    });
+    if('PointerEvent' in window){
+      c.addEventListener('pointerenter', function(e){ if(e.pointerType === 'mouse' && hoverOK.matches) open(c); });
+    } else {
+      c.addEventListener('mouseenter', function(){ if(hoverOK.matches) open(c); });
+    }
     tab.addEventListener('keydown', function(e){
       var d = e.key === 'ArrowRight' || e.key === 'ArrowDown' ? 1 : e.key === 'ArrowLeft' || e.key === 'ArrowUp' ? -1 : 0;
       if(!d) return;
