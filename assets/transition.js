@@ -3,12 +3,13 @@
 
    Three arrival modes, chosen by the tiny inline script in each page's <head> (so the Denim Blue cover is on
    screen before the first paint, with no flash of the page underneath):
-     aur-full   first page of a visit (about 2 s): the Aurora pattern forms in the centre of the screen, line by
-                line from the bottom upward, with a restrained glow developing alongside; then the logo fades in,
-                the finished composition holds, and everything dissolves into the page. Any tap, click or key
-                press skips it. Nothing ever moves across the screen: the pattern is centred and stationary.
-     aur-short  arriving from another Aurora page, or any later direct load in the same visit (about 0.65 s):
-                the same bottom-to-top formation, shortened, without the logo
+     aur-full   first page of a visit (about 2.4 s): the Aurora pattern forms in the centre of the screen, line
+                by line from the bottom upward, with a restrained glow developing alongside; then the logo fades
+                in and the finished composition holds. The exit mirrors the entrance: the lines fade away one by
+                one from the bottom upward, the logo fades just behind them, the glow dies down, and last the navy
+                fades into the page. Any tap, click or key press skips it. Nothing ever moves across the screen: the pattern is centred and stationary.
+     aur-short  arriving from another Aurora page, or any later direct load in the same visit (about 0.8 s):
+                the same formation and dissolve, shortened, without the logo
      aur-fade   the same, for prefers-reduced-motion: a plain fade
    Back/forward and reload get no cover at all. The page is never waiting on the animation: it is built and
    interactive underneath, and a CSS-only failsafe lifts the cover after 3.5 s even if this script never runs.
@@ -35,8 +36,14 @@
 
   var MODES = ['aur-full', 'aur-short', 'aur-fade'];
   var mode = MODES.filter(function(c){ return d.classList.contains(c); })[0] || '';
-  var TOTAL = {'aur-full':2000, 'aur-short':650, 'aur-fade':300};
-  var FORM  = {'aur-full':1.05, 'aur-short':0.4};      /* seconds for the pattern to finish forming */
+  var TOTAL = {'aur-full':2400, 'aur-short':800, 'aur-fade':300};
+  /* seconds: how long the pattern takes to form, when its lines begin to dissolve, the spread of that
+     dissolve from the lowest line to the highest, and how long each line takes to fade */
+  var TIMING = {
+    'aur-full':  {form:1.05, ex0:1.45, exSpread:0.36, exDur:0.30},
+    'aur-short': {form:0.40, ex0:0.38, exSpread:0.16, exDur:0.14}
+  };
+  var REVEAL = {'aur-full':0.84, 'aur-short':0.77};   /* the share of the run at which the cover starts to lift */
   var revealed = false, finished = false, timers = [], raf = 0, pat = null;
 
   function later(fn, ms){ var t = setTimeout(fn, ms); timers.push(t); return t; }
@@ -52,7 +59,8 @@
 
 
   /* ---- the pattern, formed line by line from the bottom up ---- */
-  function formPattern(form){
+  function formPattern(T){
+    var form = T.form;
     var cv = pat.cv, sheet = pat.sheet, N = BLADES.length;
     var box = cv.getBoundingClientRect();
     var dpr = Math.min(window.devicePixelRatio || 1, 1.5);
@@ -62,11 +70,14 @@
     var sc = cv.width / PW;
     ctx.imageSmoothingEnabled = true; ctx.imageSmoothingQuality = 'high';
     var DUR = form * 0.44, SPREAD = form * 0.58, t0 = performance.now();
-    var start = new Array(N);
+    var start = new Array(N), out = new Array(N), exEnd = T.ex0 + T.exSpread + T.exDur + form * 0.03;
+    var wv = function(b, i){ return Math.sin((b[0] + b[2] / 2) / PW * 9.4 + i * 0.09); };
     for(var i = 0; i < N; i++){
       var b = BLADES[i];
       /* lowest line first; the front of the formation is wavy, not a flat edge, and neighbours overlap in time */
-      start[i] = SPREAD * (i / (N - 1)) + form * 0.03 * Math.sin((b[0] + b[2] / 2) / PW * 9.4 + i * 0.09);
+      start[i] = SPREAD * (i / (N - 1)) + form * 0.03 * wv(b, i);
+      /* the dissolve runs the same way: lowest line first, a wavy front, neighbours overlapping in time */
+      out[i] = T.ex0 + T.exSpread * (i / (N - 1)) + form * 0.03 * wv(b, i);
     }
     function frame(now){
       raf = 0;
@@ -78,13 +89,18 @@
           var g = (t - start[i]) / DUR;
           if(g <= 0){ done = false; continue; }
           if(g > 1) g = 1; else done = false;
+          var x = (t - out[i]) / T.exDur, fade = 1;
+          if(x > 0){
+            if(x >= 1) continue;                          /* this line has dissolved */
+            fade = 1 - x * x * (3 - 2 * x); done = false;  /* each line fades gradually, easing in and out */
+          }
           var b = BLADES[i], e = 1 - Math.pow(1 - g, 3);
           var rows = Math.max(1, Math.round(b[3] * e)), lead = g < 1 ? Math.min(rows, Math.max(3, Math.round(b[3] * 0.1))) : 0;
           var lean = 0.035 * (1 - e) * Math.sin(g * 3.4 + b[0] * 0.013);     /* a hair of flow, gone when the line is formed */
           ctx.save();
           ctx.translate(b[0] * sc, (b[1] + b[3]) * sc);
           if(lean) ctx.transform(1, 0, lean, 1, 0, 0);
-          ctx.globalAlpha = Math.min(1, g * 4);
+          ctx.globalAlpha = Math.min(1, g * 4) * fade;
           if(rows > lead) ctx.drawImage(sheet, b[4], b[5] + b[3] - (rows - lead), b[2], rows - lead, 0, -(rows - lead) * sc, b[2] * sc, (rows - lead) * sc);
           if(lead){
             ctx.globalAlpha *= 0.45;                      /* the growing tip is a little softer than the line below it */
@@ -93,7 +109,7 @@
           ctx.restore();
         }
       } else done = false;
-      if(!done || t < form + 0.05) raf = requestAnimationFrame(frame);
+      if(!done || t < exEnd) raf = requestAnimationFrame(frame);
     }
     raf = requestAnimationFrame(frame);
   }
@@ -102,8 +118,8 @@
   function start(){
     if(finished) return;
     d.classList.add('aur-run');
-    if(pat) formPattern(FORM[mode]);
-    later(reveal, Math.round(TOTAL[mode] * 0.8));
+    if(pat) formPattern(TIMING[mode]);
+    later(reveal, Math.round(TOTAL[mode] * (REVEAL[mode] || 0.8)));
     later(clear, TOTAL[mode] + 60);
   }
   if(mode){
