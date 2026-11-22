@@ -10,6 +10,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700;800&family=Noto+Sans+Mono:wght@400;500;700&family=Noto+Serif:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
 <link rel="icon" href="assets/badge.png">
 <link rel="stylesheet" href="assets/style.css">
+<script>(function(){try{var d=document.documentElement;if(/seqstill=/.test(location.search)){d.classList.add('st-live');return}if(window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;if(navigator.deviceMemory&&navigator.deviceMemory<2)return;var c=document.createElement('canvas');if(!(window.WebGLRenderingContext&&(c.getContext('webgl')||c.getContext('experimental-webgl'))))return;d.classList.add('st-live')}catch(e){}})()</script>
 <noscript><style>.rv{opacity:1 !important;transform:none !important}</style></noscript>
 </head>
 <body>
@@ -48,32 +49,28 @@
   </div>
 </section>
 
-<section class="sq on-dark" id="construction-engineering" aria-labelledby="ce-title">
-  <div class="sq-pin">
-    <canvas class="sq-canvas" aria-hidden="true"></canvas>
-    <div class="sq-labels" aria-hidden="true"></div>
-    <div class="sq-top wrap">
+<section class="st on-dark" id="construction-engineering" aria-labelledby="ce-title">
+  <div class="st-pin">
+    <picture class="st-poster" aria-hidden="true"><source media="(max-width:860px)" srcset="assets/station-seq/poster-tall.webp"><img src="assets/station-seq/poster-wide.webp" alt="" width="1600" height="900" decoding="async"></picture>
+    <canvas class="st-canvas" aria-hidden="true"></canvas>
+    <div class="st-labels" aria-hidden="true"></div>
+    <div class="st-head wrap">
       <p class="eyebrow">01 &middot; Field to finish</p>
       <h2 id="ce-title">Construction &amp; Engineering Surveys</h2>
     </div>
-    <p class="sq-tag">Illustrative site</p>
-    <ol class="sq-rail" aria-hidden="true">
-      <li class="on"><b>01</b><span>Establish Control</span></li>
-      <li><b>02</b><span>Project Layout</span></li>
-      <li><b>03</b><span>Verify &amp; Document</span></li>
-    </ol>
-    <div class="sq-steps wrap">
-      <article class="sq-step on" data-step="0">
-        <figure class="sq-still"><picture><source media="(max-width:860px)" srcset="assets/site-seq/s1-tall.webp"><img src="assets/site-seq/s1-wide.webp" alt="Survey control monuments and a connected network across a construction site (illustrative site)" width="1600" height="900" loading="lazy"></picture></figure>
-        <div class="sq-copy"><p class="sq-no">01 &middot; Establish Control</p><h3>Control first, then everything else</h3><p>We set and observe the control network the whole project works from, including machine control networks, tying existing conditions to one coordinate system before anything is built.</p></div>
+    <div class="st-rail" aria-hidden="true"><span><i></i></span><span><i></i></span><span><i></i></span></div>
+    <div class="st-steps wrap">
+      <article class="st-step on" data-step="0">
+        <figure class="st-still"><picture><source media="(max-width:860px)" srcset="assets/station-seq/s1-tall.webp"><img src="assets/station-seq/s1-wide.webp" alt="Total station on its tripod over a control point, with a plumb line to the ground marker (illustrative values)" width="1600" height="900" loading="lazy"></picture></figure>
+        <div class="st-copy"><p class="st-no">01 &middot; Establish Control</p><h3>Control first, then everything else</h3><p>We set and observe the control network the whole project works from, including machine control networks, tying existing conditions to one coordinate system before anything is built.</p></div>
       </article>
-      <article class="sq-step" data-step="1">
-        <figure class="sq-still"><picture><source media="(max-width:860px)" srcset="assets/site-seq/s2-tall.webp"><img src="assets/site-seq/s2-wide.webp" alt="Gridlines, dimensions and footings being set out across the site (illustrative site)" width="1600" height="900" loading="lazy"></picture></figure>
-        <div class="sq-copy"><p class="sq-no">02 &middot; Project Layout</p><h3>Gridlines, offsets and elevations in the field</h3><p>Gridlines, offsets and elevations are set out from the issued construction drawings, so foundations and structures are built where the drawings place them.</p></div>
+      <article class="st-step" data-step="1">
+        <figure class="st-still"><picture><source media="(max-width:860px)" srcset="assets/station-seq/s2-tall.webp"><img src="assets/station-seq/s2-wide.webp" alt="Total station telescope turning to a bearing, with a line of sight and ground stakes (illustrative values)" width="1600" height="900" loading="lazy"></picture></figure>
+        <div class="st-copy"><p class="st-no">02 &middot; Project Layout</p><h3>Gridlines, offsets and elevations in the field</h3><p>Gridlines, offsets and elevations are set out from the issued construction drawings, so foundations and structures are built where the drawings place them.</p></div>
       </article>
-      <article class="sq-step" data-step="2">
-        <figure class="sq-still"><picture><source media="(max-width:860px)" srcset="assets/site-seq/s3-tall.webp"><img src="assets/site-seq/s3-wide.webp" alt="Completed foundations with as-built survey points and deviation values (illustrative site)" width="1600" height="900" loading="lazy"></picture></figure>
-        <div class="sq-copy"><p class="sq-no">03 &middot; Verify &amp; Document</p><h3>As-builts, checked and recorded</h3><p>As-built surveys compare what was built with what was drawn. Repeat observations monitor settlement, and the results are documented for the project team.</p></div>
+      <article class="st-step" data-step="2">
+        <figure class="st-still"><picture><source media="(max-width:860px)" srcset="assets/station-seq/s3-tall.webp"><img src="assets/station-seq/s3-wide.webp" alt="Total station keypad and display after the layout loop has closed (illustrative values)" width="1600" height="900" loading="lazy"></picture></figure>
+        <div class="st-copy"><p class="st-no">03 &middot; Verify &amp; Document</p><h3>As-builts, checked and recorded</h3><p>As-built surveys compare what was built with what was drawn. Repeat observations monitor settlement, and the results are documented for the project team.</p></div>
       </article>
     </div>
   </div>
@@ -176,6 +173,6 @@
 
 <script src="assets/app.js"></script>
 <script src="assets/services-motion.js"></script>
-<script src="assets/site-scene.js"></script>
+<script src="assets/station-scene.js"></script>
 </body>
 </html>
