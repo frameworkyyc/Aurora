@@ -179,10 +179,10 @@
       var fade = 1 - deliv*(P.keep > 0.14 ? 1 : 0.30);
       if(fade <= 0.02) continue;
       shown++;
-      var a = P.a * (0.30 + 0.70*reg) * fade;
+      var a = Math.min(1, P.a * (0.5 + 0.7*reg) * fade);
       var hue = P.kind==='deck' ? 172 : P.kind==='pier' ? 186 : P.kind==='noise' ? 120 : 150;
-      ctx.fillStyle = 'hsla('+hue+',58%,'+(P.kind==='noise'?46:64)+'%,'+a.toFixed(3)+')';
-      var r = (P.kind==='noise' ? 0.9 : 1.35) * (1 + 0.45*(1-reg));
+      ctx.fillStyle = 'hsla('+hue+',58%,'+(P.kind==='noise'?54:72)+'%,'+a.toFixed(3)+')';
+      var r = (P.kind==='noise' ? 1.2 : 1.9) * (1 + 0.45*(1-reg));
       ctx.fillRect(q[0], q[1], r, r);
     }
 
