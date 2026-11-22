@@ -1583,3 +1583,10 @@ header.hero-page:focus-within{
 }
 .setup .setup-head h2{max-width:none}
 .adv-ed-head .lede{margin-top:1.1rem}
+
+/* Services hero: compact, so the page is engaging straight away */
+.page-head--tight{padding-block:calc(74px + clamp(1.75rem,3.6vw,3rem)) clamp(1.75rem,3.4vw,2.75rem)}
+.page-head--tight h1{max-width:20ch}
+.page-head--tight .lede{max-width:60ch;margin-top:1rem}
+.page-head--tight .svc-jump{margin-top:1.4rem}
+@media (max-width:860px){.page-head--tight .lede{font-size:.98rem}}
