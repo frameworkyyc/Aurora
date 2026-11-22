@@ -922,7 +922,14 @@ window.__BADGE_SHORT = {"w":199.143,"h":157.475,"blades":[{"pts":[[10.469,86.535
   var wide = window.matchMedia('(min-width:861px)');
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var stage = document.getElementById('top');
-  if(stage) requestAnimationFrame(function(){ stage.classList.add('stage-ready'); });
+  if(stage){
+    var ready = function(){ requestAnimationFrame(function(){ stage.classList.add('stage-ready'); }); };
+    /* under the loading screen the hero waits for the cover to lift, so its entrance is seen */
+    if(/\baur-(full|short)\b/.test(document.documentElement.className)){
+      var fired = false, once = function(){ if(!fired){ fired = true; ready(); } };
+      window.addEventListener('aur:reveal', once); setTimeout(once, 2600);
+    } else ready();
+  }
 
   /* the readouts track the pointer, the way a live instrument would */
   if(wide.matches && !reduce && window.matchMedia('(hover:hover) and (pointer:fine)').matches){
