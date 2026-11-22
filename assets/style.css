@@ -1558,7 +1558,6 @@ header.hero-page:focus-within{
 
 /* ---------- services page ---------- */
 .svc-anchor{display:block;height:0;scroll-margin-top:0}
-.svc-jump{margin-top:2rem;display:flex;flex-wrap:wrap;gap:.75rem}
 .setup-lede{margin:1.1rem 0 0;max-width:34ch;color:rgba(255,255,255,.78);font-size:1.05rem;line-height:1.6}
 .cap-list{list-style:none;margin:1.5rem 0 0;padding:0;display:flex;flex-wrap:wrap;gap:.5rem .5rem;max-width:36rem}
 .cap-list li{font-family:var(--sans);font-size:.86rem;font-weight:600;color:#fff;padding:.38rem .8rem;border:1px solid rgba(255,255,255,.22);border-radius:2px;background:rgba(5,54,76,.55)}
@@ -1584,12 +1583,54 @@ header.hero-page:focus-within{
 .setup .setup-head h2{max-width:none}
 .adv-ed-head .lede{margin-top:1.1rem}
 
-/* Services hero: compact, so the page is engaging straight away */
-.page-head--tight{padding-block:calc(74px + clamp(1.75rem,3.6vw,3rem)) clamp(1.75rem,3.4vw,2.75rem)}
-.page-head--tight h1{max-width:20ch}
-.page-head--tight .lede{max-width:60ch;margin-top:1rem}
-.page-head--tight .svc-jump{margin-top:1.4rem}
-@media (max-width:860px){.page-head--tight .lede{font-size:.98rem}}
+/* ---------- Services hero: text left, a lit render of the instrument right ---------- */
+.svc-hero{background:linear-gradient(180deg,#05364c 0%,#04293a 100%);padding:0;overflow:hidden}
+.svc-hero::after{display:none}
+.svc-hero-in{position:relative;min-height:560px;display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,.7fr);align-items:center;padding-top:calc(74px + 1.25rem);padding-bottom:3rem}
+.svc-hero-text{position:relative;z-index:2;max-width:42rem}
+.svc-hero .eyebrow{display:flex;align-items:center;gap:.8rem;margin-bottom:1.1rem;color:var(--green)}
+.svc-hero .eyebrow::before{content:"";width:2rem;height:1px;background:var(--green)}
+.svc-hero h1{font-size:clamp(1.9rem,3.5vw,3.3rem);line-height:1.06;letter-spacing:-.025em;max-width:none;color:#fff;margin:0}
+.svc-hero h1 .l1,.svc-hero h1 .l2{display:block}
+.svc-hero h1 .l2{color:rgba(255,255,255,.6)}
+.svc-hero .lede{max-width:52ch;margin-top:1.3rem;font-size:clamp(.98rem,1.2vw,1.08rem);line-height:1.65;color:rgba(255,255,255,.8)}
+.svc-links{display:flex;flex-wrap:wrap;gap:.9rem 2.5rem;margin-top:1.9rem}
+.svc-links a{display:flex;align-items:center;gap:.7rem;padding:.75rem 0 .1rem;border-top:1px solid rgba(255,255,255,.22);color:#fff;text-decoration:none;font-family:var(--sans);font-size:.92rem;font-weight:600;transition:border-color .25s ease}
+.svc-links b{font-family:var(--mono);font-weight:500;font-size:.68rem;letter-spacing:.14em;color:var(--green)}
+.svc-links i{font-style:normal;color:var(--green);transition:transform .25s ease}
+.svc-links a:hover,.svc-links a:focus-visible{border-top-color:var(--green)}
+.svc-links a:hover i,.svc-links a:focus-visible i{transform:translateX(4px)}
+.svc-links a:focus-visible{outline:2px solid var(--green);outline-offset:4px}
+.svc-hero-fig{position:absolute;right:var(--pad);bottom:0;top:calc(74px + .5rem);margin:0;aspect-ratio:8/7;z-index:1;pointer-events:none;
+  -webkit-mask-image:linear-gradient(180deg,#000 0%,#000 66%,transparent 100%);mask-image:linear-gradient(180deg,#000 0%,#000 66%,transparent 100%)}
+.svc-hero-fig::before{content:"";position:absolute;inset:-12% -22% -4%;background:radial-gradient(closest-side,rgba(48,128,158,.34),rgba(48,128,158,0) 72%)}
+.svc-hero-fig::after{content:"";position:absolute;left:50%;top:78%;bottom:0;width:1px;background:linear-gradient(180deg,rgba(59,182,87,0),rgba(59,182,87,.55))}
+.svc-hero-fig img{position:relative;display:block;height:100%;width:auto}
+.svc-hero-ticks{position:absolute;left:0;right:0;bottom:0;height:14px;z-index:1;pointer-events:none;
+  background:repeating-linear-gradient(90deg,rgba(255,255,255,.2) 0 1px,transparent 1px 24px) bottom/100% 5px no-repeat,repeating-linear-gradient(90deg,rgba(255,255,255,.3) 0 1px,transparent 1px 120px) bottom/100% 11px no-repeat}
+.svc-hero-ticks span{position:absolute;bottom:18px;font-family:var(--mono);font-size:.6rem;letter-spacing:.14em;color:rgba(255,255,255,.38)}
+.svc-hero-ticks span:first-child{left:var(--pad)}
+.svc-hero-ticks span:last-child{right:var(--pad)}
+@media (prefers-reduced-motion:no-preference){
+  .svc-hero-text{animation:svcIn .7s cubic-bezier(.2,.8,.3,1) both}
+  .svc-hero-fig img{animation:svcFig .9s ease .1s both}
+}
+@keyframes svcIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+@keyframes svcFig{from{opacity:0}to{opacity:1}}
+@media (max-width:1000px){
+  .svc-hero-in{min-height:520px;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr)}
+  .svc-hero-fig{right:calc(var(--pad) - 1.75rem)}
+  .svc-hero .lede{max-width:42ch}
+}
+@media (max-width:720px){
+  .svc-hero-in{display:block;min-height:0;padding-bottom:0}
+  .svc-hero-text{max-width:none}
+  .svc-links{gap:.6rem 1.75rem;margin-top:1.5rem}
+  .svc-hero-fig{position:relative;right:auto;top:auto;bottom:auto;height:min(66vw,262px);aspect-ratio:auto;margin:1.25rem calc(var(--pad)*-1) 0;display:flex;justify-content:center;
+    -webkit-mask-image:linear-gradient(180deg,#000 0%,#000 58%,transparent 100%);mask-image:linear-gradient(180deg,#000 0%,#000 58%,transparent 100%)}
+  .svc-hero-fig::before{inset:-10% 0 0}
+  .svc-hero-ticks{display:none}
+}
 
 /* ---------- Services: the total station, in three stages ---------- */
 .st{padding-block:0;background:linear-gradient(180deg,#04293a 0%,#05364c 100%);color:#fff;position:relative}
