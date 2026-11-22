@@ -329,7 +329,7 @@ nav a[href="contact.html"]:hover,nav a[href="contact.html"]:focus-visible,nav a[
 .contact-grid a:hover .v{color:var(--green)}
 @media (max-width:760px){.contact-grid{grid-template-columns:1fr}}
 
-footer{background:var(--night);color:rgba(255,255,255,.45);border-top:1px solid var(--rule-dark)}
+footer{background:var(--night);color:rgba(255,255,255,.45);border-top:1px solid rgba(255,255,255,.14)}
 .foot{
   max-width:var(--maxw);margin:0 auto;padding:1.75rem var(--pad);
   display:flex;flex-wrap:wrap;gap:1rem 2rem;align-items:center;justify-content:space-between;
@@ -562,7 +562,7 @@ header.hero-page.brand-on::before{opacity:0}
   .teaser h3{padding:0 1.15rem;margin-bottom:1rem;font-size:1.12rem}
   .teaser .go{padding:0 1.15rem 1.15rem}
 
-  .contact:not(.contact--photo) .lede{display:none}
+  .contact:not(.contact-final) .lede{display:none}
   .contact h2{margin-bottom:1.75rem}
 }
 
@@ -1334,10 +1334,6 @@ header.hero-page:focus-within{
 
 /* Careers call-out */
 
-/* Closing call: photograph behind the existing contact block */
-.contact--photo .contact-img{position:absolute;inset:0;z-index:0}
-.contact--photo::before{inset:0;height:auto;z-index:1;background:linear-gradient(90deg,rgba(3,22,31,.9) 0%,rgba(3,22,31,.62) 50%,rgba(3,22,31,.22) 100%)}
-.contact--photo .ridge{z-index:2}
 
 @media (max-width:1000px){
   .exp-grid{grid-template-columns:1fr 1fr}
@@ -1511,14 +1507,7 @@ header.hero-page:focus-within{
 .about .stat b{font-size:clamp(1.7rem,3.2vw,2.4rem)}
 .about .stat > span{margin-top:.3rem;font-size:.54rem;letter-spacing:.14em;line-height:1.35}
 
-.contact--photo{padding-block:clamp(3.25rem,6.5vw,5rem)}
-.contact--photo h2{max-width:18ch}
-.contact--photo .lede{max-width:46ch;margin-top:1rem}
-.contact--photo .cta-row{margin-top:1.6rem}
 @media (max-width:860px){
-  .about .stat > span{font-size:.5rem;letter-spacing:.1em}
-  /* the photograph is brighter on the right on small screens: darken it evenly under the text */
-  .contact--photo::before{background:linear-gradient(180deg,rgba(3,22,31,.8),rgba(3,22,31,.68) 55%,rgba(3,22,31,.82))}
 }
 
 /* Careers — editorial split (photo left ~45%, panel right ~55%) */
@@ -1542,7 +1531,24 @@ header.hero-page:focus-within{
 }
 @media (prefers-reduced-motion:reduce){.careers-arrow{transition:none}.careers-link:hover .careers-arrow{transform:none}}
 
-/* Contact — photographic finale, fading into the footer */
-.contact--photo::after{content:"";position:absolute;left:0;right:0;bottom:0;height:clamp(40px,7%,80px);z-index:1;pointer-events:none;background:linear-gradient(180deg,rgba(5,54,76,0),var(--night))}
-.contact--photo .wrap{padding-bottom:.5rem}
-@media (max-width:860px){ .contact--photo .ridge{display:none} .careers-split{padding-block:2.75rem 3rem} }
+@media (max-width:860px){ .careers-split{padding-block:2.75rem 3rem} }
+
+/* Contact — solid navy closing band */
+.contact-final{background:#05364c;padding-block:clamp(3.25rem,6vw,5rem)}
+.contact-final::before{display:none}
+.contact-final .wrap{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);column-gap:clamp(2rem,7vw,7rem);align-items:end}
+.contact-final .eyebrow{grid-column:1/-1;margin:0 0 1.4rem;color:var(--green)}
+.contact-final h2{margin:0;max-width:11ch;font-size:clamp(2.6rem,6.2vw,5rem);line-height:1.02;letter-spacing:-.02em;color:#fff}
+.contact-final-side{padding-bottom:.35rem}
+.contact-final .lede{margin:0;max-width:44ch;color:rgba(255,255,255,.82);font-size:clamp(1rem,1.25vw,1.1rem);line-height:1.65}
+.contact-final .cta-row{margin-top:1.75rem;display:flex;flex-wrap:wrap;align-items:center;gap:.9rem 1.75rem}
+.contact-final .btn-solid{color:#04141B}
+.contact-final-phone{color:#fff;font-family:var(--sans);font-weight:600;text-decoration:none;border-bottom:1px solid rgba(255,255,255,.35);padding-bottom:2px}
+.contact-final-phone:hover,.contact-final-phone:focus-visible{color:var(--green);border-color:var(--green)}
+.contact-final a:focus-visible{outline:2px solid var(--green);outline-offset:3px}
+@media (max-width:860px){
+  .contact-final .wrap{grid-template-columns:1fr;row-gap:1.5rem}
+  .contact-final h2{max-width:12ch}
+  .contact-final-side{padding-bottom:0}
+}
+@media (max-width:860px){.contact-final h2{margin-bottom:0}}
