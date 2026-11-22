@@ -1986,28 +1986,31 @@ header.hero-page:focus-within{
 .aur-veil{display:none;position:fixed;inset:0;z-index:2147483000;background:#05364c;overflow:hidden;pointer-events:none}
 .aur-full .aur-veil,.aur-short .aur-veil,.aur-fade .aur-veil,.aur-out .aur-veil{display:block;pointer-events:auto}
 .aur-full .aur-veil,.aur-short .aur-veil,.aur-fade .aur-veil{animation:aur-failsafe .3s ease 3.5s both}
-.aur-pat,.aur-logo{position:absolute;left:50%;top:50%;max-width:none;opacity:0;pointer-events:none;-webkit-user-select:none;user-select:none}
-.aur-pat{height:min(64vh,108vw);width:auto;aspect-ratio:818/960;transform:translate3d(calc(-50% - 80vw),-50%,0);will-change:transform,opacity}
-.aur-logo{width:min(54vw,380px);height:auto;transform:translate(-50%,-50%)}
+.aur-veil::before{content:"";position:absolute;inset:0;opacity:0;pointer-events:none;
+  background:radial-gradient(48vmin 48vmin at 50% 50%,rgba(59,182,87,.16),rgba(31,131,167,.08) 55%,rgba(5,54,76,0) 100%)}
+.aur-pat,.aur-logo{position:absolute;left:50%;top:50%;max-width:none;opacity:0;pointer-events:none;-webkit-user-select:none;user-select:none;transform:translate(-50%,-50%)}
+.aur-pat{height:min(62vh,108vw);width:auto;aspect-ratio:818/960}
+.aur-logo{width:min(50vw,340px);height:auto;
+  filter:drop-shadow(0 0 14px #05364c) drop-shadow(0 0 30px #05364c)}   /* a quiet shade keeps the wordmark clear of the lines */
 
-/* first visit: about 1.75 s */
-.aur-run.aur-full .aur-veil{animation:aur-v-full 1.75s linear both}
-.aur-run.aur-full .aur-pat{animation:aur-p-move-full 1.65s cubic-bezier(.42,.05,.4,1) both,aur-p-fade-full 1.65s linear both}
-.aur-run.aur-full .aur-logo{animation:aur-logo-full 1.75s ease both}
-@keyframes aur-v-full{0%,72%{opacity:1;visibility:visible;animation-timing-function:ease-in}100%{opacity:0;visibility:hidden}}
-@keyframes aur-p-move-full{from{transform:translate3d(calc(-50% - 80vw),-50%,0)}to{transform:translate3d(calc(-50% + 80vw),-50%,0)}}
-@keyframes aur-p-fade-full{0%{opacity:0}14%,78%{opacity:1}100%{opacity:0}}
-@keyframes aur-logo-full{
-  0%,24%{opacity:0;transform:translate(-50%,-50%) scale(.965)}
-  46%,70%{opacity:1;transform:translate(-50%,-50%) scale(1)}
-  86%,100%{opacity:0;transform:translate(-50%,-50%) scale(1)}}
+/* first visit: a stationary reveal, about 1.8 s.
+   pattern and a soft glow rise, the logo follows, the composition holds, then everything dissolves into the page */
+.aur-run.aur-full .aur-veil{animation:aur-v-full 1.8s linear both}
+.aur-run.aur-full .aur-veil::before{animation:aur-glow-full 1.8s ease-in-out both}
+.aur-run.aur-full .aur-pat{animation:aur-pat-full 1.8s ease-in-out both}
+.aur-run.aur-full .aur-logo{animation:aur-logo-full 1.8s ease-in-out both}
+@keyframes aur-v-full{0%,70%{opacity:1;visibility:visible;animation-timing-function:ease-in-out}100%{opacity:0;visibility:hidden}}
+@keyframes aur-glow-full{0%{opacity:0}34%,66%{opacity:1}90%,100%{opacity:0}}
+@keyframes aur-pat-full{0%{opacity:0}38%,66%{opacity:.92}90%,100%{opacity:0}}
+@keyframes aur-logo-full{0%,22%{opacity:0}50%,66%{opacity:1}88%,100%{opacity:0}}
 
-/* arriving from another page: about 0.55 s */
-.aur-run.aur-short .aur-veil{animation:aur-v-short .56s linear both}
-.aur-run.aur-short .aur-pat{animation:aur-p-move-short .56s cubic-bezier(.3,.1,.3,1) both,aur-p-fade-short .56s linear both}
-@keyframes aur-v-short{0%,28%{opacity:1;visibility:visible;animation-timing-function:ease-out}100%{opacity:0;visibility:hidden}}
-@keyframes aur-p-move-short{from{transform:translate3d(calc(-50% - 62vw),-50%,0)}to{transform:translate3d(calc(-50% + 62vw),-50%,0)}}
-@keyframes aur-p-fade-short{0%{opacity:0}22%,60%{opacity:1}100%{opacity:0}}
+/* arriving from another page: the same pattern, shorter, about 0.6 s */
+.aur-run.aur-short .aur-veil{animation:aur-v-short .6s linear both}
+.aur-run.aur-short .aur-veil::before{animation:aur-glow-short .6s ease-in-out both}
+.aur-run.aur-short .aur-pat{animation:aur-pat-short .6s ease-in-out both}
+@keyframes aur-v-short{0%,45%{opacity:1;visibility:visible;animation-timing-function:ease-in-out}100%{opacity:0;visibility:hidden}}
+@keyframes aur-glow-short{0%{opacity:0}30%,50%{opacity:1}85%,100%{opacity:0}}
+@keyframes aur-pat-short{0%{opacity:0}30%,50%{opacity:.9}85%,100%{opacity:0}}
 
 /* reduced motion: a plain fade */
 .aur-run.aur-fade .aur-veil{animation:aur-v-fade .3s ease-out both}

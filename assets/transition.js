@@ -3,9 +3,10 @@
 
    Three arrival modes, chosen by the tiny inline script in each page's <head> (so the Denim Blue cover is on
    screen before the first paint, with no flash of the page underneath):
-     aur-full   first page of a visit: the Aurora pattern flows left to right, the logo resolves, the pattern
-                sweeps away (about 1.75 s, any tap, key press or click skips it)
-     aur-short  arriving from another Aurora page, or any later direct load in the same visit (about 0.55 s)
+     aur-full   first page of a visit: the Aurora pattern rises in the centre with a soft glow, the logo fades
+                in, the composition holds, then it all dissolves into the page (about 1.8 s; any tap, key press or
+                click skips it). Nothing moves sideways: the pattern is centred and stationary throughout
+     aur-short  arriving from another Aurora page, or any later direct load in the same visit (about 0.6 s)
      aur-fade   the same, for prefers-reduced-motion: a plain fade
    Back/forward and reload get no cover at all. The page is never waiting on the animation: it is built and
    interactive underneath, and a CSS-only failsafe lifts the cover after 3.5 s even if this script never runs.
@@ -25,7 +26,7 @@
 
   var MODES = ['aur-full', 'aur-short', 'aur-fade'];
   var mode = MODES.filter(function(c){ return d.classList.contains(c); })[0] || '';
-  var TOTAL = {'aur-full':1750, 'aur-short':560, 'aur-fade':300};
+  var TOTAL = {'aur-full':1800, 'aur-short':600, 'aur-fade':300};
   var revealed = false, finished = false, timers = [];
 
   function later(fn, ms){ var t = setTimeout(fn, ms); timers.push(t); return t; }
@@ -42,7 +43,7 @@
   function start(){
     if(finished) return;
     d.classList.add('aur-run');
-    later(reveal, Math.round(TOTAL[mode] * 0.62));
+    later(reveal, Math.round(TOTAL[mode] * 0.66));
     later(clear, TOTAL[mode] + 60);
   }
   if(mode){
