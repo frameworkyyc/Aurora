@@ -562,7 +562,7 @@ header.hero-page.brand-on::before{opacity:0}
   .teaser h3{padding:0 1.15rem;margin-bottom:1rem;font-size:1.12rem}
   .teaser .go{padding:0 1.15rem 1.15rem}
 
-  .contact .lede{display:none}
+  .contact:not(.contact--photo) .lede{display:none}
   .contact h2{margin-bottom:1.75rem}
 }
 
@@ -1331,10 +1331,6 @@ header.hero-page:focus-within{
 .about-figs{position:relative;padding-bottom:12%}
 .about-fig--a{aspect-ratio:4/3}
 .about-fig--b{position:absolute;right:0;bottom:0;width:54%;aspect-ratio:3/2;border:6px solid var(--paper)}
-.about .stats{margin-block:clamp(2.5rem,5vw,4rem)}
-.about-pts{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(1.2rem,3vw,2.5rem)}
-.about-pts h3{font-size:1.1rem;margin-bottom:.4rem;padding-top:.9rem;border-top:3px solid var(--green)}
-.about-pts p{font-size:.95rem;margin:0}
 
 /* Careers call-out */
 .careers-cta{position:relative;background:var(--night);color:#fff;overflow:hidden;padding-block:clamp(5rem,12vw,9.5rem)}
@@ -1361,7 +1357,6 @@ header.hero-page:focus-within{
   .wwd-intro{grid-template-columns:1fr;gap:1rem}
   .about-figs{padding-bottom:16%}
   .about-fig--b{right:0;width:50%}
-  .about-pts{grid-template-columns:1fr}
   .ind-rail{flex-direction:column;height:auto;gap:.5rem}
   .ind-card{flex:none;height:5.2rem;transition:height .55s cubic-bezier(.2,.7,.2,1)}
   .ind-card.is-open{height:min(23rem,72svh)}
@@ -1512,4 +1507,35 @@ header.hero-page:focus-within{
 @media (prefers-reduced-motion:reduce){
   .stat b .suffix{opacity:1;transform:none;transition:none}
   .reel-strip{transition:none}
+}
+
+/* ---------- About, Careers and Contact: the simplified closing sections ---------- */
+.about{padding-block:clamp(3.5rem,7vw,6rem)}
+.about-grid{align-items:center}
+.about-copy .eyebrow{margin-bottom:1rem}
+.about-copy h2{margin-bottom:clamp(1.1rem,2vw,1.6rem);max-width:22ch}
+.about-copy p{margin:0 0 1rem}
+.about-lead{font-family:var(--sans);font-weight:600;font-size:clamp(1.12rem,1.7vw,1.35rem);line-height:1.35;letter-spacing:-.015em;color:var(--navy);max-width:30ch}
+.about-links{display:flex;flex-wrap:wrap;align-items:center;gap:1.4rem;margin-top:1.6rem}
+.about-link{font-family:var(--sans);font-weight:600;font-size:.9rem;color:var(--navy);text-decoration:none;border-bottom:1px solid var(--green);padding-bottom:2px}
+.about-link:hover,.about-link:focus-visible{color:#1f7a3a}
+/* the figures: one compact row on every screen, counters unchanged */
+.about .stats{grid-template-columns:repeat(3,1fr);margin:clamp(2rem,4vw,3rem) 0 0}
+.about .stat{padding:clamp(.85rem,1.6vw,1.2rem) .6rem}
+.about .stat b{font-size:clamp(1.7rem,3.2vw,2.4rem)}
+.about .stat > span{margin-top:.3rem;font-size:.54rem;letter-spacing:.14em;line-height:1.35}
+
+.careers-cta{padding-block:clamp(3.25rem,6.5vw,5rem)}
+.careers-cta h2{max-width:20ch}
+.careers-cta .lede{max-width:46ch;margin-top:1rem}
+.careers-cta .cta-row{margin-top:1.5rem}
+
+.contact--photo{padding-block:clamp(3.25rem,6.5vw,5rem)}
+.contact--photo h2{max-width:18ch}
+.contact--photo .lede{max-width:46ch;margin-top:1rem}
+.contact--photo .cta-row{margin-top:1.6rem}
+@media (max-width:860px){
+  .about .stat > span{font-size:.5rem;letter-spacing:.1em}
+  /* the photograph is brighter on the right on small screens: darken it evenly under the text */
+  .contact--photo::before{background:linear-gradient(180deg,rgba(3,22,31,.8),rgba(3,22,31,.68) 55%,rgba(3,22,31,.82))}
 }

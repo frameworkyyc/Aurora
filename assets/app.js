@@ -32,75 +32,6 @@ window.__sectionProgress = function(el){
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var clamp = function(v,a,b){ return v<a?a:v>b?b:v; };
 
-  /* ---- latitude stations ---- */
-  var LAT_MIN = 48.6, LAT_MAX = 67.2;
-  var pos = function(lat){ return (lat - LAT_MIN) / (LAT_MAX - LAT_MIN); };
-  var stations = [].slice.call(document.querySelectorAll('.station'));
-  var hot = -1;
-  stations.forEach(function(s){
-    var p = pos(parseFloat(s.dataset.lat));
-    s.style.left = (p*100) + '%';
-    if(p < 0.06) s.classList.add('edge-left');
-    if(p > 0.90) s.classList.add('edge-right');
-    s.setAttribute('aria-label','Jump to project at latitude ' + s.dataset.lat + ' degrees north');
-    s.addEventListener('mouseenter', function(){ hot = p; });
-    s.addEventListener('focus', function(){ hot = p; });
-    s.addEventListener('mouseleave', function(){ hot = -1; });
-    s.addEventListener('blur', function(){ hot = -1; });
-    s.addEventListener('click', function(){
-      var lat = parseFloat(s.dataset.lat);
-      var id = lat > 60 ? '#proj-66' : lat > 55 ? '#proj-56' : lat > 50 ? '#proj-50' : '#projects';
-      var el = document.querySelector(id);
-      if(el){ el.scrollIntoView({behavior: reduce ? 'auto' : 'smooth', block:'center'}); }
-      else { window.location.href = 'projects.html' + (id.indexOf('#proj') === 0 ? id : ''); }
-    });
-  });
-  /* ---- the traverse walks itself: a run that sweeps station to station ---- */
-  (function(){
-    var run = document.getElementById('axisRun');
-    var dot = document.getElementById('axisDot');
-    var axis = document.getElementById('axis');
-    if(!run || !dot || !axis) return;
-
-    var marks = stations.map(function(st){ return pos(parseFloat(st.dataset.lat)); });
-
-    if(reduce){
-      run.style.width = '100%';
-      stations.forEach(function(st){ st.classList.add('passed'); });
-      return;
-    }
-
-    var PERIOD = 9200, t0 = performance.now(), live = false, raf = 0;
-
-    function step(now){
-      if(!live){ raf = 0; return; }
-      var u = ((now - t0) % PERIOD) / PERIOD;
-      var travel = clamp(u/0.84, 0, 1);
-      var fade = Math.min(1, u/0.05) * (1 - clamp((u-0.88)/0.12, 0, 1));
-
-      run.style.width = (travel*100).toFixed(2) + '%';
-      run.style.opacity = fade.toFixed(3);
-      dot.style.left = (travel*100).toFixed(2) + '%';
-      dot.style.opacity = (fade*0.95).toFixed(3);
-
-      for(var i=0;i<stations.length;i++){
-        var d = travel - marks[i];
-        stations[i].classList.toggle('passed', d >= 0 && fade > 0.15);
-        stations[i].classList.toggle('hit', Math.abs(d) < 0.016 && fade > 0.15);
-      }
-      raf = requestAnimationFrame(step);
-    }
-
-    function start(){ if(!raf){ live = true; raf = requestAnimationFrame(step); } }
-    function stop(){ live = false; }
-
-    if('IntersectionObserver' in window){
-      new IntersectionObserver(function(es){
-        es.forEach(function(e){ e.isIntersecting ? start() : stop(); });
-      },{threshold:0}).observe(axis);
-    } else start();
-  })();
-
   /* ---- gentle parallax on project photography ---- */
   if(!reduce){
     /* named apart from the hero's shooting stars: both live in this scope and
@@ -1011,90 +942,12 @@ window.__BADGE_SHORT = {"w":199.143,"h":157.475,"blades":[{"pts":[[10.469,86.535
   nightSky(document.querySelector('.nightsky'),  {rate:0.0045, brandSky:true});
 })();
 
-/* ---- hero choreography: the headline is measured into place a line at a
-        time, and the technical readouts settle around it ---- */
+/* ---- hero choreography: the entrance plays once the page is ready, and the
+        technical readouts follow the pointer ---- */
 (function(){
   var wide = window.matchMedia('(min-width:861px)');
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var intro = document.querySelector('.intro');
   var stage = document.getElementById('top');
-  if(!intro) return;
-
-  /* wrap each rendered line of the headline so it can be masked separately */
-  function splitLines(el){
-    if(!el || el.dataset.split) return;
-    var text = el.textContent.replace(/\s+/g,' ').trim();
-    var html = el.innerHTML;
-    /* keep the emphasis span: rebuild from words, preserving which are inside <em> */
-    var tmp = document.createElement('div');
-    tmp.innerHTML = html;
-    var words = [];
-    (function walk(node, em){
-      for(var i=0;i<node.childNodes.length;i++){
-        var c = node.childNodes[i];
-        if(c.nodeType === 3){
-          c.nodeValue.split(/\s+/).forEach(function(w){ if(w) words.push({w:w, em:em}); });
-        } else walk(c, em || c.tagName === 'EM');
-      }
-    })(tmp, false);
-
-    el.innerHTML = '';
-    var probes = words.map(function(o){
-      var sp = document.createElement('span');
-      sp.className = 'wd';
-      sp.textContent = o.w + ' ';
-      if(o.em) sp.setAttribute('data-em','');
-      el.appendChild(sp);
-      return sp;
-    });
-
-    /* group the probes by the line they landed on */
-    var lines = [], last = null;
-    probes.forEach(function(sp){
-      var top = sp.offsetTop;
-      if(last === null || Math.abs(top-last) > 4){ lines.push([]); last = top; }
-      lines[lines.length-1].push(sp);
-    });
-
-    el.innerHTML = '';
-    lines.forEach(function(group){
-      var ln = document.createElement('span'); ln.className = 'ln';
-      var inner = document.createElement('span');
-      group.forEach(function(sp){
-        if(sp.hasAttribute('data-em')){
-          var em = document.createElement('em'); em.textContent = sp.textContent;
-          inner.appendChild(em);
-        } else inner.appendChild(document.createTextNode(sp.textContent));
-      });
-      ln.appendChild(inner); el.appendChild(ln);
-    });
-    el.dataset.split = '1';
-    el.setAttribute('aria-label', text);
-  }
-
-  function setup(){
-    if(!wide.matches || reduce) return;
-    splitLines(intro.querySelector('h2'));
-  }
-  setup();
-  window.addEventListener('resize', function(){
-    var h1 = intro.querySelector('h2');
-    if(h1 && h1.dataset.split && wide.matches){
-      /* re-measure: line breaks move with the viewport */
-      h1.innerHTML = h1.getAttribute('aria-label')
-        .replace('shovel-holder to stakeholder.','<em>shovel-holder to stakeholder.</em>');
-      delete h1.dataset.split;
-      splitLines(h1);
-      intro.classList.add('lines-in');
-    }
-  });
-
-  if('IntersectionObserver' in window){
-    new IntersectionObserver(function(es){
-      es.forEach(function(e){ if(e.isIntersecting){ intro.classList.add('lines-in'); } });
-    },{threshold:0.18}).observe(intro);
-  } else intro.classList.add('lines-in');
-
   if(stage) requestAnimationFrame(function(){ stage.classList.add('stage-ready'); });
 
   /* the readouts track the pointer, the way a live instrument would */

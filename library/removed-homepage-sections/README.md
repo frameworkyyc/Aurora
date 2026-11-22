@@ -10,6 +10,9 @@ Removed from `index.html` in one commit. This folder is not deployed (`library/`
 | `setup-instrument-readings.js` | The instrument's readouts and leader lines resolving as the sequence advances |
 | `capture-section.html` | "Ten million points…": the reality-capture sequence markup |
 | `capture-visualization.js` | The point-cloud canvas (raw returns to registered cloud to surface mesh to deliverable) and the heading that recedes as the first note arrives |
+| `intro-integrate-section.html` | The "We integrate with every member of your team, from shovel-holder to stakeholder" section, its two buttons and the latitude timeline (Vancouver, Port Alice, KSM Mine, Baffin Island) |
+| `intro-headline-lines.js` | The line-by-line headline reveal for that section |
+| `intro-traverse-and-stations.js` | The timeline's station buttons and its self-running traverse line |
 | `featured-projects-section.html` | "Real jobs, real latitudes": the three featured project cards |
 
 ## Putting a section back
@@ -20,3 +23,6 @@ Removed from `index.html` in one commit. This folder is not deployed (`library/`
 5. The `.about` section now carries a phone-only mountain break at its top. Remove that ridge block if the featured projects section returns above it.
 
 The Projects page and all project data are untouched; the same three projects still live there.
+
+
+The "We integrate…" message now lives in the About section's copy. To restore the standalone section, put `intro-integrate-section.html` back before the contact section, add `intro-traverse-and-stations.js` back at the top of the first `(function(){ ... })` block in `assets/app.js` (before the parallax code), and re-add the headline code from `intro-headline-lines.js` to the hero choreography block, where `splitLines`, `setup()` and the observer need `var intro = document.querySelector('.intro');` defined first. Its CSS is still in `assets/style.css`.

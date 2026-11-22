@@ -67,7 +67,6 @@
      arrives. */
   var hdr = function(){ return phone.matches ? 60 : 74; };
   function at(id){ return function(){ var s = el(id); return s ? clampY(absTop(s) - hdr()) : 0; }; }
-  function intro(){ return clampY(absTop(el('intro')) - window.innerHeight * 0.12); }
 
   /* view the section -> pause -> glide to the next. dur is the glide in ms,
      dwell the pause in ms. About 28 seconds in all, with the fade back to the start. */
@@ -77,8 +76,8 @@
     {y:at('industries'),          dur:1800, dwell:2600},   /* industries we serve */
     {y:at('expertise'),           dur:1800, dwell:2600},   /* our expertise */
     {y:at('about'),               dur:1800, dwell:2600},   /* about Aurora */
-    {y:at('careers'),             dur:1800, dwell:1800},   /* careers */
-    {y:intro,                     dur:2200, dwell:2800},   /* headline resolves line by line */
+    {y:at('careers'),             dur:1800, dwell:2400},   /* careers */
+    {y:function(){ return clampY(absTop(document.querySelector('.contact')) - window.innerHeight * 0.1); }, dur:2000, dwell:2800},   /* contact */
     {restart:true}
   ];
 
@@ -100,8 +99,6 @@
       }
       rv.forEach(function(n){ n.classList.remove('in'); replayIO.observe(n); });
     }
-    var introEl = el('intro');
-    if(introEl) introEl.classList.remove('lines-in');      /* app.js adds it back on view */
     hero.classList.remove('stage-ready');
     requestAnimationFrame(function(){ hero.classList.add('stage-ready'); });
   }
