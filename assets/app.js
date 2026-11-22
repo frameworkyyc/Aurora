@@ -940,6 +940,7 @@ window.__BADGE_SHORT = {"w":199.143,"h":157.475,"blades":[{"pts":[[10.469,86.535
   }
 
   nightSky(document.querySelector('.nightsky'),  {rate:0.0045, brandSky:true});
+  nightSky(document.querySelector('.setup-sky'),  {rate:0.0045, aurora:true});
 })();
 
 /* ---- hero choreography: the entrance plays once the page is ready, and the

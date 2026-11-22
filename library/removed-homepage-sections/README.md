@@ -26,3 +26,6 @@ The Projects page and all project data are untouched; the same three projects st
 
 
 The "We integrate…" message now lives in the About section's copy. To restore the standalone section, put `intro-integrate-section.html` back before the contact section, add `intro-traverse-and-stations.js` back at the top of the first `(function(){ ... })` block in `assets/app.js` (before the parallax code), and re-add the headline code from `intro-headline-lines.js` to the hero choreography block, where `splitLines`, `setup()` and the observer need `var intro = document.querySelector('.intro');` defined first. Its CSS is still in `assets/style.css`.
+
+## Update
+The total-station sequence and the point-cloud visualization now live on `services.html` (scripts concatenated, unchanged, in `assets/services-motion.js`; sky canvas started in `assets/app.js`). The files here remain the reference copies.
