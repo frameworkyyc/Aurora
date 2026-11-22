@@ -21,11 +21,17 @@
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var canHover = window.matchMedia('(hover:hover) and (pointer:fine)').matches;
 
-  var data = items.map(function(li){
+  /* one data source for this traverse and the Projects map (assets/projects-data.js);
+     the visually hidden list in the page is the fallback and the crawlable text */
+  var shared = window.AURORA_PROJECTS;
+  var data = (shared && shared.length ? shared.map(function(d){
+    return {place:d.place, lat:d.lat, coord:d.coord, loc:d.loc, title:d.title, names:d.names||null, desc:d.desc||'', img:d.img||'', href:d.href||''};
+  }) : items.map(function(li){
     var d = li.dataset;
-    return {place:d.place, lat:parseFloat(d.lat), loc:d.loc, title:d.title, desc:d.desc||'', img:d.img||'', href:d.href||''};
-  }).sort(function(a,b){ return a.lat - b.lat; });
-  var fmt = function(v){ return v.toFixed(2) + '°N'; };
+    return {place:d.place, lat:parseFloat(d.lat), coord:'recorded', loc:d.loc, title:d.title, names:null, desc:d.desc||'', img:d.img||'', href:d.href||''};
+  })).sort(function(a,b){ return a.lat - b.lat; });
+  /* an approximate regional reference carries a leading approx sign; recorded values do not */
+  var fmt = function(p){ return (p.coord === 'regional' ? '\u2248' : '') + p.lat.toFixed(2) + '\u00b0N'; };
 
   var LAT_MIN = 48.4, LAT_MAX = 66.9;
   var u = function(lat){ return (lat - LAT_MIN)/(LAT_MAX - LAT_MIN); };
@@ -33,7 +39,7 @@
   host.hidden = false;
   host.innerHTML =
     '<div class="sat-head"><p class="sat-label">Selected project locations</p>' +
-    '<p class="sat-sub">Places Aurora has worked, not the limits of where it will go. Latitudes are those of the named place.</p></div>' +
+    '<p class="sat-sub">Places Aurora has worked, not the limits of where it will go. \u2248 marks an approximate regional reference, not a project-site position.</p></div>' +
     '<div class="sat-axis" id="satAxis">' +
       '<span class="sat-line"></span><span class="sat-run"></span><span class="sat-dot"></span><span class="sat-ticks"></span>' +
     '</div>' +
@@ -52,8 +58,8 @@
     b.setAttribute('aria-haspopup', 'true');
     b.setAttribute('aria-expanded', 'false');
     b.setAttribute('aria-controls', 'satCard');
-    b.setAttribute('aria-label', p.place + ', ' + fmt(p.lat) + ': ' + p.title + '. Show project card');
-    b.innerHTML = '<i class="d"></i><span class="lab"><b>' + p.place + '</b>' + fmt(p.lat) + '</span>';
+    b.setAttribute('aria-label', p.place + ', ' + fmt(p) + ': ' + p.title + '. Show project card');
+    b.innerHTML = '<i class="d"></i><span class="lab"><b>' + p.place + '</b>' + fmt(p) + '</span>';
     axis.appendChild(b);
     var t = document.createElement('span'); t.className = 'sat-tick'; ticks.appendChild(t);
     return {el:b, tick:t, p:p, x:0, frac:0};
@@ -80,15 +86,25 @@
   }
 
   /* ---- the project card ---- */
-  var closeT = 0, quiet = false;
+  var closeT = 0, quiet = false, padT = 0;
+  var basePad = parseFloat(getComputedStyle(host).paddingBottom) || 0, curPad = basePad;
+  var secEl = document.getElementById('service-area');
+  /* The section grows only as far as the open card needs (it can use the section's own bottom padding first),
+     holds that while the visitor moves between markers, and settles back shortly after the card closes. */
+  function fit(){
+    if(host.classList.contains('sat--phone') || card.hidden){ return; }
+    var over = card.getBoundingClientRect().bottom - (secEl.getBoundingClientRect().bottom - 16);
+    if(over > 0){ curPad = curPad + over; host.style.paddingBottom = curPad + 'px'; }
+  }
+  function settle(){ clearTimeout(padT); padT = setTimeout(function(){ if(openIdx === -1){ curPad = basePad; host.style.paddingBottom = ''; } }, 1400); }
   function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
   function fill(p){
-    var names = p.title.indexOf(' / ') > -1 ? p.title.split(' / ') : null;
+    var names = p.names;
     card.classList.toggle('has-img', !!p.img);
     card.innerHTML =
       (p.img ? '<img src="' + esc(p.img) + '" alt="" width="760" height="428" decoding="async">' : '') +
       '<div class="sat-card-b">' +
-        '<p class="sat-card-loc">' + esc(p.loc) + ' <span>' + fmt(p.lat) + '</span></p>' +
+        '<p class="sat-card-loc">' + esc(p.loc) + ' <span>' + fmt(p) + '</span></p>' +
         (names ? '<h3>Projects</h3><ul>' + names.map(function(n){ return '<li>' + esc(n) + '</li>'; }).join('') + '</ul>'
                : '<h3>' + esc(p.title) + '</h3>') +
         (p.desc ? '<p class="sat-card-d">' + esc(p.desc) + '</p>' : '') +
@@ -120,7 +136,9 @@
     card.style.setProperty('--arrow', (m.x - left) + 'px');
     var down = axis.offsetTop + 152, up = axis.offsetTop + 28 - card.offsetHeight;
     card.style.top = down + 'px';
+    fit();   /* grow the section just enough for this card */
     if(card.getBoundingClientRect().bottom > window.innerHeight - 10){
+      var r0 = card.getBoundingClientRect();
       card.style.top = up + 'px';
       if(card.getBoundingClientRect().top >= 84) card.classList.add('is-up');
       else card.style.top = down + 'px';   /* neither fits whole: stay below, the page can scroll */
@@ -137,7 +155,7 @@
   function hide(){
     clearTimeout(closeT);
     if(openIdx > -1){ markers[openIdx].el.classList.remove('is-open'); markers[openIdx].el.setAttribute('aria-expanded','false'); }
-    openIdx = -1; card.hidden = true;
+    openIdx = -1; card.hidden = true; settle();
   }
   function later(){ clearTimeout(closeT); closeT = setTimeout(hide, 260); }
 

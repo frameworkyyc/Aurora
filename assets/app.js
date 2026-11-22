@@ -993,12 +993,19 @@ window.__BADGE_SHORT = {"w":199.143,"h":157.475,"blades":[{"pts":[[10.469,86.535
   /* Real coordinates, and a real coastline to plot them against. The outlines
      below are heavily simplified — this is a survey drawing, not an atlas —
      but the geography underneath is genuine, so the positions mean something. */
-  var STN = [
-    {id:'AS-VAN', name:'Vancouver',     lat:49.28, lon:-123.12, elev:12,   method:'Layout \u00b7 machine control', proj:null},
-    {id:'AS-PTA', name:'Port Alice',    lat:50.42, lon:-127.45, elev:8,    method:'LiDAR \u00b7 sonar merge', proj:'proj-50'},
-    {id:'AS-KSM', name:'KSM Mine',      lat:56.52, lon:-130.35, elev:1180, method:'Layout \u00b7 monitoring', proj:'proj-56'},
-    {id:'AS-BAF', name:'Baffin Island', lat:66.00, lon:-70.50,  elev:212,  method:'As-built \u00b7 30 km', proj:'proj-66'}
-  ];
+  /* The stations come from the shared project data (assets/projects-data.js), the same source as the Services
+     page traverse. coord 'regional' marks an approximate reference for a town or region, drawn dashed and
+     labelled with an approx sign; 'recorded' values are those already published on the site. */
+  var SHARED = window.AURORA_PROJECTS;
+  var STN = (SHARED && SHARED.length ? SHARED.map(function(d){
+    return {id:d.stn, name:d.place, lat:d.lat, lon:d.lon, elev:d.elev==null ? null : d.elev, method:d.method||'', coord:d.coord, d:d};
+  }) : [
+    {id:'AS-VAN', name:'Vancouver',     lat:49.28, lon:-123.12, elev:12,   method:'Layout \u00b7 machine control', coord:'recorded', d:{title:'Vancouver',loc:'Vancouver, BC',desc:'',img:'',href:''}},
+    {id:'AS-PTA', name:'Port Alice',    lat:50.42, lon:-127.45, elev:8,    method:'LiDAR \u00b7 sonar merge', coord:'recorded', d:{title:'Port Alice',loc:'Port Alice, BC',desc:'',img:'',href:'#proj-50'}},
+    {id:'AS-KSM', name:'KSM Mine',      lat:56.52, lon:-130.35, elev:1180, method:'Layout \u00b7 monitoring', coord:'recorded', d:{title:'KSM Mine',loc:'KSM Mine, BC',desc:'',img:'',href:'#proj-56'}},
+    {id:'AS-BAF', name:'Baffin Island', lat:66.00, lon:-70.50,  elev:212,  method:'As-built \u00b7 30 km', coord:'recorded', d:{title:'Baffin Island',loc:'Baffin Island, Nunavut',desc:'',img:'',href:'#proj-66'}}
+  ]).sort(function(a,b){ return a.lat - b.lat; });
+  var approx = function(S){ return S.coord === 'regional' ? '\u2248' : ''; };
 
   /* [lat, lon] runs. Mainland BC coast, the island, Haida Gwaii, and the
      Arctic land the northern job sits on. */
@@ -1231,11 +1238,26 @@ window.__BADGE_SHORT = {"w":199.143,"h":157.475,"blades":[{"pts":[[10.469,86.535
     ctx.strokeStyle = 'rgba(59,182,87,.85)';
     ctx.lineWidth = 1.4; ctx.setLineDash([7,5]); ctx.stroke(); ctx.setLineDash([]);
 
+    /* labels: selected first, then the rest in order; one that would sit on an already placed label is left off
+       (the marker stays; it names itself when the view closes in) */
+    var placed = [], showLab = [];
+    var order = []; for(var q0=0;q0<STN.length;q0++) order.push(q0);
+    order.sort(function(a,b){ return (b===sel)-(a===sel) || (b===hov)-(a===hov) || a-b; });
+    for(var oi=0;oi<order.length;oi++){
+      var ko = order[oi], Po = pt(ko), so = 7 + 5*Math.max(0,Math.min(1,(runT-(ko-0.55))/0.55));
+      var lxo = Po[0]+so*1.6, lyo = Po[1]-5;
+      if(lxo > frame.x+frame.w-130) lxo = Po[0]-so*1.6-120;
+      var rect = {x:lxo-2, y:lyo-11, w:STN[ko].name.length*7+10, h:30};
+      var hit = false;
+      for(var pj=0;pj<placed.length;pj++){ var R = placed[pj]; if(rect.x < R.x+R.w && R.x < rect.x+rect.w && rect.y < R.y+R.h && R.y < rect.y+rect.h){ hit = true; break; } }
+      showLab[ko] = !hit; if(!hit) placed.push(rect);
+    }
+
     for(var k=0;k<STN.length;k++){
       var P = pt(k);
       var arrive = Math.max(0, Math.min(1, (runT-(k-0.55))/0.55));
       if(arrive<=0) continue;
-      var isSel = (k === sel), isHov = (k === hov && STN[k].proj);
+      var isSel = (k === sel), isHov = (k === hov);
       var dim = (sel >= 0 && !isSel) ? 0.5 : 1;
       var sz = 7 + 5*arrive + (isSel ? 3 : isHov ? 1.5 : 0);
       lastArr[k] = arrive;
@@ -1252,9 +1274,11 @@ window.__BADGE_SHORT = {"w":199.143,"h":157.475,"blades":[{"pts":[[10.469,86.535
       ctx.globalAlpha = dim;
       ctx.strokeStyle = 'rgba(120,240,170,'+(0.35+0.6*arrive).toFixed(2)+')';
       ctx.lineWidth = 1.2;
+      if(STN[k].coord === 'regional') ctx.setLineDash([3,2.5]);   /* approximate regional reference: a dashed marker */
       ctx.beginPath();
       ctx.moveTo(0,-sz); ctx.lineTo(sz*0.87, sz*0.5); ctx.lineTo(-sz*0.87, sz*0.5);
       ctx.closePath(); ctx.stroke();
+      ctx.setLineDash([]);
       ctx.beginPath(); ctx.arc(0,0,1.6,0,Math.PI*2);
       ctx.fillStyle='rgba(160,255,200,.95)'; ctx.fill();
       ctx.globalAlpha = 0.45*arrive*dim;
@@ -1265,15 +1289,17 @@ window.__BADGE_SHORT = {"w":199.143,"h":157.475,"blades":[{"pts":[[10.469,86.535
       ctx.stroke();
       ctx.restore();
 
-      ctx.globalAlpha = arrive*dim;
-      ctx.font = (isSel ? '700' : '500') + ' 11px ui-monospace,Menlo,monospace';
-      var lx = P[0]+sz*1.6, ly = P[1]-5;
-      if(lx > frame.x+frame.w-130) lx = P[0]-sz*1.6-120;
-      ctx.fillStyle = 'rgba(226,240,242,.92)';
-      ctx.fillText(STN[k].name.toUpperCase(), lx, ly);
-      ctx.fillStyle = 'rgba(143,193,211,.7)';
-      ctx.fillText(STN[k].lat.toFixed(2)+'\u00b0N  '+Math.abs(STN[k].lon).toFixed(2)+'\u00b0W', lx, ly+13);
-      ctx.globalAlpha = 1;
+      if(showLab[k]){
+        ctx.globalAlpha = arrive*dim;
+        ctx.font = (isSel ? '700' : '500') + ' 11px ui-monospace,Menlo,monospace';
+        var lx = P[0]+sz*1.6, ly = P[1]-5;
+        if(lx > frame.x+frame.w-130) lx = P[0]-sz*1.6-120;
+        ctx.fillStyle = 'rgba(226,240,242,.92)';
+        ctx.fillText(STN[k].name.toUpperCase(), lx, ly);
+        ctx.fillStyle = 'rgba(143,193,211,.7)';
+        ctx.fillText(approx(STN[k])+STN[k].lat.toFixed(2)+'\u00b0N  '+Math.abs(STN[k].lon).toFixed(2)+'\u00b0W', lx, ly+13);
+        ctx.globalAlpha = 1;
+      }
     }
 
     if(runT>0 && runT<legs){
@@ -1297,9 +1323,9 @@ window.__BADGE_SHORT = {"w":199.143,"h":157.475,"blades":[{"pts":[[10.469,86.535
     var st = STN[cur];
     if(out.id && out.id.textContent !== st.id){
       out.id.textContent = st.id;
-      out.lat.textContent = st.lat.toFixed(2)+'\u00b0N';
-      out.elev.textContent = st.elev+' m';
-      out.method.textContent = st.method;
+      out.lat.textContent = approx(st)+st.lat.toFixed(2)+'\u00b0N'+(st.coord === 'regional' ? ' approx.' : '');
+      out.elev.textContent = st.elev == null ? '\u2014' : st.elev+' m';
+      out.method.textContent = st.method || '\u2014';
     }
     if(out.run) out.run.textContent = (runT/legs*4180).toFixed(0)+' km';
     placePins();
@@ -1312,10 +1338,10 @@ window.__BADGE_SHORT = {"w":199.143,"h":157.475,"blades":[{"pts":[[10.469,86.535
   var pinHost = sec.querySelector('.map-pins');
   card = sec.querySelector('.map-card');
   STN.forEach(function(S, i){
-    if(!S.proj || !pinHost) return;
+    if(!pinHost) return;
     var b = document.createElement('button');
     b.type = 'button'; b.className = 'map-pin'; b.hidden = true;
-    b.setAttribute('aria-label', S.name + ': preview project');
+    b.setAttribute('aria-label', S.name + ', ' + approx(S) + S.lat.toFixed(2) + ' degrees north: preview project');
     b.setAttribute('aria-pressed', 'false');
     b.addEventListener('click', function(ev){ ev.stopPropagation(); select(sel === i ? -1 : i); });
     b.addEventListener('pointerenter', function(){ hov = i; });
@@ -1329,25 +1355,30 @@ window.__BADGE_SHORT = {"w":199.143,"h":157.475,"blades":[{"pts":[[10.469,86.535
       var inside = P[0] > frame.x-4 && P[0] < frame.x+frame.w+4 && P[1] > frame.y-4 && P[1] < frame.y+frame.h+4;
       var ok = inside && (lastArr[i]||0) > 0.7;
       if(b.hidden === ok) b.hidden = !ok;
-      if(ok) b.style.transform = 'translate3d('+(P[0]-22).toFixed(1)+'px,'+(P[1]-22).toFixed(1)+'px,0)';
+      if(ok){
+        /* crowded markers (Vancouver and Squamish at the widest view) share the space between them, so each stays tappable */
+        var dmin = 44;
+        for(var j=0;j<STN.length;j++){ if(j === i) continue; var Q = pt(j); var dd = Math.hypot(P[0]-Q[0], P[1]-Q[1]); if(dd < dmin) dmin = dd; }
+        var sz2 = Math.max(18, Math.min(44, dmin));
+        if(b._s !== sz2){ b._s = sz2; b.style.width = sz2+'px'; b.style.height = sz2+'px'; }
+        b.style.transform = 'translate3d('+(P[0]-sz2/2).toFixed(1)+'px,'+(P[1]-sz2/2).toFixed(1)+'px,0)';
+      }
     }
     sec.classList.toggle('map-ready', runT >= STN.length-1.05);
   }
   function fill(i){
-    var art = document.getElementById(STN[i].proj);
-    if(!art || !card) return false;
-    var img = art.querySelector('.proj-media img');
-    var ci = card.querySelector('.mc-img');
-    if(img){ ci.src = img.getAttribute('src'); ci.alt = img.getAttribute('alt') || ''; ci.hidden = false; } else ci.hidden = true;
-    var h = art.querySelector('h3'), d = art.querySelector('h3 + p'), loc = art.querySelector('.proj-meta i');
-    card.querySelector('.mc-title').textContent = h ? h.textContent : STN[i].name;
-    card.querySelector('.mc-loc').textContent = (loc ? loc.textContent : STN[i].name) + ' \u00b7 ' + STN[i].lat.toFixed(2) + '\u00b0N';
-    card.querySelector('.mc-desc').textContent = d ? d.textContent : '';
-    card.querySelector('.mc-link').setAttribute('href', '#' + STN[i].proj);
+    var D = STN[i].d, ci = card && card.querySelector('.mc-img');
+    if(!card) return false;
+    if(D.img){ ci.src = D.img; ci.alt = ''; ci.hidden = false; } else { ci.removeAttribute('src'); ci.hidden = true; }
+    card.querySelector('.mc-title').textContent = D.names ? 'Projects' : D.title;
+    card.querySelector('.mc-loc').textContent = D.loc + ' \u00b7 ' + approx(STN[i]) + STN[i].lat.toFixed(2) + '\u00b0N' + (STN[i].coord === 'regional' ? ' (approx.)' : '');
+    card.querySelector('.mc-desc').textContent = D.names ? D.names.join(' \u00b7 ') : (D.desc || '');
+    var lk = card.querySelector('.mc-link');
+    if(D.href){ lk.setAttribute('href', D.href); lk.hidden = false; } else { lk.hidden = true; }
     return true;
   }
   function select(i){
-    if(i >= 0 && (!STN[i].proj || !fill(i))) i = -1;
+    if(i >= 0 && !fill(i)) i = -1;
     var switching = i >= 0 && sel >= 0 && i !== sel;
     if(switching && !reduce){
       fly.from = lastFocus || focusView(fk); fly.t0 = performance.now();
@@ -1367,8 +1398,7 @@ window.__BADGE_SHORT = {"w":199.143,"h":157.475,"blades":[{"pts":[[10.469,86.535
     if(!live) { p = progress(); draw(); }
   }
   /* the projects in the order they appear on the page */
-  ORDER = STN.map(function(S, i){ return i; }).filter(function(i){ return STN[i].proj && document.getElementById(STN[i].proj); })
-    .sort(function(a, b){ return document.getElementById(STN[a].proj).getBoundingClientRect().top - document.getElementById(STN[b].proj).getBoundingClientRect().top; });
+  ORDER = STN.map(function(S, i){ return i; });   /* south to north, as on the traverse */
   function step(d){
     if(sel < 0 || ORDER.length < 2) return;
     var pos = ORDER.indexOf(sel);

@@ -1710,7 +1710,7 @@ header.hero-page:focus-within{
 @media (max-width:860px){.sa-top{grid-template-columns:1fr;gap:1.5rem}}
 
 /* the traverse: previous project locations */
-.sat{position:relative;margin-top:clamp(3rem,6vw,5rem);padding:1.3rem 0 184px;border-top:1px solid rgba(255,255,255,.16)}
+.sat{position:relative;margin-top:clamp(3rem,6vw,5rem);padding:1.3rem 0 0;border-top:1px solid rgba(255,255,255,.16);transition:padding-bottom .3s ease}
 .sat-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:.35rem 1.5rem;margin-bottom:.4rem}
 .sat-label{margin:0;font-family:var(--mono);font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.9)}
 .sat-sub{margin:0;font-size:.86rem;color:rgba(255,255,255,.62)}
@@ -1768,6 +1768,7 @@ header.hero-page:focus-within{
 .sat--phone .sat-m .lab{display:none}
 .sat--phone .sat-card{position:relative;top:auto;left:auto;width:100%;margin-top:.9rem}
 @media (prefers-reduced-motion:reduce){
+  .sat{transition:none}
   .sat-m{transition:none;opacity:1}.sat-m .d{transition:none}.sat-card{animation:none}
 }
 
@@ -1793,3 +1794,6 @@ header.hero-page:focus-within{
   .capture-legend{left:auto;right:var(--pad);bottom:calc(clamp(2rem,7vh,4.5rem) + 1.7rem);justify-items:end;text-align:right}
   .capture-legend li{flex-direction:row-reverse}
 }
+
+.mc-link[hidden]{display:none !important}
+.mc-img[hidden]{display:none !important}
