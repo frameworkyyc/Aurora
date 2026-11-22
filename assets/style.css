@@ -1961,3 +1961,20 @@ header.hero-page:focus-within{
 .ind-card{cursor:pointer}
 
 @media (max-height:460px){.sh-hero .lede{display:none}.sh-hero h1{font-size:2rem}.sh-stat b{font-size:1.8rem}}
+
+.ind-card{-webkit-touch-callout:none;-webkit-user-select:none;user-select:none}
+.ind-card .ph{pointer-events:none;-webkit-user-drag:none}
+.ind-body a{-webkit-user-select:text;user-select:text}
+
+/* ---------- Projects: photographs and text read as one entry ---------- */
+.proj{align-items:center;padding-block:clamp(1.75rem,3.5vw,2.5rem)}
+.proj-media{align-self:center;aspect-ratio:16/10}
+.proj-media img{aspect-ratio:auto;height:100%}
+.proj-meta{max-width:none;margin-bottom:.75rem;padding-bottom:.75rem}
+.proj h3{margin-bottom:.55rem}
+.proj-outcome{margin-top:.8rem}
+.proj-data{margin-top:1.2rem}
+.pm-row{padding:.42rem 0}
+@media (min-width:761px){.proj-media{aspect-ratio:4/3}}
+@media (min-width:861px){.proj{padding-block:clamp(2.5rem,4.6vw,3.75rem)}}
+.proj .proj-meta{max-width:none}

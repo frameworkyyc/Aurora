@@ -276,45 +276,7 @@ window.__sectionProgress = function(el){
   } else { inView = true; sync(); }
 })();
 
-/* ---- industries: a rail of photographs, one open at a time. Hover, focus,
-        tap or the arrow keys open a card; each card is a real button. ---- */
-(function(){
-  var rail = document.querySelector('.ind-rail');
-  if(!rail) return;
-  var cards = [].slice.call(rail.querySelectorAll('.ind-card'));
-  var hoverOK = window.matchMedia('(hover:hover) and (min-width:861px)');
-  function open(c){
-    cards.forEach(function(k){
-      var on = k === c;
-      k.classList.toggle('is-open', on);
-      k.querySelector('.ind-tab').setAttribute('aria-expanded', on ? 'true' : 'false');
-    });
-  }
-  /* iPadOS/iOS reports hover whenever a trackpad or keyboard is attached and turns a tap into pointer events,
-     compatibility mouse events and a click. So hover-opening is keyed on a mouse-type pointer only, and a tap
-     anywhere on a card (not just on its label button) opens it, once, with no second tap. */
-  cards.forEach(function(c, i){
-    var tab = c.querySelector('.ind-tab');
-    tab.addEventListener('click', function(){ open(c); });
-    tab.addEventListener('focus', function(){ open(c); });
-    c.addEventListener('click', function(e){
-      if(e.target.closest('.ind-body a')) return;          /* links inside an open card just follow */
-      open(c);
-    });
-    if('PointerEvent' in window){
-      c.addEventListener('pointerenter', function(e){ if(e.pointerType === 'mouse' && hoverOK.matches) open(c); });
-    } else {
-      c.addEventListener('mouseenter', function(){ if(hoverOK.matches) open(c); });
-    }
-    tab.addEventListener('keydown', function(e){
-      var d = e.key === 'ArrowRight' || e.key === 'ArrowDown' ? 1 : e.key === 'ArrowLeft' || e.key === 'ArrowUp' ? -1 : 0;
-      if(!d) return;
-      e.preventDefault();
-      var n = cards[(i + d + cards.length) % cards.length];
-      n.querySelector('.ind-tab').focus();
-    });
-  });
-})();
+/* (The industries rail lives in assets/industries.js, a separate script, so nothing else on the page can stop it from loading.) */
 
 /* ---- careers enquiry: composes an email, like the project enquiry ---- */
 (function(){
@@ -963,7 +925,7 @@ window.__BADGE_SHORT = {"w":199.143,"h":157.475,"blades":[{"pts":[[10.469,86.535
   if(stage) requestAnimationFrame(function(){ stage.classList.add('stage-ready'); });
 
   /* the readouts track the pointer, the way a live instrument would */
-  if(wide.matches && !reduce && window.matchMedia('(hover:hover)').matches){
+  if(wide.matches && !reduce && window.matchMedia('(hover:hover) and (pointer:fine)').matches){
     var hz = document.querySelector('[data-hz]'),
         lat = document.querySelector('[data-lat]'),
         elev = document.querySelector('[data-elev]');
@@ -973,6 +935,7 @@ window.__BADGE_SHORT = {"w":199.143,"h":157.475,"blades":[{"pts":[[10.469,86.535
       return d + '\u00b0' + String(m).padStart(2,'0') + '\u2032' + String(sec).padStart(2,'0') + '\u2033';
     }
     window.addEventListener('pointermove', function(e){
+      if(e.pointerType && e.pointerType !== 'mouse') return;   /* a touch must never change the page: iOS then treats the tap as a hover and swallows its click */
       if(pending) return; pending = true;
       requestAnimationFrame(function(){
         var u = e.clientX/window.innerWidth, v = e.clientY/window.innerHeight;
