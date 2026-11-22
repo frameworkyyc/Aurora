@@ -1333,13 +1333,6 @@ header.hero-page:focus-within{
 .about-fig--b{position:absolute;right:0;bottom:0;width:54%;aspect-ratio:3/2;border:6px solid var(--paper)}
 
 /* Careers call-out */
-.careers-cta{position:relative;background:var(--night);color:#fff;overflow:hidden;padding-block:clamp(5rem,12vw,9.5rem)}
-.careers-cta-img{position:absolute;inset:0;z-index:0}
-.careers-cta::before{content:"";position:absolute;inset:0;z-index:1;
-  background:linear-gradient(90deg,rgba(2,16,23,.86) 0%,rgba(2,16,23,.55) 45%,rgba(2,16,23,.05) 100%)}
-.careers-cta-in{position:relative;z-index:2}
-.careers-cta h2{color:#fff;max-width:14ch}
-.careers-cta .lede{color:rgba(255,255,255,.82);max-width:44ch;margin-top:1.1rem}
 
 /* Closing call: photograph behind the existing contact block */
 .contact--photo .contact-img{position:absolute;inset:0;z-index:0}
@@ -1367,7 +1360,6 @@ header.hero-page:focus-within{
   .ind-body p{font-size:.9rem}
   .exp-grid{grid-template-columns:1fr}
   .exp-tile,.exp-tile--lead{aspect-ratio:16/10}
-  .careers-cta::before{background:linear-gradient(180deg,rgba(2,16,23,.55),rgba(2,16,23,.86))}
 }
 @media (prefers-reduced-motion:reduce){
   .ind-card,.ind-card .ph,.ind-body{transition:none}
@@ -1444,12 +1436,6 @@ header.hero-page:focus-within{
 .wwd-ridge svg{display:block;width:100%;height:100%}
 .wwd-ridge .wr-front{fill:var(--paper)}
 .wwd-ridge .wr-back{fill:#fff;fill-opacity:.13}
-.careers-cta::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:clamp(70px,16%,150px);z-index:1;pointer-events:none;
-  background:linear-gradient(180deg,rgba(5,54,76,0),var(--night))}
-@media (max-width:860px){ .careers-cta::after{background:linear-gradient(180deg,rgba(7,26,36,0),#071A24)} }
-.contact--photo::after{content:"";position:absolute;left:0;right:0;top:0;height:clamp(80px,18%,170px);z-index:1;pointer-events:none;
-  background:linear-gradient(180deg,#05364C,rgba(5,54,76,0))}
-@media (max-width:860px){ .contact--photo::after{background:linear-gradient(180deg,#071A24,rgba(7,26,36,0))} }
 
 /* the animated surveyor: a transparent video placed by script so its feet sit
    on the same summit as the static figure, at the same scale as the range */
@@ -1525,11 +1511,6 @@ header.hero-page:focus-within{
 .about .stat b{font-size:clamp(1.7rem,3.2vw,2.4rem)}
 .about .stat > span{margin-top:.3rem;font-size:.54rem;letter-spacing:.14em;line-height:1.35}
 
-.careers-cta{padding-block:clamp(3.25rem,6.5vw,5rem)}
-.careers-cta h2{max-width:20ch}
-.careers-cta .lede{max-width:46ch;margin-top:1rem}
-.careers-cta .cta-row{margin-top:1.5rem}
-
 .contact--photo{padding-block:clamp(3.25rem,6.5vw,5rem)}
 .contact--photo h2{max-width:18ch}
 .contact--photo .lede{max-width:46ch;margin-top:1rem}
@@ -1539,3 +1520,29 @@ header.hero-page:focus-within{
   /* the photograph is brighter on the right on small screens: darken it evenly under the text */
   .contact--photo::before{background:linear-gradient(180deg,rgba(3,22,31,.8),rgba(3,22,31,.68) 55%,rgba(3,22,31,.82))}
 }
+
+/* Careers — editorial split (photo left ~45%, panel right ~55%) */
+.careers-split{background:#fff;padding-block:clamp(3.5rem,7vw,6rem)}
+.careers-card{display:grid;grid-template-columns:45fr 55fr;min-height:clamp(340px,34vw,440px);background:var(--ice)}
+.careers-photo{margin:0;position:relative;overflow:hidden;background:var(--night)}
+.careers-photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:12% 55%}
+.careers-panel{display:flex;flex-direction:column;justify-content:space-between;padding:clamp(1.75rem,3.6vw,3.25rem) clamp(1.5rem,4vw,3.75rem) 0}
+.careers-label{margin:0 0 1.1rem;font-size:.72rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--green)}
+.careers-panel h2{margin:0;color:var(--navy);max-width:18ch;font-size:clamp(1.9rem,3.2vw,2.75rem);line-height:1.08}
+.careers-text{margin:1.1rem 0 0;max-width:40ch;color:rgba(5,54,76,.78);font-size:clamp(.98rem,1.2vw,1.08rem);line-height:1.6}
+.careers-link{font-family:var(--sans);display:flex;align-items:center;justify-content:space-between;margin-top:2rem;padding:1.15rem 0 1.35rem;border-top:1px solid var(--rule);color:var(--navy);font-weight:600;font-size:1rem;text-decoration:none}
+.careers-arrow{color:var(--green);font-size:1.25rem;transition:transform .2s ease}
+.careers-link:hover .careers-arrow,.careers-link:focus-visible .careers-arrow{transform:translateX(4px)}
+.careers-link:focus-visible{outline:2px solid var(--green);outline-offset:2px}
+@media (max-width:860px){
+  .careers-card{grid-template-columns:1fr;min-height:0}
+  .careers-photo{aspect-ratio:16/10}
+  .careers-photo img{object-position:12% 60%}
+  .careers-panel{padding:1.75rem 1.4rem 0}
+}
+@media (prefers-reduced-motion:reduce){.careers-arrow{transition:none}.careers-link:hover .careers-arrow{transform:none}}
+
+/* Contact — photographic finale, fading into the footer */
+.contact--photo::after{content:"";position:absolute;left:0;right:0;bottom:0;height:clamp(40px,7%,80px);z-index:1;pointer-events:none;background:linear-gradient(180deg,rgba(5,54,76,0),var(--night))}
+.contact--photo .wrap{padding-bottom:.5rem}
+@media (max-width:860px){ .contact--photo .ridge{display:none} .careers-split{padding-block:2.75rem 3rem} }
