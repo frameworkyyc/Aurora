@@ -10,7 +10,6 @@
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700;800&family=Noto+Sans+Mono:wght@400;500;700&family=Noto+Serif:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
 <link rel="icon" href="assets/badge.png">
 <link rel="stylesheet" href="assets/style.css">
-<script>(function(){try{var d=document.documentElement;if(/seqstill=/.test(location.search)){d.classList.add('st-live');return}if(window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;if(navigator.deviceMemory&&navigator.deviceMemory<2)return;var c=document.createElement('canvas');if(!(window.WebGLRenderingContext&&(c.getContext('webgl')||c.getContext('experimental-webgl'))))return;d.classList.add('st-live')}catch(e){}})()</script>
 <noscript><style>.rv{opacity:1 !important;transform:none !important}</style></noscript>
 </head>
 <body>
@@ -50,35 +49,33 @@
       </div>
     </div>
     <figure class="svc-hero-fig" aria-hidden="true">
-      <img src="assets/hero/station-hero-1280.webp" srcset="assets/hero/station-hero-800.webp 800w, assets/hero/station-hero-1280.webp 1280w" sizes="(max-width:720px) 320px, 600px" alt="" width="1280" height="1120" fetchpriority="high" decoding="async">
+      <div class="svc-hero-stage">
+        <img src="assets/hero/station-hero-1280.webp" srcset="assets/hero/station-hero-800.webp 800w, assets/hero/station-hero-1280.webp 1280w" sizes="(max-width:720px) 320px, 600px" alt="" width="1280" height="1120" fetchpriority="high" decoding="async">
+        <canvas></canvas>
+      </div>
     </figure>
   </div>
 </section>
 
-<section class="st on-dark" id="construction-engineering" aria-labelledby="ce-title">
-  <div class="st-pin">
-    <picture class="st-poster" aria-hidden="true"><source media="(max-width:860px)" srcset="assets/station-seq/poster-tall.webp"><img src="assets/station-seq/poster-wide.webp" alt="" width="1600" height="900" decoding="async"></picture>
-    <canvas class="st-canvas" aria-hidden="true"></canvas>
-    <div class="st-labels" aria-hidden="true"></div>
-    <div class="st-head wrap">
-      <p class="eyebrow">01 &middot; Field to finish</p>
-      <h2 id="ce-title">Construction &amp; Engineering Surveys</h2>
+<section class="ce-ed is-light" id="construction-engineering" aria-labelledby="ce-title">
+  <div class="wrap">
+    <div class="ce-head rv">
+      <div>
+        <p class="eyebrow">01 &middot; Field to finish</p>
+        <h2 id="ce-title">Construction &amp; Engineering Surveys</h2>
+      </div>
+      <p class="ce-lede">On active construction sites, Aurora sets and checks the survey control, layout and as-built measurements that the project builds from &mdash; measured in the field and tied to one network.</p>
     </div>
-    <div class="st-rail" aria-hidden="true"><span><i></i></span><span><i></i></span><span><i></i></span></div>
-    <div class="st-steps wrap">
-      <article class="st-step on" data-step="0">
-        <figure class="st-still"><picture><source media="(max-width:860px)" srcset="assets/station-seq/s1-tall.webp"><img src="assets/station-seq/s1-wide.webp" alt="Total station on its tripod over a control point, with a plumb line to the ground marker (illustrative values)" width="1600" height="900" loading="lazy"></picture></figure>
-        <div class="st-copy"><p class="st-no">01 &middot; Establish Control</p><h3>Control first, then everything else</h3><p>We set and observe the control network the whole project works from, including machine control networks, tying existing conditions to one coordinate system before anything is built.</p></div>
-      </article>
-      <article class="st-step" data-step="1">
-        <figure class="st-still"><picture><source media="(max-width:860px)" srcset="assets/station-seq/s2-tall.webp"><img src="assets/station-seq/s2-wide.webp" alt="Total station telescope turning to a bearing, with a line of sight and ground stakes (illustrative values)" width="1600" height="900" loading="lazy"></picture></figure>
-        <div class="st-copy"><p class="st-no">02 &middot; Project Layout</p><h3>Gridlines, offsets and elevations in the field</h3><p>Gridlines, offsets and elevations are set out from the issued construction drawings, so foundations and structures are built where the drawings place them.</p></div>
-      </article>
-      <article class="st-step" data-step="2">
-        <figure class="st-still"><picture><source media="(max-width:860px)" srcset="assets/station-seq/s3-tall.webp"><img src="assets/station-seq/s3-wide.webp" alt="Total station keypad and display after the layout loop has closed (illustrative values)" width="1600" height="900" loading="lazy"></picture></figure>
-        <div class="st-copy"><p class="st-no">03 &middot; Verify &amp; Document</p><h3>As-builts, checked and recorded</h3><p>As-built surveys compare what was built with what was drawn. Repeat observations monitor settlement, and the results are documented for the project team.</p></div>
-      </article>
-    </div>
+    <figure class="ce-photo rv">
+      <img class="ph" src="assets/photos/site-dusk-towers-a-900.webp" srcset="assets/photos/site-dusk-towers-a-900.webp 900w, assets/photos/site-dusk-towers-a-1500.webp 1500w, assets/photos/site-dusk-towers-a-2300.webp 2300w" sizes="(max-width:1240px) 100vw, 1240px" alt="Total station on a tripod at dusk beside steel structures under construction at an industrial site" width="2300" height="1074" loading="lazy">
+    </figure>
+    <ol class="ce-list">
+      <li class="ce-row rv"><span class="ce-no">01</span><h3>Project layout &amp; as-built surveys</h3><p>Gridlines, offsets and elevations are set out in the field from the issued construction drawings. As-built surveys then record what was built and compare it with what was drawn.</p></li>
+      <li class="ce-row rv"><span class="ce-no">02</span><h3>Survey control &amp; construction support surveys</h3><p>Control networks are established, observed and maintained so every trade on site works to one coordinate system, with field support as the work progresses.</p></li>
+      <li class="ce-row rv"><span class="ce-no">03</span><h3>Existing-conditions &amp; feasibility surveys</h3><p>Measured starting conditions before construction begins, so the project team plans from what is actually on the ground.</p></li>
+      <li class="ce-row rv"><span class="ce-no">04</span><h3>Machine control networks</h3><p>Site control that keeps machine-guided equipment working from verified positions, checked as conditions change.</p></li>
+      <li class="ce-row rv"><span class="ce-no">05</span><h3>Settlement monitoring</h3><p>Repeat observations track movement of structures and ground over time, and the results are documented for the project team.</p></li>
+    </ol>
   </div>
 </section>
 
@@ -179,6 +176,6 @@
 
 <script src="assets/app.js"></script>
 <script src="assets/services-motion.js"></script>
-<script src="assets/station-scene.js"></script>
+<script src="assets/hero-station.js"></script>
 </body>
 </html>

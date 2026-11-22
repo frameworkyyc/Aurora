@@ -1605,7 +1605,13 @@ header.hero-page:focus-within{
   -webkit-mask-image:linear-gradient(180deg,#000 0%,#000 66%,transparent 100%);mask-image:linear-gradient(180deg,#000 0%,#000 66%,transparent 100%)}
 .svc-hero-fig::before{content:"";position:absolute;inset:-12% -22% -4%;background:radial-gradient(closest-side,rgba(48,128,158,.34),rgba(48,128,158,0) 72%)}
 .svc-hero-fig::after{content:"";position:absolute;left:50%;top:78%;bottom:0;width:1px;background:linear-gradient(180deg,rgba(59,182,87,0),rgba(59,182,87,.55))}
-.svc-hero-fig img{position:relative;display:block;height:100%;width:auto}
+.svc-hero-stage{position:relative;height:100%;aspect-ratio:8/7}
+.svc-hero-stage img,.svc-hero-stage canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.svc-hero-stage img{transition:opacity .7s ease}
+.svc-hero-stage canvas{opacity:0;transition:opacity .7s ease;pointer-events:auto;cursor:grab;touch-action:pan-y;-webkit-tap-highlight-color:transparent}
+.svc-hero-stage canvas.is-drag{cursor:grabbing}
+.svc-hero-fig.is-live canvas{opacity:1}
+.svc-hero-fig.is-live img{opacity:0}
 .svc-hero-ticks{position:absolute;left:0;right:0;bottom:0;height:14px;z-index:1;pointer-events:none;
   background:repeating-linear-gradient(90deg,rgba(255,255,255,.2) 0 1px,transparent 1px 24px) bottom/100% 5px no-repeat,repeating-linear-gradient(90deg,rgba(255,255,255,.3) 0 1px,transparent 1px 120px) bottom/100% 11px no-repeat}
 .svc-hero-ticks span{position:absolute;bottom:18px;font-family:var(--mono);font-size:.6rem;letter-spacing:.14em;color:rgba(255,255,255,.38)}
@@ -1613,7 +1619,7 @@ header.hero-page:focus-within{
 .svc-hero-ticks span:last-child{right:var(--pad)}
 @media (prefers-reduced-motion:no-preference){
   .svc-hero-text{animation:svcIn .7s cubic-bezier(.2,.8,.3,1) both}
-  .svc-hero-fig img{animation:svcFig .9s ease .1s both}
+  .svc-hero-stage img{animation:svcFig .9s ease .1s both}
 }
 @keyframes svcIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
 @keyframes svcFig{from{opacity:0}to{opacity:1}}
@@ -1632,62 +1638,22 @@ header.hero-page:focus-within{
   .svc-hero-ticks{display:none}
 }
 
-/* ---------- Services: the total station, in three stages ---------- */
-.st{padding-block:0;background:linear-gradient(180deg,#04293a 0%,#05364c 100%);color:#fff;position:relative}
-.st-poster,.st-canvas,.st-labels,.st-rail{display:none}
-.st-head{padding-top:clamp(2.5rem,6vw,3.5rem)}
-.st-head h2{color:#fff;max-width:20ch;font-size:clamp(1.7rem,3.2vw,2.5rem);margin:0}
-.st-steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(1.25rem,3vw,2.25rem);padding-block:2rem clamp(3rem,6vw,5rem)}
-.st-step{display:flex;flex-direction:column;gap:1rem}
-.st-still{margin:0;aspect-ratio:16/9;overflow:hidden;background:#04293a;border:1px solid rgba(255,255,255,.12);position:relative}
-.st-still img{width:100%;height:100%;object-fit:cover;display:block}
-.st-still::after{content:"Illustrative values";position:absolute;left:.6rem;bottom:.6rem;font-family:var(--mono);font-size:.62rem;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.85);background:rgba(4,41,58,.7);padding:.25rem .45rem}
-.st-no{margin:0 0 .5rem;font-family:var(--mono);font-size:.74rem;letter-spacing:.18em;text-transform:uppercase;color:var(--green)}
-.st-copy h3{margin:0 0 .55rem;color:#fff;font-size:clamp(1.2rem,2vw,1.5rem);line-height:1.2}
-.st-copy p:last-child{margin:0;color:rgba(255,255,255,.8);font-size:1rem;line-height:1.6}
-@media (max-width:860px){ .st-steps{grid-template-columns:1fr;gap:2.25rem} .st-still{aspect-ratio:9/10} }
 
-/* live mode: a pinned stage the scroll drives (decided in the page head, before first paint) */
-.st-live .st{height:280svh}
-.st-live .st-pin{position:sticky;top:0;height:100svh;overflow:hidden}
-.st-live .st-poster{display:block;position:absolute;inset:0;transition:opacity .6s ease}
-.st-live .st-poster img{width:100%;height:100%;object-fit:cover;display:block}
-.st-live .st--ready .st-poster{opacity:0}
-.st-live .st-canvas{display:block;position:absolute;inset:0;width:100%;height:100%}
-.st-live .st-labels{display:block;position:absolute;inset:0;pointer-events:none;z-index:2}
-.st-live .st-pin::before{content:"";position:absolute;inset:0;z-index:2;pointer-events:none;background:linear-gradient(90deg,rgba(4,38,53,.86) 0%,rgba(4,38,53,.55) 30%,rgba(4,38,53,0) 52%)}
-.st-live .st-head{position:absolute;left:0;right:0;top:0;z-index:3;padding-top:calc(74px + 1.4rem);pointer-events:none}
-.st-live .st-head h2{font-size:clamp(1.5rem,2.6vw,2.2rem)}
-.st-live .st-steps{position:absolute;left:0;right:0;bottom:clamp(2rem,9vh,5rem);z-index:3;display:block;padding:0;pointer-events:none}
-.st-live .st-step{position:absolute;left:var(--pad);bottom:0;width:min(27rem,46%);opacity:0;transform:translateY(12px);transition:opacity .55s ease,transform .55s ease}
-.st-live .st-step.on{opacity:1;transform:none}
-.st-live .st-still{display:none}
-.st-live .st-copy h3{font-size:clamp(1.6rem,2.7vw,2.35rem);line-height:1.12;letter-spacing:-.02em;margin-bottom:.8rem}
-.st-live .st-copy p:last-child{font-size:1rem;line-height:1.62;max-width:34ch;color:rgba(255,255,255,.84)}
-.st-live .st-no{display:flex;align-items:center;gap:.8rem}
-.st-live .st-no::before{content:"";width:2rem;height:1px;background:var(--green)}
-.st-live .st-rail{display:flex;gap:.45rem;position:absolute;z-index:3;left:var(--pad);bottom:clamp(1rem,4vh,2.2rem);width:min(27rem,46%)}
-.st-rail span{flex:1;height:2px;background:rgba(255,255,255,.18);overflow:hidden}
-.st-rail i{display:block;height:100%;background:var(--green);transform:scaleX(0);transform-origin:left}
-/* labels: tiny, attached to the instrument's own graphics */
-.stl{position:absolute;left:0;top:0;opacity:0;will-change:transform;font-family:var(--mono);color:#fff}
-.stl i{position:absolute;left:-3px;top:-3px;width:6px;height:6px;border-radius:50%;background:var(--green)}
-.stl span{position:absolute;white-space:nowrap;font-size:.68rem;letter-spacing:.06em;padding:.2rem .45rem;background:rgba(4,38,53,.7);border:1px solid rgba(255,255,255,.16)}
-.stl b{font-weight:600}
-.stl--e span{left:12px;top:-12px}
-.stl--w span{right:12px;top:-12px}
+/* ---------- Services: Construction & Engineering Surveys, editorial ---------- */
+.ce-ed{background:#fff;padding-block:clamp(3.5rem,7vw,6rem);scroll-margin-top:74px}
+.ce-head{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:clamp(1.5rem,5vw,5rem);align-items:end;margin-bottom:clamp(1.75rem,3.5vw,2.75rem)}
+.ce-head h2{margin:0;color:var(--navy);font-size:clamp(2.1rem,4.4vw,3.6rem);line-height:1.04;letter-spacing:-.025em;max-width:13ch}
+.ce-lede{margin:0;max-width:40ch;font-size:clamp(1rem,1.3vw,1.12rem);line-height:1.65;color:rgba(5,54,76,.82)}
+.ce-photo{margin:0 0 clamp(2rem,4vw,3rem);aspect-ratio:21/9;overflow:hidden;background:var(--night)}
+.ce-photo img{width:100%;height:100%;object-fit:cover;object-position:50% 62%;display:block}
+.ce-list{list-style:none;margin:0;padding:0;border-top:1px solid var(--rule)}
+.ce-row{display:grid;grid-template-columns:3rem minmax(0,1fr) minmax(0,1.1fr);gap:0 clamp(1rem,3vw,3rem);align-items:baseline;padding-block:clamp(1.15rem,2vw,1.6rem);border-bottom:1px solid var(--rule)}
+.ce-no{font-family:var(--mono);font-size:.78rem;letter-spacing:.18em;color:var(--green)}
+.ce-row h3{margin:0;color:var(--navy);font-size:clamp(1.15rem,1.9vw,1.55rem);line-height:1.2;letter-spacing:-.015em}
+.ce-row p{margin:0;max-width:52ch;font-size:1rem;line-height:1.6}
 @media (max-width:860px){
-  .st-live .st-pin::before{background:linear-gradient(0deg,rgba(4,38,53,.92) 0%,rgba(4,38,53,.7) 28%,rgba(4,38,53,0) 52%)}
-  .st-live .st-head h2{font-size:1.3rem}
-  .st-live .st-step{width:calc(100% - 2*var(--pad))}
-  .st-live .st-rail{width:calc(100% - 2*var(--pad))}
-  .st-live .st-copy h3{font-size:1.35rem;margin-bottom:.5rem}
-  .st-live .st-copy p:last-child{font-size:.92rem;line-height:1.55;max-width:none}
-  .st-live .st-steps{bottom:clamp(2rem,6vh,3rem)}
+  .ce-head{grid-template-columns:1fr;gap:1.1rem}
+  .ce-photo{aspect-ratio:16/10}
+  .ce-row{grid-template-columns:2.4rem minmax(0,1fr);gap:.45rem 1rem}
+  .ce-row p{grid-column:2}
 }
-@media (max-height:560px){ .st-live .st-copy p:last-child{display:none} }
-/* a still-frame render, used to make the fallback images */
-.seq-still header,.seq-still .page-head,.seq-still .thread,.seq-still .skip,.seq-still footer,.seq-still #reality-capture,.seq-still #capture,.seq-still .adv-ed,.seq-still .contact{display:none !important}
-.seq-still main{padding:0}
-.seq-still .st{height:100svh}
-.seq-still .st-steps,.seq-still .st-head,.seq-still .st-rail,.seq-still .st-poster,.seq-still .st-pin::before{display:none !important}
