@@ -1720,7 +1720,7 @@ header.hero-page:focus-within{
 .sat-dot{position:absolute;top:88px;left:0;width:7px;height:7px;margin:-3px 0 0 -3.5px;border-radius:50%;background:var(--green);opacity:0;pointer-events:none;box-shadow:0 0 12px rgba(59,182,87,.85),0 0 3px rgba(180,255,200,.9)}
 .sat-ticks{position:absolute;left:0;right:0;top:88px;height:0;pointer-events:none}
 .sat-tick{position:absolute;top:3px;width:1px;height:6px;background:rgba(255,255,255,.4)}
-.sat-m{position:absolute;top:88px;transform:translate(-50%,-50%);width:36px;height:36px;padding:0;border:0;background:none;color:inherit;cursor:pointer;opacity:0;transition:opacity .5s ease calc(var(--i)*70ms)}
+.sat-m{position:absolute;top:88px;transform:translate(-50%,-50%);width:44px;height:44px;padding:0;border:0;background:none;color:inherit;cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:transparent;-webkit-touch-callout:none;user-select:none;-webkit-user-select:none;opacity:0;transition:opacity .5s ease calc(var(--i)*70ms)}
 .sat.in .sat-m{opacity:1}
 .sat-m .d{position:absolute;left:50%;top:50%;width:10px;height:10px;margin:-5px 0 0 -5px;border-radius:50%;background:#05364c;border:1.5px solid var(--cyan);transition:transform .25s cubic-bezier(.2,.8,.3,1),background .25s ease,border-color .25s ease,box-shadow .25s ease}
 .sat-m .lab{position:absolute;left:50%;transform:translateX(-50%);white-space:nowrap;text-align:center;font-family:var(--mono);font-size:.64rem;letter-spacing:.1em;color:rgba(255,255,255,.74);line-height:1.45;pointer-events:none}
@@ -1733,9 +1733,11 @@ header.hero-page:focus-within{
 .sat-m.passed .d{background:var(--green);border-color:var(--green)}
 .sat-m.passed .lab b{color:var(--green)}
 .sat-m.hit .d{transform:scale(1.55);box-shadow:0 0 14px rgba(59,182,87,.8)}
-.sat-m:hover .d,.sat-m.is-open .d,.sat-m:focus-visible .d{background:var(--green);border-color:#fff;transform:scale(1.4);box-shadow:0 0 0 4px rgba(59,182,87,.22)}
+.sat-m.is-open .d,.sat-m:focus-visible .d{background:var(--green);border-color:#fff;transform:scale(1.4);box-shadow:0 0 0 4px rgba(59,182,87,.22)}
+@media (hover:hover) and (pointer:fine){.sat-m:hover .d{background:var(--green);border-color:#fff;transform:scale(1.4);box-shadow:0 0 0 4px rgba(59,182,87,.22)}}
 .sat-m:focus-visible{outline:2px solid var(--green);outline-offset:-3px;border-radius:6px}
-.sat-m:hover .lab b,.sat-m.is-open .lab b{color:#fff}
+.sat-m.is-open .lab b{color:#fff}
+@media (hover:hover) and (pointer:fine){.sat-m:hover .lab b{color:#fff}}
 
 /* the project card: compact, photo left when there is one */
 .sat-card{position:absolute;top:0;z-index:6;background:#042b3d;border:1px solid rgba(255,255,255,.2);box-shadow:0 16px 36px rgba(2,16,23,.5);display:grid;grid-template-columns:1fr;animation:satIn .16s ease both}
@@ -1762,7 +1764,7 @@ header.hero-page:focus-within{
 .sat--phone{padding-bottom:0}
 .sat--phone .sat-axis{height:84px}
 .sat--phone .sat-line,.sat--phone .sat-run,.sat--phone .sat-dot,.sat--phone .sat-ticks{top:42px}
-.sat--phone .sat-m{top:42px;width:30px;height:46px}
+.sat--phone .sat-m{top:42px;width:32px;height:48px}
 .sat--phone .sat-m .lab{display:none}
 .sat--phone .sat-card{position:relative;top:auto;left:auto;width:100%;margin-top:.9rem}
 @media (prefers-reduced-motion:reduce){

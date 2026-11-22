@@ -141,21 +141,51 @@
   }
   function later(){ clearTimeout(closeT); closeT = setTimeout(hide, 260); }
 
+  /* Input handling.
+     iPadOS/iOS Safari turns a tap into pointer events, then compatibility mouse events, then a click, and
+     reports hover capability whenever a trackpad or keyboard is attached. So mouse-style hover handling must
+     never run for a finger: everything is keyed on the pointer's type, and taps are handled on click only.
+     - mouse (and trackpad) pointers: the card opens on enter and closes shortly after leaving (unchanged)
+     - touch / pen: one tap opens the card at once; tapping another marker switches; tap outside closes
+     - keyboard: focus opens, Enter/Space toggles, Tab moves into the card's link, Escape closes
+     iOS sends no click for a tap on a non-interactive area, so "outside" is detected on pointerdown. */
+  var lastType = '';          /* pointer type of the most recent press on a marker: mouse | touch | pen | '' (keyboard) */
+  var hasPointer = 'PointerEvent' in window;
   markers.forEach(function(m, i){
-    m.el.addEventListener('click', function(e){ e.stopPropagation(); openIdx === i ? hide() : show(i); });
-    if(canHover){
-      m.el.addEventListener('mouseenter', function(){ show(i); });       /* the card opens at once */
-      m.el.addEventListener('mouseleave', later);
+    if(hasPointer){
+      m.el.addEventListener('pointerdown', function(e){ lastType = e.pointerType || 'touch'; });
+      m.el.addEventListener('pointerenter', function(e){ if(e.pointerType === 'mouse') show(i); });   /* the card opens at once */
+      m.el.addEventListener('pointerleave', function(e){ if(e.pointerType === 'mouse') later(); });
+    } else {
+      m.el.addEventListener('touchstart', function(){ lastType = 'touch'; }, {passive:true});
+      m.el.addEventListener('mousedown', function(){ if(lastType !== 'touch') lastType = 'mouse'; });
+      if(canHover){ m.el.addEventListener('mouseenter', function(){ if(lastType !== 'touch') show(i); }); m.el.addEventListener('mouseleave', function(){ if(lastType !== 'touch') later(); }); }
     }
-    m.el.addEventListener('focus', function(){ if(!quiet && m.el.matches(':focus-visible')) show(i); });   /* keyboard focus only; taps open via click */
+    m.el.addEventListener('click', function(e){
+      e.stopPropagation();
+      var type = lastType; lastType = '';
+      if(type === 'touch' || type === 'pen') show(i);                 /* a tap always opens (or switches); no second tap */
+      else if(type === 'mouse'){ if(openIdx !== i) show(i); }        /* hover already opened it; a click keeps it */
+      else { openIdx === i ? hide() : show(i); }                       /* keyboard */
+    });
+    m.el.addEventListener('focus', function(){ if(!quiet && m.el.matches(':focus-visible')) show(i); });   /* keyboard focus only */
     m.el.addEventListener('keydown', function(e){
       if(e.key === 'Tab' && !e.shiftKey && openIdx === i && card.querySelector('a')){ e.preventDefault(); card.querySelector('a').focus(); }
     });
   });
-  card.addEventListener('mouseenter', function(){ clearTimeout(closeT); });
-  card.addEventListener('mouseleave', function(){ if(canHover) later(); });
-  document.addEventListener('click', function(e){ if(openIdx > -1 && !host.contains(e.target)) hide(); });
-  host.addEventListener('click', function(e){ if(openIdx > -1 && !e.target.closest('.sat-m') && !e.target.closest('.sat-card')) hide(); });
+  if(hasPointer){
+    card.addEventListener('pointerenter', function(e){ if(e.pointerType === 'mouse') clearTimeout(closeT); });
+    card.addEventListener('pointerleave', function(e){ if(e.pointerType === 'mouse') later(); });
+    /* outside press closes: pointerdown is delivered on iOS where a click on a plain area is not */
+    document.addEventListener('pointerdown', function(e){
+      if(openIdx > -1 && !e.target.closest('.sat-m') && !e.target.closest('.sat-card')) hide();
+    }, true);
+  } else {
+    card.addEventListener('mouseenter', function(){ clearTimeout(closeT); });
+    card.addEventListener('mouseleave', function(){ if(canHover) later(); });
+    document.addEventListener('touchstart', function(e){ if(openIdx > -1 && !e.target.closest('.sat-m') && !e.target.closest('.sat-card')) hide(); }, {passive:true, capture:true});
+    document.addEventListener('click', function(e){ if(openIdx > -1 && !e.target.closest('.sat-m') && !e.target.closest('.sat-card')) hide(); });
+  }
   document.addEventListener('keydown', function(e){
     if(e.key === 'Escape' && openIdx > -1){ var el = markers[openIdx].el; hide(); quiet = true; el.focus(); quiet = false; }
   });
