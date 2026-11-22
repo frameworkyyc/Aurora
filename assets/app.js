@@ -1357,11 +1357,18 @@ window.__BADGE_SHORT = {"w":199.143,"h":157.475,"blades":[{"pts":[[10.469,86.535
       if(b.hidden === ok) b.hidden = !ok;
       if(ok){
         /* crowded markers (Vancouver and Squamish at the widest view) share the space between them, so each stays tappable */
-        var dmin = 44;
-        for(var j=0;j<STN.length;j++){ if(j === i) continue; var Q = pt(j); var dd = Math.hypot(P[0]-Q[0], P[1]-Q[1]); if(dd < dmin) dmin = dd; }
-        var sz2 = Math.max(18, Math.min(44, dmin));
+        var dmin = 44, ox = 0, oy = 0;
+        for(var j=0;j<STN.length;j++){
+          if(j === i) continue; var Q = pt(j); var dx = P[0]-Q[0], dy = P[1]-Q[1]; var dd = Math.hypot(dx, dy);
+          if(dd < dmin) dmin = dd;
+          if(dd < 24){   /* the touch targets (not the drawn markers) are eased apart so each can be reached */
+            var push = Math.min(12, (24-dd)/2), ux = dd > 0.5 ? dx/dd : (i > j ? 0 : 0), uy = dd > 0.5 ? dy/dd : (i > j ? 1 : -1);
+            ox += ux*push; oy += uy*push;
+          }
+        }
+        var sz2 = Math.max(20, Math.min(44, dmin + Math.hypot(ox,oy)));
         if(b._s !== sz2){ b._s = sz2; b.style.width = sz2+'px'; b.style.height = sz2+'px'; }
-        b.style.transform = 'translate3d('+(P[0]-sz2/2).toFixed(1)+'px,'+(P[1]-sz2/2).toFixed(1)+'px,0)';
+        b.style.transform = 'translate3d('+(P[0]+ox-sz2/2).toFixed(1)+'px,'+(P[1]+oy-sz2/2).toFixed(1)+'px,0)';
       }
     }
     sec.classList.toggle('map-ready', runT >= STN.length-1.05);
@@ -1369,6 +1376,7 @@ window.__BADGE_SHORT = {"w":199.143,"h":157.475,"blades":[{"pts":[[10.469,86.535
   function fill(i){
     var D = STN[i].d, ci = card && card.querySelector('.mc-img');
     if(!card) return false;
+    card.classList.toggle('no-img', !D.img);
     if(D.img){ ci.src = D.img; ci.alt = ''; ci.hidden = false; } else { ci.removeAttribute('src'); ci.hidden = true; }
     card.querySelector('.mc-title').textContent = D.names ? 'Projects' : D.title;
     card.querySelector('.mc-loc').textContent = D.loc + ' \u00b7 ' + approx(STN[i]) + STN[i].lat.toFixed(2) + '\u00b0N' + (STN[i].coord === 'regional' ? ' (approx.)' : '');
