@@ -346,11 +346,25 @@ nav a[aria-current="page"]{color:#fff}
 nav a[aria-current="page"]::after{right:0}
 
 .menu-btn{
-  display:none;background:none;border:1px solid var(--rule-dark);color:#fff;
-  font-family:var(--mono);font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;
-  padding:.6rem .85rem;border-radius:2px;cursor:pointer;margin-left:auto;
+  display:none;position:relative;width:44px;height:44px;padding:0;margin-left:auto;margin-right:-11px;
+  background:none;border:0;color:#fff;cursor:pointer;
+  -webkit-tap-highlight-color:transparent;touch-action:manipulation;
+  filter:drop-shadow(0 1px 3px rgba(0,0,0,.4));
 }
-.menu-btn:hover{border-color:var(--green)}
+/* a plain white three-line icon; it becomes a cross while the menu is open */
+.menu-ico,.menu-ico::before,.menu-ico::after{
+  position:absolute;left:50%;width:22px;height:2px;margin-left:-11px;background:#fff;border-radius:1px;
+  transition:transform .3s ease,top .3s ease,background .2s ease;
+}
+.menu-ico{top:50%;margin-top:-1px}
+.menu-ico::before,.menu-ico::after{content:"";left:0;margin-left:0}
+.menu-ico::before{top:-7px}
+.menu-ico::after{top:7px}
+.menu-btn.is-open .menu-ico{background:transparent}
+.menu-btn.is-open .menu-ico::before{top:0;transform:rotate(45deg)}
+.menu-btn.is-open .menu-ico::after{top:0;transform:rotate(-45deg)}
+.menu-btn:focus-visible{outline:2px solid var(--green);outline-offset:-4px;border-radius:3px}
+.bar{padding-left:max(var(--pad),env(safe-area-inset-left));padding-right:max(var(--pad),env(safe-area-inset-right))}
 @media (max-width:860px){
   .menu-btn{display:block}
   nav{
@@ -2024,3 +2038,17 @@ header.hero-page:focus-within{
 .aur-skip .aur-veil{animation:aur-skip .2s ease-out forwards !important}
 @keyframes aur-skip{to{opacity:0;visibility:hidden}}
 @keyframes aur-failsafe{to{opacity:0;visibility:hidden}}
+
+/* ---------- mobile menu button over the hero ----------
+   On a phone or tablet the home page's header stays out of sight over the hero (no bar, no wordmark), but the
+   menu button is there from the first paint, top right. Scrolling past the hero brings the bar and wordmark in
+   around it, so it is the same button throughout; opening it over the hero gives the bar its fill. */
+@media (max-width:860px){
+  header.hero-page:not(.brand-on):not(:focus-within){
+    opacity:1;visibility:visible;pointer-events:none;
+    transition:background .45s ease,border-color .45s ease;
+  }
+  header.hero-page .menu-btn,header.hero-page nav{pointer-events:auto}
+  header.hero-page.menu-open{background:rgba(5,54,76,.98);border-bottom-color:var(--rule-dark)}
+  header.hero-page.menu-open::before{opacity:0}
+}

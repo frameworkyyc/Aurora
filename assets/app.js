@@ -149,18 +149,18 @@ window.__sectionProgress = function(el){
   var btn = document.querySelector('.menu-btn');
   var nav = document.getElementById('nav');
   if(!btn || !nav) return;
-  btn.addEventListener('click', function(){
-    var open = nav.classList.toggle('open');
+  var hdr = btn.closest('header'), lab = btn.querySelector('.vh');
+  function set(open){
+    nav.classList.toggle('open', open);
+    btn.classList.toggle('is-open', open);
     btn.setAttribute('aria-expanded', open ? 'true' : 'false');
-    btn.textContent = open ? 'Close' : 'Menu';
-  });
-  nav.addEventListener('click', function(e){
-    if(e.target.tagName === 'A'){
-      nav.classList.remove('open');
-      btn.setAttribute('aria-expanded','false');
-      btn.textContent = 'Menu';
-    }
-  });
+    if(lab) lab.textContent = open ? 'Close' : 'Menu';
+    if(hdr) hdr.classList.toggle('menu-open', open);
+  }
+  btn.addEventListener('click', function(){ set(!nav.classList.contains('open')); });
+  nav.addEventListener('click', function(e){ if(e.target.tagName === 'A') set(false); });
+  document.addEventListener('keydown', function(e){ if(e.key === 'Escape' && nav.classList.contains('open')){ set(false); btn.focus(); } });
+  window.matchMedia('(min-width:861px)').addEventListener && window.matchMedia('(min-width:861px)').addEventListener('change', function(m){ if(m.matches) set(false); });
 })();
 
 /* ---- enquiry form: composes an email, so it works with no backend ---- */
